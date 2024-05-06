@@ -1,4 +1,5 @@
 import { getAllPosts } from "@/src/fetch";
+import Header from "./modules/Header";
 
 export default async function Index() {
   // 記事を全件取得する。
@@ -7,7 +8,7 @@ export default async function Index() {
 
   return (
     <main>
-      <h1>くろねこ。の実験室</h1>
+      <Header />
       <ul>
         {posts.map((post) => (
           <li key={post.slug}>
