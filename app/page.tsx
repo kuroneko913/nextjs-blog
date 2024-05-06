@@ -1,5 +1,7 @@
 import { getAllPosts } from "@/src/fetch";
 import Header from "./modules/Header";
+import Hero from "./modules/Hero";
+import Footer from "./modules/Footer";
 
 export default async function Index() {
   // 記事を全件取得する。
@@ -9,6 +11,7 @@ export default async function Index() {
   return (
     <main>
       <Header />
+      <Hero />
       <ul>
         {posts.map((post) => (
           <li key={post.slug}>
@@ -22,6 +25,7 @@ export default async function Index() {
           </li>
         ))}
       </ul>
+      <Footer />
     </main>
   );
 }

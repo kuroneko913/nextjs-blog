@@ -1,4 +1,6 @@
+import Footer from "@/app/modules/Footer";
 import Header from "../../modules/Header";
+import Hero from "../../modules/Hero";
 import { getPostBySlug } from "@/src/fetch";
 import markdownToHtml from "@/src/markdownToHtml";
 
@@ -11,6 +13,7 @@ export default async function BlogPage({params}) {
       <Header />
       <h2>{post.title}</h2>
       <div dangerouslySetInnerHTML={{ __html: articleHtml}} />
+      <Footer />
     </main>
   );
 }
