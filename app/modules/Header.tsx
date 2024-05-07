@@ -4,7 +4,7 @@ export default function Header() {
             <div className="logo">
                 <a className="text-xl text-gray-900 font-bold color-black" href="/">くろねこ。の実験室</a>
             </div>
-            <ul className="flex space-x-16 text-gray-900 items-end">
+            <ul className="flex space-x-16 text-gray-900 font-bold items-end">
                 <li>
                     <a className="hover:text-blue-500" href="/">Home</a>
                 </li>
