@@ -1,7 +1,15 @@
 import Image from 'next/image';
+import { socialIcons } from '@/src/constants/socialIcons';
 import SocialIconBox from './SocialIconBox';
 
 export default function IntroductionBox() {
+    let icons = structuredClone(socialIcons);
+    const resizeIcons = icons.map(icon => {
+        icon.width = "32px";
+        icon.height = "32px";
+        return icon;
+    });
+
     return (
         <div className="p-10 border-2" style={{ maxWidth: "20vw", height: "100%", marginTop: "100px" }}>
             <div style={{ width: "100px", height: "100px", overflow: "hidden", position: "relative", borderRadius: "50%", margin: "auto" }}>
@@ -13,7 +21,7 @@ export default function IntroductionBox() {
                 <p>フロントエンドは苦手ですが、少しでもできるようになれたらな、ということでNextJSでこのブログサイトを作りました。</p>
             </div>
             <div className="mx-auto w-full max-w-md flex justify-center basis-1">
-                <SocialIconBox />
+                <SocialIconBox icons={resizeIcons} />
             </div>
         </div>
     );
