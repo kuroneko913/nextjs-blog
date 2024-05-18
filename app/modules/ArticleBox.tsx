@@ -13,6 +13,7 @@ export default function ArticleBox(prop) {
                 <h2 className="text-xl mt-4 w-[280px] truncate">{post.title}</h2>
                 <p className="text-sm w-[280px]">{post.date.toLocaleDateString('ja-JP', options)}</p>
                 <p className="text-sm w-[280px]">{post.tags?.join(',')}</p>
+                <p className="text-sm w-[280px]">{post.categories?.join(',')}</p>
             </a>
         </div>
     );

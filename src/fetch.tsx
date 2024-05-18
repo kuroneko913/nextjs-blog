@@ -5,10 +5,14 @@ import matter from "gray-matter";
 // 記事のディレクトリを指定
 const postsDirectory = `${process.cwd()}/posts`;
 
-/**
- * 記事のslugを取得する。
- */
-export function getPostSlugs() {
+// 記事の検索キーを指定
+const allowedSearchKeys = {category: 'categories', tag: 'tags'};
+
+  /**
+  * 記事のslugを取得する。
+  * @returns array
+  */
+  export function getPostSlugs() {
     return fs.readdirSync(postsDirectory).map((filename) => {
       return filename.replace(/\.md$/, "");
     });
@@ -33,3 +37,50 @@ export function getPostSlugs() {
     return await Promise.all(slugs.map((slug) => getPostBySlug(slug)));
   }
   
+  /**
+   * 記事のキーで検索する。
+   * @param array searchParams
+   * @returns array 
+   */
+  export async function getPostsByCondition(searchParams: {}) {
+    let posts = await getAllPosts();
+    if (Object.keys(searchParams).length === 0) {
+      return posts;
+    }
+    
+    const key = Object.keys(searchParams)[0];
+    const value = searchParams[key];
+    if (!Object.keys(allowedSearchKeys).includes(key)) {
+      return posts;
+    }
+    return posts.filter((post) => {
+      const postKeyName = allowedSearchKeys[key];
+      const postValues = post[postKeyName];
+      if (postValues === undefined) {
+        return false;
+      }
+      return postValues.includes(value);
+    });
+  }
+
+  /**
+   * 
+   * @returns array
+   */
+  export async function getCategoryList() {
+    let posts = await getAllPosts();
+    let categories = {};
+    posts.forEach((post) => {
+      if (post.categories === undefined) {
+        return;
+      }
+      post.categories.forEach((category) => {
+        if (categories[category] === undefined) {
+          categories[category] = 1;
+          return;
+        }
+        categories[category] += 1;
+      });
+    });
+    return categories;
+  }

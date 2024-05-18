@@ -1,14 +1,15 @@
-export default function CategoryArchive() {
+export default function CategoryArchive(props) {
+    const { categories } = props;
     return (
         <div className="px-10 w-1/4" style={{ height: "100%", marginTop: "100px" }}>
             <div>
                 <h1 className="text-2xl pb-4 font-bold">Category</h1>
                 <ul>
-                    <li><a href="/blog?category=PHP">PHP (1)</a></li>
-                    <li>JavaScript (2)</li>
-                    <li>React (3)</li>
-                    <li>NextJS (4)</li>
-                    <li>その他 (3)</li>
+                    { Object.keys(categories).map((category, index) => (
+                        <li key={index}>
+                            <a href={`/blog?category=${category}`}>{category}({categories[category]})</a>
+                        </li>
+                    ))}
                 </ul>
             </div>
             <div className="py-10">
