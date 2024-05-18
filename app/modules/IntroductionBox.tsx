@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { socialIcons } from '@/src/constants/socialIcons';
 import SocialIconBox from './SocialIconBox';
 
-export default function IntroductionBox() {
+export default function IntroductionBox(props) {
     let icons = structuredClone(socialIcons);
     const resizeIcons = icons.map(icon => {
         icon.width = "32px";
@@ -11,7 +11,7 @@ export default function IntroductionBox() {
     });
 
     return (
-        <div className="p-10 w-1/4 border-2" style={{ height: "100%", marginTop: "100px" }}>
+        <div className="p-10 w-1/4 border-2" style={{ height: "100%", marginTop: props.props?.marginTop }}>
             <div style={{ width: "100px", height: "100px", overflow: "hidden", position: "relative", borderRadius: "50%", margin: "auto" }}>
                 <Image layout="fill" objectFit="cover" src="/images/hero.webp" alt="Hero"/>
             </div>

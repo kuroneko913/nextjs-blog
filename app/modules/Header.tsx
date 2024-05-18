@@ -1,6 +1,6 @@
 export default function Header() {
     return (
-        <header className="top-0 bg-white flex justify-between px-10 py-6 shadow-md">
+        <header className="top-0 bg-white flex justify-between px-20 py-6 shadow-md">
             <div className="logo">
                 <a className="text-xl text-gray-900 font-bold color-black" href="/">くろねこ。の実験室</a>
             </div>
