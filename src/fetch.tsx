@@ -101,6 +101,7 @@ const allowedSearchKeys = {category: 'categories', tag: 'tags', archive: 'date'}
   export async function getArchiveList() {
     let posts = await getAllPosts();
     let yearMonths = {};
+    let years = {};
     posts.forEach((post) => {
       const postDate = new Date(post.date).toLocaleDateString('ja-JP',{year:'numeric', month:'2-digit'});
       if (yearMonths[postDate] === undefined) {
@@ -109,5 +110,13 @@ const allowedSearchKeys = {category: 'categories', tag: 'tags', archive: 'date'}
       }
       yearMonths[postDate] += 1;
     });
-    return yearMonths;
+    for (const yearMonth in yearMonths) {
+      const year = yearMonth.split('/')[0];
+      if (years[year] === undefined) {
+        years[year] = [];
+      }
+      years[year][yearMonth] = yearMonths[yearMonth];
+    }
+
+    return years;
   }

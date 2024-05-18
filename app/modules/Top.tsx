@@ -4,7 +4,7 @@ import IntroductionBox from "./IntroductionBox";
 import { RecomendedPostsFilter, UpdatedArticleFilter } from "@/src/ArticleFilter";
 
 export default function Top(prop) {
-    const updatedPosts = UpdatedArticleFilter(prop.posts, 3);
+    const updatedPosts = UpdatedArticleFilter(prop.posts, 6);
     const RecomendedPosts = RecomendedPostsFilter(prop.posts, 10);
     return (
         <div className="flex p-10 justify-between">
