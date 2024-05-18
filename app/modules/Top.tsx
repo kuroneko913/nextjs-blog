@@ -8,7 +8,7 @@ export default function Top(prop) {
     const RecomendedPosts = RecomendedPostsFilter(prop.posts, 10);
     return (
         <div className="flex p-10 justify-between">
-            <div>
+            <div className="w-3/4">
                 <UpdateArticle posts={updatedPosts} />
                 <RecommendArticle posts={RecomendedPosts} />
             </div>

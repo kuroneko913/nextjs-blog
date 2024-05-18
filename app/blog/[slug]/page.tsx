@@ -1,6 +1,5 @@
 import Footer from "@/app/modules/Footer";
 import Header from "../../modules/Header";
-import Hero from "../../modules/Hero";
 import { getPostBySlug } from "@/src/fetch";
 import markdownToHtml from "@/src/markdownToHtml";
 

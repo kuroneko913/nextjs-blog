@@ -3,6 +3,7 @@ import Image from 'next/image';
 export default function ArticleBox(prop) {
     const { post } = prop;
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
+
     return (
         <div className="flex-none w-[280px]" key={post.slug}>
             <a href={`/blog/${post.slug}`}>

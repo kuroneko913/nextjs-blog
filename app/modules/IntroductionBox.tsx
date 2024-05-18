@@ -11,7 +11,7 @@ export default function IntroductionBox() {
     });
 
     return (
-        <div className="p-10 border-2" style={{ maxWidth: "20vw", height: "100%", marginTop: "100px" }}>
+        <div className="p-10 w-1/4 border-2" style={{ height: "100%", marginTop: "100px" }}>
             <div style={{ width: "100px", height: "100px", overflow: "hidden", position: "relative", borderRadius: "50%", margin: "auto" }}>
                 <Image layout="fill" objectFit="cover" src="/images/hero.webp" alt="Hero"/>
             </div>
