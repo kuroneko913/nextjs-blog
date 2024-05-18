@@ -6,7 +6,7 @@ import matter from "gray-matter";
 const postsDirectory = `${process.cwd()}/posts`;
 
 // 記事の検索キーを指定
-const allowedSearchKeys = {category: 'categories', tag: 'tags'};
+const allowedSearchKeys = {category: 'categories', tag: 'tags', archive: 'date'};
 
   /**
   * 記事のslugを取得する。
@@ -59,12 +59,21 @@ const allowedSearchKeys = {category: 'categories', tag: 'tags'};
       if (postValues === undefined) {
         return false;
       }
-      return postValues.includes(value);
+      // 日付の場合は、年月のみで比較する。
+      if (postKeyName === 'date') {
+        const postDate = new Date(post.date).toLocaleDateString('ja-JP',{year:'numeric', month:'2-digit'});
+        return postDate === value;
+      }
+
+      if (Array.isArray(postValues)) {
+        return postValues.includes(value);
+      }
+      return postValues === value;
     });
   }
 
   /**
-   * 
+   * カテゴリーのリストを取得する。
    * @returns array
    */
   export async function getCategoryList() {
@@ -83,4 +92,22 @@ const allowedSearchKeys = {category: 'categories', tag: 'tags'};
       });
     });
     return categories;
+  }
+
+  /**
+   * 投稿年月のリストを取得する。
+   * @returns array
+   */
+  export async function getArchiveList() {
+    let posts = await getAllPosts();
+    let yearMonths = {};
+    posts.forEach((post) => {
+      const postDate = new Date(post.date).toLocaleDateString('ja-JP',{year:'numeric', month:'2-digit'});
+      if (yearMonths[postDate] === undefined) {
+        yearMonths[postDate] = 1;
+        return;
+      }
+      yearMonths[postDate] += 1;
+    });
+    return yearMonths;
   }
