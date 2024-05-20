@@ -38,7 +38,7 @@ export const CodeBlock = ({ inline, className, children }) => {
         return (
             <>
                 <div className="filename">{filename}</div>
-                <SyntaxHighlighter style={vscDarkPlus} language={match[1]} PreTag="div" children={String(children).replace(/\\n$/, '')} />
+                <SyntaxHighlighter style={vscDarkPlus} language={match[1]} PreTag="div" children={String(children).replace(/\\n$/, '')} showLineNumbers={true} />
             </>   
         );
     }
