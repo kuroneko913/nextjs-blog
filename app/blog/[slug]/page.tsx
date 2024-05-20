@@ -2,7 +2,7 @@ import Footer from "@/app/modules/Footer";
 import Header from "../../modules/Header";
 import Hero from "../../modules/Hero";
 import IntroductionBox from "../../modules/IntroductionBox";
-import { getPostBySlug } from "@/src/fetch";
+import { getPostBySlug, getPostSlugs } from "@/src/fetch";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";

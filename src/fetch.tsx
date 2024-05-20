@@ -22,7 +22,7 @@ const allowedSearchKeys:AllowedSearchKeys = {category: 'categories', tag: 'tags'
   /**
    * slugを受けとって、記事を取得する。
    */
-  export async function getPostBySlug(slug: string) {
+  export async function getPostBySlug(slug: string): Promise<Post> {
     const decodedSlug = decodeURIComponent(slug);
     const filePath = path.join(postsDirectory, `${decodedSlug}.md`);
     const fileContents = fs.readFileSync(filePath, "utf8");
