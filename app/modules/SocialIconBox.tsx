@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export default function SocialIconBox(props) {
+export default function SocialIconBox(props: { icons: { icon: any, link: string, width: string, height: string }[] }) {
     const icons = props.icons;
 
     return (

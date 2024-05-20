@@ -1,10 +1,12 @@
+import { Post } from "@/src/interfaces/post";
+
 /**
  * 投稿を更新日時の降順でソートし、指定された件数分の投稿を返す
- * @param array posts 投稿
+ * @param Post[] 投稿
  * @param int | null count 取得件数 nullの場合は全件取得
- * @returns array
+ * @returns Post[]
  */
-export function UpdatedArticleFilter(posts: [], count : number|null = 3) {
+export function UpdatedArticleFilter(posts: Post[], count : number|null = 3): Post[] {
     // 元の配列を上書きしないようにコピーを作成してそれをソートする
     const targetPosts = posts.map((post) => { return post });
     const sortedPosts = targetPosts.sort((a, b) => {
@@ -18,11 +20,11 @@ export function UpdatedArticleFilter(posts: [], count : number|null = 3) {
 
 /**
  * おすすめタグのついた投稿を指定された件数分返す
- * @param array posts 投稿
+ * @param Post[] posts 投稿
  * @param int count 取得件数
- * @returns array
+ * @returns Post[]
  */
-export function RecomendedPostsFilter(posts: [], count : number = 10) {
+export function RecomendedPostsFilter(posts: Post[], count : number = 10): Post[] {
     const targetPosts = posts.map((post) => { return post });
     return targetPosts.filter((post) => {
         if (post.tags === undefined) return false;

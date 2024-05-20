@@ -1,8 +1,9 @@
 import Image from 'next/image';
+import { Post } from "@/src/interfaces/post";
 
-export default function ArticleBox(prop) {
+export default function ArticleBox(prop : { post: Post }) {
     const { post } = prop;
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const options:Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
     return (
         <div className="flex-none w-[280px]" key={post.slug}>

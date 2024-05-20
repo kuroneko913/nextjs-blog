@@ -1,6 +1,7 @@
 import ArticleBox from './ArticleBox';
+import { Post } from '@/src/interfaces/post';
 
-export default function UpdateArticle(prop) {
+export default function UpdateArticle(prop: { posts: Post[] }) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return (
         <div className="p-10">

@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { socialIcons } from '@/src/constants/socialIcons';
 import SocialIconBox from './SocialIconBox';
 
-export default function IntroductionBox(props) {
+export default function IntroductionBox(props: { props?: { marginTop: string } }) {
     let icons = structuredClone(socialIcons);
     const resizeIcons = icons.map(icon => {
         icon.width = "32px";

@@ -2,8 +2,9 @@ import UpdateArticle from "./UpdateArticle";
 import RecommendArticle from "./RecommendArticle";
 import IntroductionBox from "./IntroductionBox";
 import { RecomendedPostsFilter, UpdatedArticleFilter } from "@/src/ArticleFilter";
+import { Post } from "@/src/interfaces/post";
 
-export default function Top(prop) {
+export default function Top(prop: { posts: Post[] }) {
     const updatedPosts = UpdatedArticleFilter(prop.posts, 6);
     const RecomendedPosts = RecomendedPostsFilter(prop.posts, 10);
 

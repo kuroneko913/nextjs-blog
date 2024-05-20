@@ -1,12 +1,13 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { Post, SearchParams, AllowedSearchKeys, Categories, ArchiveDates, Archives } from "@/src/interfaces/post";
 
 // 記事のディレクトリを指定
 const postsDirectory = `${process.cwd()}/posts`;
 
 // 記事の検索キーを指定
-const allowedSearchKeys = {category: 'categories', tag: 'tags', archive: 'date'};
+const allowedSearchKeys:AllowedSearchKeys = {category: 'categories', tag: 'tags', archive: 'date'};
 
   /**
   * 記事のslugを取得する。
@@ -26,13 +27,14 @@ const allowedSearchKeys = {category: 'categories', tag: 'tags', archive: 'date'}
     const filePath = path.join(postsDirectory, `${decodedSlug}.md`);
     const fileContents = fs.readFileSync(filePath, "utf8");
     const {data, content} = matter(fileContents);
-    return {...data, slug:decodedSlug, content};
+    return {...data, slug:decodedSlug, content} as Post;
   }
   
   /**
    * 全記事を取得する。
+   * @returns Promise<Post[]>
    */
-  export async function getAllPosts() {
+  export async function getAllPosts(): Promise<Post[]> {
     const slugs = getPostSlugs();
     return await Promise.all(slugs.map((slug) => getPostBySlug(slug)));
   }
@@ -42,7 +44,7 @@ const allowedSearchKeys = {category: 'categories', tag: 'tags', archive: 'date'}
    * @param array searchParams
    * @returns array 
    */
-  export async function getPostsByCondition(searchParams: {}) {
+  export async function getPostsByCondition(searchParams:SearchParams): Promise<Post[]> {
     let posts = await getAllPosts();
     if (Object.keys(searchParams).length === 0) {
       return posts;
@@ -55,7 +57,7 @@ const allowedSearchKeys = {category: 'categories', tag: 'tags', archive: 'date'}
     }
     return posts.filter((post) => {
       const postKeyName = allowedSearchKeys[key];
-      const postValues = post[postKeyName];
+      const postValues = post[postKeyName as keyof Post];
       if (postValues === undefined) {
         return false;
       }
@@ -76,9 +78,9 @@ const allowedSearchKeys = {category: 'categories', tag: 'tags', archive: 'date'}
    * カテゴリーのリストを取得する。
    * @returns array
    */
-  export async function getCategoryList() {
+  export async function getCategoryList(): Promise<{}> {
     let posts = await getAllPosts();
-    let categories = {};
+    let categories:Categories = {};
     posts.forEach((post) => {
       if (post.categories === undefined) {
         return;
@@ -100,8 +102,8 @@ const allowedSearchKeys = {category: 'categories', tag: 'tags', archive: 'date'}
    */
   export async function getArchiveList() {
     let posts = await getAllPosts();
-    let yearMonths = {};
-    let years = {};
+    let yearMonths:ArchiveDates = {};
+    let years:Archives = {};
     posts.forEach((post) => {
       const postDate = new Date(post.date).toLocaleDateString('ja-JP',{year:'numeric', month:'2-digit'});
       if (yearMonths[postDate] === undefined) {
@@ -112,9 +114,6 @@ const allowedSearchKeys = {category: 'categories', tag: 'tags', archive: 'date'}
     });
     for (const yearMonth in yearMonths) {
       const year = yearMonth.split('/')[0];
-      if (years[year] === undefined) {
-        years[year] = [];
-      }
       years[year][yearMonth] = yearMonths[yearMonth];
     }
 

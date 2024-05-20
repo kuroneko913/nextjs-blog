@@ -1,6 +1,7 @@
+import { Archives, Categories } from "@/src/interfaces/post";
 import ArchiveList from "./ArchiveList";
 
-export default function CategoryArchive(props) {
+export default function CategoryArchive(props: { categories: Categories, archives: Archives }) {
     const { categories, archives } = props;
 
     return (

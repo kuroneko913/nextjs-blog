@@ -1,12 +1,23 @@
 'use client';
 
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { Components } from 'react-markdown';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import Youtube from 'react-youtube';
 import { Tweet } from 'react-twitter-widgets';
+import { HTMLAttributes } from 'react';
 
-export const CodeBlock = ({ inline, className, children }) => {
+// HTML要素を拡張するための型定義
+interface CodeBlockProps extends HTMLAttributes<HTMLElement> {
+    inline?: boolean; // Make inline optional
+}
+
+const CodeBlock: React.FC<CodeBlockProps> = ({ inline, className, children }) => {
     const match = /language-(\w+)/.exec(className || '');
+    if (match === null || className === undefined) {
+        return <code className={className}>{children}</code>;
+    }
+
     if (match[1] === "youtube") {
         return (
             <div className="youtube-wrap">
@@ -38,11 +49,20 @@ export const CodeBlock = ({ inline, className, children }) => {
         return (
             <>
                 <div className="filename">{filename}</div>
-                <SyntaxHighlighter style={vscDarkPlus} language={match[1]} PreTag="div" children={String(children).replace(/\\n$/, '')} showLineNumbers={true} />
-            </>   
+                <SyntaxHighlighter
+                    style={vscDarkPlus}
+                    language={match[1]}
+                    PreTag="div"
+                    showLineNumbers={true}
+                >
+                    {String(children).replace(/\\n$/, '')}
+                </SyntaxHighlighter>
+            </>
         );
     }
 
     // インラインコード
     return <code className={className}>{children}</code>;
 }
+
+export default CodeBlock;

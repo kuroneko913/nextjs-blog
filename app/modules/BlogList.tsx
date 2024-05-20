@@ -1,6 +1,7 @@
+import { Post } from "@/src/interfaces/post";
 import ArticleBox from "./ArticleBox";
 
-export default function BlogList(prop) {
+export default function BlogList(prop: { posts: Post[] }) {
     return (
         <div className="p-10 w-3/4">
             <h1 className="text-2xl pb-10 font-bold">Blog</h1>
