@@ -114,6 +114,9 @@ const allowedSearchKeys:AllowedSearchKeys = {category: 'categories', tag: 'tags'
     });
     for (const yearMonth in yearMonths) {
       const year = yearMonth.split('/')[0];
+      if (years[year] === undefined) {
+        years[year] = {};
+      }
       years[year][yearMonth] = yearMonths[yearMonth];
     }
 
