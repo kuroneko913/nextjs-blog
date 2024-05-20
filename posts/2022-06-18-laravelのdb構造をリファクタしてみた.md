@@ -138,7 +138,7 @@ laravelでテーブルをrenameする時は、Schema::rename(from, to);を使え
 [Laravel 6.x データベース：マイグレーション
 ](https://readouble.com/laravel/6.x/ja/migrations.html)
 
-```php
+```php:RenameTagsTagsBk.php
 <?php
 
 use Illuminate\Database\Migrations\Migration;

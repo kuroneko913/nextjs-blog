@@ -2,6 +2,7 @@
 title: 2022-10-01-PHPConferenceに参加してきたよー！1日目
 date: 2022-10-01T09:33:55.840Z
 description: 2022-10-01-PHPConferenceに参加してきたよー！1日目
+categories: [テスト, ブログ]
 ---
 # はじめに
 お仕事やプライベートで素のPHPやLaravelを触っているので、[PHP Conference Japan 2022](https://phpcon.php.gr.jp/2022/)に所属する会社の先輩後輩も登壇するとのことでその応援も兼ねて参加してきた。

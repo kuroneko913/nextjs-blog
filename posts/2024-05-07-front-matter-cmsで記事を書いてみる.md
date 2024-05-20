@@ -5,7 +5,7 @@ date: 2024-05-07T13:22:40.295Z
 preview: ""
 draft: true
 tags: [オススメ]
-categories: []
+categories: [テスト,こんにちは,PHP]
 type: default
 ---
 
