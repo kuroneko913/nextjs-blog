@@ -6,6 +6,7 @@ preview: ""
 draft: true
 tags: []
 categories: []
+slug: 2024-09-05-create-github-commit-navigator
 ---
 
 # はじめに

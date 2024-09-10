@@ -11,32 +11,31 @@ const allowedSearchKeys:AllowedSearchKeys = {category: 'categories', tag: 'tags'
 
   /**
   * 記事のslugを取得する。
-  * @returns array
+  * @returns Post[]
   */
-  export function getPostSlugs() {
+  export function getAllPosts() {
     return fs.readdirSync(postsDirectory).map((filename) => {
-      return filename.replace(/\.md$/, "");
+      const fromFileSlug = filename.replace(/\.md$/, "");
+      const fileContents = fs.readFileSync(path.join(postsDirectory, filename), "utf8");
+      const {data, content} = matter(fileContents);
+      if (data.slug === undefined) {
+        return {...data, slug: fromFileSlug, content} as Post;
+      }
+      return {...data, slug: data.slug, content} as Post;
     });
   }
   
   /**
    * slugを受けとって、記事を取得する。
+   * @param string slug
+   * @returns Post
    */
   export async function getPostBySlug(slug: string): Promise<Post> {
-    const decodedSlug = decodeURIComponent(slug);
-    const filePath = path.join(postsDirectory, `${decodedSlug}.md`);
-    const fileContents = fs.readFileSync(filePath, "utf8");
-    const {data, content} = matter(fileContents);
-    return {...data, slug:decodedSlug, content} as Post;
-  }
-  
-  /**
-   * 全記事を取得する。
-   * @returns Promise<Post[]>
-   */
-  export async function getAllPosts(): Promise<Post[]> {
-    const slugs = getPostSlugs();
-    return await Promise.all(slugs.map((slug) => getPostBySlug(slug)));
+    const articles = getAllPosts();
+    const filteredArticle = articles.filter((article) => {
+      return article.slug === slug || article.slug === decodeURIComponent(slug);
+    });
+    return filteredArticle[0] as Post;
   }
   
   /**
