@@ -1,5 +1,13 @@
 /      /      200
 /about  /about  200
 /blog   /blog   200
-/:slug  /blog/:slug  301
+/images/*   /images/:splat   200
+/_next/static/*  /_next/static/:splat  200
+/_next/image*    /_next/image/:splat   200
+/*.webp     /:splat  200
+/*.png      /:splat  200
+/*.svg      /:splat  200 
+/api/* /api/:splat 200
+/favicon.ico /favicon.ico 200
+/*  /blog/:splat  301
 
