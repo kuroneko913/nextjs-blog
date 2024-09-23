@@ -1,0 +1,5 @@
+/      /      200
+/about  /about  200
+/blog   /blog   200
+/:slug  /blog/:slug  301
+
