@@ -84,7 +84,10 @@ const allowedSearchKeys:AllowedSearchKeys = {category: 'categories', tag: 'tags'
       if (post.categories === undefined) {
         return;
       }
-      post.categories.forEach((category) => {
+      if (post.slug === 'about') {
+        return;
+      }
+      post.categories?.forEach((category) => {
         if (categories[category] === undefined) {
           categories[category] = 1;
           return;
@@ -107,6 +110,9 @@ const allowedSearchKeys:AllowedSearchKeys = {category: 'categories', tag: 'tags'
       const postDate = new Date(post.date).toLocaleDateString('ja-JP',{year:'numeric', month:'2-digit'});
       if (yearMonths[postDate] === undefined) {
         yearMonths[postDate] = 1;
+        return;
+      }
+      if (post.slug === 'about') {
         return;
       }
       yearMonths[postDate] += 1;

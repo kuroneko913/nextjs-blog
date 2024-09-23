@@ -11,7 +11,7 @@ export default async function Blog(prop: { posts: Post[] }) {
     const archives = await getArchiveList();
 
     return (
-        <div className="flex p-10">
+        <div className="flex flex-col sm:flex-row p-10 w-full">
             <BlogList posts={updatedPosts} />
             <CategoryArchive categories={categories} archives={archives} />
         </div>

@@ -5,7 +5,7 @@ export default function CategoryArchive(props: { categories: Categories, archive
     const { categories, archives } = props;
 
     return (
-        <div className="px-10 w-1/4" style={{ height: "100%", marginTop: "100px" }}>
+        <div className="px-10 w-full sm:w-1/4 flex flex-col" style={{ height: "100%", marginTop: "100px" }}>
             <div>
                 <h1 className="text-2xl pb-4 font-bold">Category</h1>
                 <ul>

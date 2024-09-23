@@ -8,11 +8,13 @@ import { SearchParams } from "@/src/interfaces/post";
 export default async function Index(props: { searchParams: SearchParams }) {
     // 記事を取得する。
     const posts = await getPostsByCondition(props.searchParams);
+    // aboutページを除外する
+    const filteredPosts = posts.filter((post) => post.slug !== "about");
     return (
         <main>
             <Header />
             <Hero />
-            <Blog posts={posts} />
+            <Blog posts={filteredPosts} />
             <Footer />
         </main>
   );

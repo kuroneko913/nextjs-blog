@@ -10,7 +10,9 @@ categories: [テスト, ブログ]
 3年ぶりの現地開催とのこと( [PHP Conference Japan 2019](https://phpcon.php.gr.jp/2019/) もちゃんと参加してた)で、リアルイベントが大好きな私は当然現地参加した。
 もらえるノベルティをかたっぱしからかっさらいつつ、Twitterでハッシュタグをつけて感想を呟き、会社のtimes_にもメモを投稿しながら参加させていただいた。
 
-<blockquote class="twitter-tweet"><p lang="ja" dir="ltr"><a href="https://twitter.com/hashtag/phpcon2022?src=hash&amp;ref_src=twsrc%5Etfw">#phpcon2022</a> <a href="https://twitter.com/hashtag/MetaQuest2?src=hash&amp;ref_src=twsrc%5Etfw">#MetaQuest2</a> <br><br>ノベルティをとりあえずパシャリ。 <a href="https://t.co/i560oQaDHC">pic.twitter.com/i560oQaDHC</a></p>&mdash; まさき。⛅ (@myblackcat7112) <a href="https://twitter.com/myblackcat7112/status/1573837947685998592?ref_src=twsrc%5Etfw">September 25, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+```twitter
+1573837947685998592
+```
 
 そうそう、今回のカンファレンスで一番ハッとさせられたのは、「プライベートの趣味が、たまたま PHPだった」という発言かもしれない。
 
@@ -28,7 +30,8 @@ categories: [テスト, ブログ]
 [軽量feature flag導入の手引き](https://qiita.com/behiron/items/de1b082e60f7b4ade773)
 
 また、一部のユーザーにだけ機能を公開するといった使い方やABテストなどの短期間の実験的取り組みにも使えるものだった。
-* [小さく安全なリリースを実現するために使える「フィーチャートグル」って何？年収は？彼女は？調べてみました！](https://qiita.com/ipeblb/items/92b794321751a6fa133e)
+
+[小さく安全なリリースを実現するために使える「フィーチャートグル」って何？年収は？彼女は？調べてみました！](https://qiita.com/ipeblb/items/92b794321751a6fa133e)
 
 ただし、実装自体はif文の追加になるのでトグルの切り替えはソースコードのデプロイが発生する。切り替えのたびにデプロイするのはだるい！ということで、
 [unleash](https://www.getunleash.io/) というトグルマネジメントサービスを導入しているらしい。
@@ -45,7 +48,10 @@ Feature toggles を用いて大きい開発案件をこまめにリリースし�
 特に、エラーバジェットを使い切った時の対応のあり方は参考にしていきたいと思う。
 
 ## [AWS CDK に魅入られた PHPer がオススメする IaC から入るインフラの話](https://www.slideshare.net/chatii0079/aws-cdk-phper) 
-<iframe src="//www.slideshare.net/slideshow/embed_code/key/bL3PC8X1KpriIC" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/chatii0079/aws-cdk-phper" title="AWS CDKに魅入られた PHPer がオススメする" target="_blank">AWS CDKに魅入られた PHPer がオススメする</a> </strong> from <strong><a href="//www.slideshare.net/chatii0079" target="_blank">Taichi Inaba</a></strong> </div>
+
+```link
+https://www.slideshare.net/chatii0079/aws-cdk-phper
+```
 
 アプリケーション側の人間だってインフラを知っておいて損はない！！ところでAWS CDKというプログラムを書く感覚でインフラを作れるものがあるんだけどこれいいぜ！って話だった。
 インフラもわかる先輩いるけど、大体必要に駆られてできるようになっただけなんだぜ、って話を聞いて妙に納得した。
@@ -86,6 +92,7 @@ PHPStanと組み合わせたら強そう。
 こちらの話も1度のリリースでの変更量を減らしたいのでフィーチャートグルを使いました、という話だった。PR Timesではフィーチャートグル(リリーストグル)を使うことなどでリリース頻度も向上させることができたらしい。
 
 > Release Toggleを用いて開発中の機能をOFFにすることで、未完成の機能をメインブランチにマージしながら開発を進めることができます。これにより、「機能のリリースとコードのデプロイを分離する」ことが可能になります。
+
 [小さく安全なリリースを実現するために使える「フィーチャートグル」って何？年収は？彼女は？調べてみました！](https://qiita.com/ipeblb/items/92b794321751a6fa133e#release-toggle)
 
 

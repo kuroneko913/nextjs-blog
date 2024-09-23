@@ -15,7 +15,7 @@ interface CodeBlockProps extends HTMLAttributes<HTMLElement> {
 const CodeBlock: React.FC<CodeBlockProps> = ({ inline, className, children }) => {
     const match = /language-(\w+)/.exec(className || '');
     if (match === null || className === undefined) {
-        return <code className={className}>{children}</code>;
+        return <code className="text">{children}</code>;
     }
 
     if (match[1] === "youtube") {
@@ -48,15 +48,17 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ inline, className, children }) =>
     if (!inline && match) {
         return (
             <>
-                <div className="filename">{filename}</div>
-                <SyntaxHighlighter
-                    style={vscDarkPlus}
-                    language={match[1]}
-                    PreTag="div"
-                    showLineNumbers={true}
-                >
-                    {String(children).replace(/\\n$/, '')}
-                </SyntaxHighlighter>
+                <div className="w-full overflow-x-auto max-w-full bg-black">
+            {filename && <div className="px-4 my-1"><span className="text-white">{filename}</span></div>}
+            <SyntaxHighlighter
+                style={vscDarkPlus}
+                language={match[1]}
+                PreTag="div"
+                showLineNumbers={true}
+            >
+                {String(children).replace(/\\n$/, '')}
+            </SyntaxHighlighter>
+        </div>
             </>
         );
     }

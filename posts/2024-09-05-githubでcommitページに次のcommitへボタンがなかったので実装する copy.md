@@ -4,8 +4,8 @@ description: ""
 date: 2024-09-05T00:11:54.259Z
 preview: ""
 draft: true
-tags: []
-categories: []
+tags: ["オススメ"]
+categories:
 slug: 2024-09-05-create-github-commit-navigator
 ---
 
@@ -131,6 +131,7 @@ GitHubがSPAであるがゆえの問題との格闘時に参考にしたリン�
 
 
 ChatGPTに相談した結果、SPAだから起きていると判明。
+
 
 ```
 この問題は、GitHubがシングルページアプリケーション (SPA) の要素を持っているために、ページの完全なリロードが行われず、URLが変わってもcontent.jsが自動で再実行されないことが原因です。つまり、ページ遷移の際にブラウザが新しいページを完全に読み込むわけではないため、content_scriptsが再度適用されないことがあります。
