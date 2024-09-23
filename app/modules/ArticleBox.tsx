@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { Post } from "@/src/interfaces/post";
+import LikeNum from './LikeNum';
 
 export default function ArticleBox(prop : { post: Post }) {
     const { post } = prop;
@@ -15,6 +16,7 @@ export default function ArticleBox(prop : { post: Post }) {
                 <p className="text-sm w-[280px]">{post.date.toLocaleDateString('ja-JP', options)}</p>
                 <p className="text-sm w-[280px]">{post.tags?.join(',')}</p>
                 <p className="text-sm w-[280px]">{post.categories?.join(',')}</p>
+                <LikeNum slug={post.slug} />
             </a>
         </div>
     );
