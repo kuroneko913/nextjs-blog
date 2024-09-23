@@ -1,9 +1,9 @@
 ---
 title: About
 description: ""
-date: 2024-09-05T00:11:54.259Z
+date: 2024-09-23T14:27:22.507Z
 preview: ""
-draft: true
+draft: false
 tags: []
 categories: []
 slug: about
@@ -19,12 +19,21 @@ PHPやPython、AI技術、IoT、AR/XR、生物学、Brain Machine Interface、�
 スポーツは全然できないが、水泳部だったので泳ぐことはできる。
 
 ## ポートフォリオなど
-[LAPRAS](https://lapras.com/public/kuroneko913)
-[GitHub](https://github.com/kuroneko913)
-[Zenn](https://zenn.dev/kuroneko913)
-[Qiita](https://qiita.com/myblackcat7112)
-[Twitter](https://twitter.com/myblackcat7112)
-
+```link
+https://lapras.com/public/kuroneko913
+```
+```link
+https://github.com/kuroneko913
+```
+```link
+https://zenn.dev/kuroneko913
+```
+```link
+https://qiita.com/myblackcat7112
+```
+```link
+https://twitter.com/myblackcat7112
+```
 ## 最近読んだ本
 ![読書メーター](/images/uploaded/screenshot-2024-09-23-232342.png)
 
