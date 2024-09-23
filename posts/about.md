@@ -23,8 +23,10 @@ PHPやPython、AI技術、IoT、AR/XR、生物学、Brain Machine Interface、�
 [GitHub](https://github.com/kuroneko913)
 [Zenn](https://zenn.dev/kuroneko913)
 [Qiita](https://qiita.com/myblackcat7112)
-[読書メーター](https://bookmeter.com/users/343391/profile)
 [Twitter](https://twitter.com/myblackcat7112)
+
+## 最近読んだ本
+![読書メーター](/images/uploaded/screenshot-2024-09-23-232342.png)
 
 ## スライドなど
 
