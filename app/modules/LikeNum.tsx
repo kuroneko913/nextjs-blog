@@ -38,8 +38,8 @@ export default function LikeNum({ slug }: { slug: string }) {
   };
 
   return (
-    <div className="w-full flex justify-end">
-        <FontAwesomeIcon icon={faThumbsUp} className="mr-2"/><span>{likeNum}</span>
+    <div className="w-full flex justify-end p-4">
+        <FontAwesomeIcon icon={faThumbsUp} className="mr-2 text-green-500"/><span>{likeNum}</span>
     </div>
   );
 }

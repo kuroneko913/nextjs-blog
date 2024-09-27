@@ -9,6 +9,16 @@ export type Post = {
     content: string;
 };
 
+export type ZennArticle = {
+    title: string;
+    slug: string;
+    body_updated_at: string;
+    path: string;
+    emoji: string;
+    article_type: string;
+    liked_count: number;
+};
+
 export type SearchParams = {
     [key: string]: string;
 };
