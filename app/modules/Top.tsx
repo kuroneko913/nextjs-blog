@@ -6,8 +6,8 @@ import { RecomendedPostsFilter, UpdatedArticleFilter } from "@/src/ArticleFilter
 import { Post } from "@/src/interfaces/post";
 
 export default function Top(prop: { posts: Post[] }) {
-    const updatedPosts = UpdatedArticleFilter(prop.posts, 6);
-    const RecomendedPosts = RecomendedPostsFilter(prop.posts, 10);
+    const updatedPosts = UpdatedArticleFilter(prop.posts, 8);
+    const RecomendedPosts = RecomendedPostsFilter(prop.posts, 8);
 
     return (
         <div className="flex p-10 justify-between flex-wrap">

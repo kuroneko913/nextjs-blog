@@ -3,7 +3,7 @@ title: GitHubでcommitページに次のcommitへボタンがなかったので�
 description: ""
 date: 2024-09-05T00:11:54.259Z
 preview: ""
-draft: true
+draft: false
 tags: ["オススメ"]
 categories:
 slug: 2024-09-05-create-github-commit-navigator

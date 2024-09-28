@@ -7,6 +7,7 @@ import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
 export default function LikeNum({ slug }: { slug: string }) {
   const [likeNum, setLikeNum] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // getLike を useEffect 内で一度だけ実行
   useEffect(() => {
@@ -25,6 +26,9 @@ export default function LikeNum({ slug }: { slug: string }) {
   }, [slug]);
 
   const toggleLike = async () => {
+    if (loading) return; // 既にリクエスト中であれば処理しない
+
+    setLoading(true); // ローディング開始
     try {
       const res = await axios.post('/api/blog-like', { slug });
       if (res.status === 200 && res.data.liked) {
@@ -34,12 +38,17 @@ export default function LikeNum({ slug }: { slug: string }) {
       }
     } catch (error) {
       console.error('Error liking the post:', error);
+    } finally {
+      setLoading(false); // ローディング終了
     }
   };
 
   return (
     <div className="w-full flex justify-end p-4">
-        <FontAwesomeIcon icon={faThumbsUp} className="mr-2 text-green-500"/><span>{likeNum}</span>
+      <button onClick={toggleLike} disabled={loading} className="flex items-center">
+        <FontAwesomeIcon icon={faThumbsUp} className={`mr-2 ${loading ? 'animate-pulse' : 'text-green-500'}`} />
+        <span>{likeNum}</span>
+      </button>
     </div>
   );
 }

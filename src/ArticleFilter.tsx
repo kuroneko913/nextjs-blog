@@ -8,12 +8,12 @@ import { Post } from "@/src/interfaces/post";
  */
 export function UpdatedArticleFilter(posts: Post[], count : number|null = 3): Post[] {
     // 元の配列を上書きしないようにコピーを作成してそれをソートする
-    let targetPosts = posts.filter((post) => {
+    const targetPosts = posts.filter((post) => {
         // aboutページは表示しない 
         if(post.slug === "about") return false;
         return true; 
     });
-    let sortedPosts = targetPosts.sort((a, b) => {
+    const sortedPosts = targetPosts.sort((a, b) => {
         if (a.date < b.date) return 1;
         if (a.date > b.date) return -1;
         return 0;
@@ -29,10 +29,17 @@ export function UpdatedArticleFilter(posts: Post[], count : number|null = 3): Po
  * @returns Post[]
  */
 export function RecomendedPostsFilter(posts: Post[], count : number = 10): Post[] {
-    let targetPosts = posts.map((post) => { return post });
-    return targetPosts.filter((post) => {
+    const targetPosts = posts.map((post) => { return post });
+    const recomendedPosts = targetPosts.filter((post) => {
         if (post.slug === "about") return false;
         if (post.tags === undefined) return false;
         return post.tags.includes("オススメ");
     }).slice(0, count);
+    const sortedPosts = recomendedPosts.sort((a, b) => {
+        if (a.date < b.date) return 1;
+        if (a.date > b.date) return -1;
+        return 0;
+    });
+    if (count === null) return sortedPosts;
+    return sortedPosts;
 };

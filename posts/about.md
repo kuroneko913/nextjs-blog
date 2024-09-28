@@ -1,7 +1,7 @@
 ---
 title: About
 description: ""
-date: 2024-09-23T14:27:22.507Z
+date: 2024-09-28T03:51:13.637Z
 preview: ""
 draft: false
 tags: []
@@ -12,6 +12,8 @@ slug: about
 # About
 ## 自己紹介
 栃木県生まれ、神奈川県在住。
+kuroneko913だったり、まさき。だったりでキャラが定まっていない。(今後はkuroneko913に寄せていくつもり)
+
 主にPHP系のWebエンジニアとして勤務中。
 PHPやPython、AI技術、IoT、AR/XR、生物学、Brain Machine Interface、プロダクト、データ分析など幅広い範囲に興味がある。 
 現在はプログラミングの講師の副業も行っている。

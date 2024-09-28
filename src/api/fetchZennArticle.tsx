@@ -2,8 +2,7 @@ import axios from "axios";
 import { ZennArticle } from "../interfaces/post";
 
 export default async function fetchZennArticles() {
-    const username = 'kuroneko913';
-    const res = await axios.get(`/api/zenn-articles?username=${username}`);
+    const res = await axios.get('/api/zenn-articles');
     return sortByDate(res.data.articles);
 }
 

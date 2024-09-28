@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
+import Image from 'next/image';
 
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,7 +11,20 @@ export default function Header() {
             {/* ハンバーガーメニュー(クローズ時) */}
             <div className={`w-full ${isMenuOpen ? 'hidden' : 'flex'} justify-between items-center`}>
                 <div className="logo">
-                    <a className="text-2xl text-gray-900 font-bold color-black" href="/">くろねこ。の実験室</a>
+                    <a className="text-2xl text-gray-900 font-bold color-black" href="/">
+                        <div className="flex items-center">
+                            <div className="relative w-12 h-12 mr-2">
+                                <Image
+                                    src="/images/logo-transparent.png"
+                                    alt="logo"
+                                    fill
+                                    sizes="100% 100%"
+                                    style={{ objectFit: 'cover' }}
+                                />
+                            </div>
+                            <h1>くろねこ。の実験室</h1>
+                        </div>
+                    </a>
                 </div>
                 {/* ハンバーガーメニューのアイコンをsm未満では出す */}
                 <div className="flex sm:hidden items-center px-4">
@@ -23,7 +37,20 @@ export default function Header() {
             <div className={`${isMenuOpen ? 'flex' : 'hidden'} sm:hidden fixed inset-0 bg-white flex-col justify-start items-center z-50`}>
                 <div className="w-full flex justify-between items-center py-6 px-4">
                     <div className="logo">
-                        <a className="text-2xl text-gray-900 font-bold color-black" href="/">くろねこ。の実験室</a>
+                        <a className="text-2xl text-gray-900 font-bold color-black" href="/">
+                        <div className="flex items-center">
+                            <div className="relative w-12 h-12 mr-2">
+                                <Image
+                                    src="/images/logo-transparent.png"
+                                    alt="logo"
+                                    fill
+                                    sizes="100% 100%"
+                                    style={{ objectFit: 'cover' }}
+                                />
+                            </div>
+                            <h1>くろねこ。の実験室</h1>
+                        </div>
+                        </a>
                     </div>
                     {/* ハンバーガーメニューのアイコンをsm未満では出す */}
                     <div className="flex sm:hidden items-center px-4">
