@@ -1,3 +1,4 @@
+//'use client'
 import UpdateArticle from "./UpdateArticle";
 import RecommendArticle from "./RecommendArticle";
 import IntroductionBox from "./IntroductionBox";

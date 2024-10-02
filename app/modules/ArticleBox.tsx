@@ -2,8 +2,8 @@ import Image from 'next/image';
 import { Post } from "@/src/interfaces/post";
 import LikeNum from './LikeNum';
 
-export default function ArticleBox(prop: { post: Post }) {
-    const { post } = prop;
+export default function ArticleBox(prop: { post: Post, likeNum: number }) {
+    const { post, likeNum } = prop;
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
   
     return (
@@ -31,7 +31,7 @@ export default function ArticleBox(prop: { post: Post }) {
             <p className="text-sm w-[280px]">{post.date.toLocaleDateString('ja-JP', options)}</p>
             <p className="text-sm w-[280px]">{post.tags?.join(', ')}</p>
             <p className="text-sm w-[280px]">{post.categories?.join(', ')}</p>
-            <LikeNum slug={post.slug} />
+            <LikeNum slug={post.slug} like={likeNum} />
         </div>
       </div>
     );

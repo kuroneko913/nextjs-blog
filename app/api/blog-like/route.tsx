@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 const { cert } = require('firebase-admin/app');
-const { getFirestore } = require('firebase-admin/firestore');
+const { getFirestore, getDocs } = require('firebase-admin/firestore');
 const admin = require('firebase-admin');
 
 // Firebaseの初期化
@@ -47,14 +47,32 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   const COLLECTION_NAME = 'blog-likes';
-  const slug = req.nextUrl.searchParams.get('slug');
-
+  const slug = req.nextUrl.searchParams.get('slug') ?? '';
   try {
     const likesRef = db.collection(COLLECTION_NAME);
-    // 特定の記事（slug）のいいねをカウントする
-    const snapshot = await likesRef.where('article-slug', '==', slug).get();
-    return NextResponse.json({ likes: snapshot.size}, { status: 200});  // ドキュメントのカウント
+    const snapshot = await likesRef.get();
+    if (snapshot.empty) {
+      return NextResponse.json({ error: 'No like found' }, { status: 404 });
+    }
+    const records = snapshot.docs.map((doc: any) => doc.data());
+    const result = countLikeBySlug(records);
+    if (slug === '') {
+      return NextResponse.json({ result }, { status: 200 });  // ドキュメントのカウント
+    }
+    // 特定の記事（slug）のいいね数を取得
+    return NextResponse.json({ 'result':result[slug] ?? 0 }, { status: 200});  // ドキュメントのカウント
   } catch (error) {
+    console.error('Error fetching likes:', error);
     return NextResponse.json({ error: 'Failed to get like' }, { status: 500 });
   }
+}
+
+function countLikeBySlug(records: {ip: string, 'article-slug': string}[])
+{
+  let result: any = {};
+  for (const record of records) {
+    const slug = record['article-slug'];
+    slug in result ? result[slug]++ : result[slug] = 1;
+  }
+  return result;
 }
