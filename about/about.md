@@ -1,7 +1,7 @@
 ---
 title: About
 description: ""
-date: 2024-09-28T03:51:13.637Z
+date: 2024-10-03T14:00:07.300Z
 preview: ""
 draft: false
 tags: []

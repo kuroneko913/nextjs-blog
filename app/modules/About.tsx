@@ -1,7 +1,7 @@
 import Footer from "@/app/modules/Footer";
 import Header from "../modules/Header";
 import Hero from "../modules/Hero";
-import { getPostBySlug } from "@/src/fetch";
+import { getPost } from "@/src/fetchForAbout";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";
@@ -9,7 +9,7 @@ import breaks from 'remark-breaks';
 import CodeBlock from "../modules/CodeBlock";
 
 export default async function About() {
-    const post = await getPostBySlug("about");
+    const post = await getPost();
     if (!post) {
         return (
             <div>
