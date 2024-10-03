@@ -10,7 +10,7 @@ const postsDirectory = `${process.cwd()}/posts`;
 const allowedSearchKeys:AllowedSearchKeys = {category: 'categories', tag: 'tags', archive: 'date'};
 
   /**
-  * 記事のslugを取得する。
+  * 記事をslugごとに取得する。
   * @returns Post[]
   */
   export function getAllPosts() {
@@ -26,7 +26,7 @@ const allowedSearchKeys:AllowedSearchKeys = {category: 'categories', tag: 'tags'
   }
   
   /**
-   * slugを受けとって、記事を取得する。
+   * slugを受けとって、特定の記事を取得する。
    * @param string slug
    * @returns Post
    */
