@@ -1,7 +1,6 @@
 'use client';
 
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { Components } from 'react-markdown';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import Youtube from 'react-youtube';
 import { Tweet } from 'react-twitter-widgets';
@@ -47,19 +46,17 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ inline, className, children }) =>
     const filename = className.split(':')[1];
     if (!inline && match) {
         return (
-            <>
-                <div className="w-full overflow-x-auto max-w-full bg-black">
-            {filename && <div className="px-4 my-1"><span className="text-white">{filename}</span></div>}
-            <SyntaxHighlighter
-                style={vscDarkPlus}
-                language={match[1]}
-                PreTag="div"
-                showLineNumbers={true}
-            >
-                {String(children).replace(/\\n$/, '')}
-            </SyntaxHighlighter>
-        </div>
-            </>
+            <div className="w-full overflow-x-auto max-w-full bg-black">
+                {filename && <div className="px-4 my-1"><span className="text-white">{filename}</span></div>}
+                <SyntaxHighlighter
+                    style={vscDarkPlus}
+                    language={match[1]}
+                    PreTag="div"
+                    showLineNumbers={true}
+                >
+                    {String(children).replace(/\\n$/, '')}
+                </SyntaxHighlighter>
+            </div>
         );
     }
 

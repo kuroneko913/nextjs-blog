@@ -63,6 +63,7 @@ export default function Header() {
                    <li><a className="block hover:text-gray-500 py-2 px-4 w-full" href="/">Home</a></li>
                    <li><a className="block hover:text-gray-500 py-2 px-4 w-full" href="/blog">Blog</a></li>
                    <li><a className="block hover:text-gray-500 py-2 px-4 w-full" href="/about">About</a></li>
+                   <li><a className="block hover:text-gray-500 py-2 px-4 w-full" href="/lab">Lab</a></li>
                </ul>
             </div>
             {/* 通常のメニュー: sm以上で表示 */}
@@ -75,6 +76,9 @@ export default function Header() {
                 </li>
                 <li>
                     <a className="hover:text-gray-500" href="/about">About</a>
+                </li>
+                <li>
+                    <a className="hover:text-gray-500" href="/lab">Lab</a>
                 </li>
             </ul>
         </header>

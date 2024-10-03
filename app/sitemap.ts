@@ -33,7 +33,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             lastModified: new Date().toISOString(),
             changeFrequency: 'weekly' as const,
             priority: 0.8,
-        }
+        },
+        {
+            url: `${protocol}://${host}/lab`,
+            lastModified: new Date().toISOString(),
+            changeFrequency: 'weekly' as const,
+            priority: 0.8,
+        },
     ];
     return [...dynamicPages, ...staticPages];
 }
