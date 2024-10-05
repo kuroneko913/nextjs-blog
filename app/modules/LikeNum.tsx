@@ -25,7 +25,7 @@ export default function LikeNum(prop: {slug: string, like?: number}) {
         if (like === undefined) {
             getLike(); // コンポーネントのマウント時に一度だけ実行
         }
-    }, [slug]);
+    }, [like, slug]);
 
     const toggleLike = async () => {
         if (loading) return; // 既にリクエスト中であれば処理しない

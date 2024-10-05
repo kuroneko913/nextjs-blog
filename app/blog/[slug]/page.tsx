@@ -9,6 +9,28 @@ import gfm from "remark-gfm";
 import breaks from 'remark-breaks';
 import CodeBlock from "../../modules/CodeBlock";
 import LikeButton from "@/app/modules/LikeButton";
+import type { Metadata } from "next";
+
+export async function generateMetadata({ params } : { params: {slug: string } }): Promise<Metadata> {
+  const post = await getPostBySlug(params.slug);
+  return {
+    title: post.title,
+    description: post.description,
+    openGraph: {
+      type: "website",
+      locale: "ja_JP",
+      title: post.title,
+      description: post.description,
+      siteName: "くろねこ。の実験室",
+      url: `https://myblackcat913.com/blog/${post.slug}`,
+      images: [
+        {
+          url: "https://myblackcat913.com/images/logo.webp",
+        },
+      ],
+    },
+  };
+}
 
 export default async function BlogPage({ params }: { params: { slug: string } }) {
   const post = await getPostBySlug(params.slug);
