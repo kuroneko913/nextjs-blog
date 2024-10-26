@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 const { cert } = require('firebase-admin/app');
-const { getFirestore, getDocs } = require('firebase-admin/firestore');
+const { getFirestore } = require('firebase-admin/firestore');
 const admin = require('firebase-admin');
 
 // Firebaseの初期化

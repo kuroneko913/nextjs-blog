@@ -2,5 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
     //TODO: Implement POST method 
-    return NextResponse.json({ message: 'Hello, World!' });
+    console.log(req.body);
+    return NextResponse.json({ message: 'ATGCCCCAAGGAA' });
 }
