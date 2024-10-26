@@ -1,6 +1,12 @@
+import { useState, useEffect } from "react";
 import Product from "./Product";
 
 export default function Base() {
+    // 開発環境の場合のみ、ベータ機能を表示する
+    const [showBetaFeature, setShowBetaFeature] = useState(false);
+    useEffect(() => {
+        setShowBetaFeature(process.env.NEXT_PUBLIC_IS_DEVELOPMENT === 'true');
+    }, []);
     return (
         <div>
             <h1>Lab</h1>
@@ -14,8 +20,8 @@ export default function Base() {
                         loading="lazy"
                     />
                 </div>
-                <p className="my-10">工事中...</p>
-                <Product />
+                { !showBetaFeature && <p className="my-10">工事中...</p> }
+                { showBetaFeature && <Product /> }
             </div>
         </div>
     );
