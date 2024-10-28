@@ -4,7 +4,6 @@ import { AminoAcidsObject } from '@/src/labs/GeneticCodes/AminoAcidsObject';
 import { Encoder } from '@/src/labs/GeneticCodes/Encoder';
 import { NextRequest, NextResponse } from 'next/server';
 
-
 export async function POST(req: NextRequest): Promise<NextResponse> {
 
     const generateKeyData = (): AminoAcidsObject => {
@@ -13,7 +12,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     const getKeyData = (keyData: any): AminoAcidsObject => {
         const AminoAcids = keyData.aminoAcids.map((aminoAcid: any) => {
-            return new AminoAcid(aminoAcid._codons, aminoAcid._name, aminoAcid._id);
+            return new AminoAcid(aminoAcid.codons, aminoAcid.name, aminoAcid.id);
         });
         return new AminoAcidsObject(AminoAcids, keyData.startCodon, keyData.endCodon);
     };
@@ -34,11 +33,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json(
         {
             message: dna.sequence,
-            keyData: {
-                aminoAcids: aminoAcidsObject.aminoAcids,
-                startCodon: aminoAcidsObject.startCodon,
-                endCodon: aminoAcidsObject.endCodon,
-            }
+            keyData: aminoAcidsObject.toJson()
         }
     );
 }

@@ -22,4 +22,18 @@ export class AminoAcidsObject {
     get endCodon(): string {
         return this._endCodon;
     }
+
+    toJson = (): {} => {
+        return {
+            aminoAcids: this._aminoAcids.map((aminoAcid: AminoAcid) => {
+                return {
+                    id: aminoAcid.id,
+                    name: aminoAcid.name,
+                    codons: aminoAcid.codons,
+                };
+            }),
+            startCodon: this._startCodon,
+            endCodon: this._endCodon
+        };
+    }
 }
