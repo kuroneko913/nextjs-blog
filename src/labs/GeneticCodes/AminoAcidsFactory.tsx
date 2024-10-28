@@ -1,7 +1,8 @@
 import { AminoAcid } from "./AminoAcid";
+import { AminoAcidsObject } from "./AminoAcidsObject";
 
 export class AminoAcidsFactory {
-    createAminoAcids(): [AminoAcid[], string, string] {
+    createAminoAcids(): AminoAcidsObject {
         // アミノ酸に割り当てる番号をランダムに生成する
         const aminoNums = this.shuffleArray((new Array(20)).fill(0).map((_, i) => i));
         let AminoAcids = aminoNums.map((num: number) => {
@@ -31,7 +32,7 @@ export class AminoAcidsFactory {
         // 開始コドンと終了コドンを持つアミノ酸(実在しない)を追加
         AminoAcids.push(new AminoAcid([startCodon ?? ''], 'Start', 20));
         AminoAcids.push(new AminoAcid([endCodon ?? ''], 'End', 21));
-        return [AminoAcids, startCodon ?? '', endCodon ?? ''];
+        return new AminoAcidsObject(AminoAcids, startCodon ?? '', endCodon ?? '');
     }
 
     generateAminoAcidNumbers() {

@@ -17,9 +17,15 @@ export default function Product() {
     //TODO: 生成された鍵を使って暗号化を行うように変更
     const [encodeMessage, setEncodeMessage] = useState('');
     const sendEncodeRequest = async() => {
-        const data = await sendApiRequest('/api/labs/genetic-codes/encode', 'POST', { message: plainMessage });
+        const data = await sendApiRequest('/api/labs/genetic-codes/encode', 'POST', { message: plainMessage, keyData: keyData });
         if (data.message !== '') { 
             setEncodeMessage(data.message);
+        }
+        if (data.keyData) {
+            setKeyData(data.keyData);
+            setKeyResponseMessage("鍵の生成に成功しました");
+            const hash = await generateHash(JSON.stringify(data.keyData));
+            setHashedKey(hash);
         }
     };
     const [encodedMessage, setEncodedMessage] = useState('');
