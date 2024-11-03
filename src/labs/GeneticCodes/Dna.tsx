@@ -32,6 +32,10 @@ export class Dna {
         }).join(''));
     }
 
+    validate(): boolean {
+        return this._sequence.match(/[^ATGC]/) === null;
+    }
+
     get sequence(): string {
         return this._sequence;
     }

@@ -25,6 +25,9 @@ export class Decoder {
      */
     public execute(encodedMessage: string):string {
         const dna = new Dna(encodedMessage);
+        if (dna.validate() === false) {
+            return '不正なフォーマットです';
+        }
         const aminoAcidList = this.decode(dna);    
         return this.aminoToMessage(aminoAcidList);
     }

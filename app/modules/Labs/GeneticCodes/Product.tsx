@@ -34,7 +34,11 @@ export default function Product() {
     };
     const [decodedMessage, setDecodedMessage] = useState('');
     const sendDecodeRequest = async () => {
-        const data = await sendApiRequest('/api/labs/genetic-codes/decode', 'POST', { message: encodedMessage, keyData: keyData });
+        let message = encodedMessage;
+        if (message === '') {
+            message = encodeMessage;
+        }
+        const data = await sendApiRequest('/api/labs/genetic-codes/decode', 'POST', { message: message, keyData: keyData });
         if (data.message) {
             setDecodedMessage(data.message);
         }
@@ -51,6 +55,10 @@ export default function Product() {
             const hash = await generateHash(JSON.stringify(data.keyData));
             setHashedKey(hash);
         }
+    };
+
+    const copyEncodedToDecode = () => {
+        setEncodedMessage(encodeMessage);
     };
 
     // ハッシュ生成の関数
@@ -89,7 +97,12 @@ export default function Product() {
                 <p>暗号化された文字列: ここに暗号化された文字列が表示されます。</p>
                 <p className="whitespace-normal break-words">{encodeMessage}</p>
             </div>
-            <textarea className="w-full border-2 rounded p-4 my-4" placeholder="ここになにか文字を入力" onChange={updateEncodedMessage}></textarea>
+            <div className="text-right">
+                <button className="bg-gray-500 hover:bg-gray-700 text-white text-right font-bold py-2 px-4 rounded-lg mb-4" onClick={copyEncodedToDecode}>
+                    復号エリアにコピー
+                </button>
+            </div>
+            <textarea className="w-full border-2 rounded p-4 my-4" placeholder="ここになにか文字を入力" onChange={updateEncodedMessage} value={encodedMessage}></textarea>
             <div className="text-right">
                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg" onClick={sendDecodeRequest}>
                     復号する
