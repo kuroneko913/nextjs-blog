@@ -34,7 +34,7 @@ export default function Product() {
     };
     const [decodedMessage, setDecodedMessage] = useState('');
     const sendDecodeRequest = async () => {
-        const data = await sendApiRequest('/api/labs/genetic-codes/decode', 'POST', { message: encodedMessage });
+        const data = await sendApiRequest('/api/labs/genetic-codes/decode', 'POST', { message: encodedMessage, keyData: keyData });
         if (data.message) {
             setDecodedMessage(data.message);
         }

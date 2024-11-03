@@ -52,7 +52,7 @@ export class Encoder {
         );
 
         // DNAを生成
-        return mRna.complementaryDna;
+        return mRna.reverseTranscript().replicate();
     };
 
     /**

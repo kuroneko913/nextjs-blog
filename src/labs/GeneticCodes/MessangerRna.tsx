@@ -6,7 +6,13 @@ export class MessangerRna {
         this._sequence = sequence;
     }
 
-    complementRule: {[mRnaBase: string]: string} = {
+    reverseTranscript(): Dna {
+        return new Dna(this._sequence.split('').map(base => {
+            return this.reverseTranscriptionRule[base];
+        }).join(''));
+    }
+
+    reverseTranscriptionRule: {[mRnaBase: string]: string} = {
         'A': 'T',
         'U': 'A',
         'G': 'C',
@@ -15,15 +21,5 @@ export class MessangerRna {
 
     get sequence(): string {
         return this._sequence;
-    }
-
-    get length(): number {
-        return this._sequence.length;
-    }
-
-    get complementaryDna(): Dna {
-        return new Dna(this._sequence.split('').map(base => {
-            return this.complementRule[base];
-        }).join(''));
     }
 }
