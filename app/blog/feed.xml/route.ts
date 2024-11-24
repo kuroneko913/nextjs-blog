@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Feed } from 'feed';
 import { marked } from 'marked';
 import { getPostsByCondition } from '@/src/fetch';
+import { UpdatedArticleFilter } from '@/src/ArticleFilter';
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
     const baseUrl = 'https://myblackcat913.com';
@@ -18,12 +19,13 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     });
 
     try {
-        const posts = await getPostsByCondition({});
+        let posts = await getPostsByCondition({});
+        posts = UpdatedArticleFilter(posts, null); // 更新日時の新しい順に並び替え
         for (const post of posts) {
             const postUrl = `${baseUrl}/blog/${encodeURIComponent(post.slug)}`;
-            let htmlContent = await marked(cleanString(post.content));
+            let htmlContent = await marked(post.content);
+            htmlContent = cleanString(htmlContent); // HTMLエンティティをエスケープ
             htmlContent = convertRelativeToAbsolute(htmlContent, baseUrl); // 相対URLを絶対URLに変換
-            htmlContent = escapeHtmlEntities(htmlContent); // HTMLエスケープ
 
             rssFeed.addItem({
                 title: cleanString(post.title),
@@ -33,6 +35,11 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
                 date: new Date(post.date),
                 guid: postUrl,
                 content: `${htmlContent}`,
+                enclosure: {
+                    url: `${baseUrl}${post.thumbnail}`,
+                    type: 'image/webp',
+                    length: 256,
+                }
             });
         }
 

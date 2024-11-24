@@ -12,7 +12,7 @@ export default function ArticleBox(prop: { post: Post, likeNum: number }) {
           {/* 画像部分 */}
           <div className="relative w-[280px] h-[200px] overflow-hidden">
             <Image
-              src="/images/hero.webp"
+              src={post.thumbnail}
               alt="Hero"
               fill
               priority 

@@ -18,6 +18,9 @@ const allowedSearchKeys:AllowedSearchKeys = {category: 'categories', tag: 'tags'
       const fromFileSlug = filename.replace(/\.md$/, "");
       const fileContents = fs.readFileSync(path.join(postsDirectory, filename), "utf8");
       const {data, content} = matter(fileContents);
+      if (data.thumbnail === undefined) {
+        data.thumbnail = '/images/hero.webp';
+      }
       if (data.slug === undefined) {
         return {...data, slug: fromFileSlug, content} as Post;
       }

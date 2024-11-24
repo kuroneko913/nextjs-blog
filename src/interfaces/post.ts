@@ -7,6 +7,7 @@ export type Post = {
     tags: string[];
     slug: string;
     content: string;
+    thumbnail: string;
 };
 
 export type ZennArticle = {
