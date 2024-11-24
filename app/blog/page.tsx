@@ -26,9 +26,7 @@ export const metadata: Metadata = {
 
 export default async function Index(props: { searchParams: SearchParams }) {
     // 記事を取得する。
-    const posts = await getPostsByCondition(props.searchParams);
-    // aboutページを除外する
-    const filteredPosts = posts.filter((post) => post.slug !== "about");
+    const filteredPosts = await getPostsByCondition(props.searchParams);
     return (
         <main>
             <Header />

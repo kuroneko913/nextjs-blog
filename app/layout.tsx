@@ -33,6 +33,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
+      <head>
+        <link 
+          rel="alternate"
+          type="application/rss+xml"
+          title="RSSフィード - くろねこ。の実験室"
+          href="/blog/feed.xml"
+        />
+      </head>
       <body className={inter.className}>{children}</body>
       <GoogleAnalytics gaId="G-0SJ770PTHM" />
     </html>
