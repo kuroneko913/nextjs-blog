@@ -2,7 +2,12 @@ import axios from "axios";
 import { ZennArticle } from "../interfaces/post";
 
 export default async function fetchZennArticles() {
-    const res = await axios.get('/api/zenn-articles');
+    const res = await axios.get('/api/zenn-articles', {
+        headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'max-age=14400',
+        }
+    });
     return sortByDate(res.data.articles);
 }
 
