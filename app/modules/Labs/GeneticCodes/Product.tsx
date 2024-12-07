@@ -79,6 +79,7 @@ export default function Product() {
                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg" onClick={sendKeyGenerateRequest}>
                     鍵を生成する
                 </button>
+                {/* <UploadKeyFileForm /> */}
             </div>
             <div className="my-10">
                 <p>生成された鍵: ここに生成された鍵が表示されます。</p>
