@@ -49,6 +49,11 @@ https://twitter.com/myblackcat7112
 
 ## スライドなど
 
+**[PHP Conference Japan 2024]var_dumpとvar_exportの理解から始めるPHPのソースコードリーディング**
+```link
+https://speakerdeck.com/myblackcat7112/var-dumptovar-exportnoli-jie-karashi-meruphpnoso-sukodorideingu
+``` 
+
 **[PHPerKaigi 2023] 問い合わせ調査に素早く回答するための「アキネイター」的アプローチの模索**
 ```link
 https://speakerdeck.com/myblackcat7112/phperkaigi-2023-wen-ihe-wasediao-cha-nisu-zao-kuhui-da-surutameno-akineita-de-apurotinomo-suo
