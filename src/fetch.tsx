@@ -14,7 +14,7 @@ const allowedSearchKeys:AllowedSearchKeys = {category: 'categories', tag: 'tags'
   * @returns Post[]
   */
   export function getAllPosts() {
-    return fs.readdirSync(postsDirectory).map((filename) => {
+    let posts = fs.readdirSync(postsDirectory).map((filename) => {
       const fromFileSlug = filename.replace(/\.md$/, "");
       const fileContents = fs.readFileSync(path.join(postsDirectory, filename), "utf8");
       const {data, content} = matter(fileContents);
@@ -25,6 +25,10 @@ const allowedSearchKeys:AllowedSearchKeys = {category: 'categories', tag: 'tags'
         return {...data, slug: fromFileSlug, content} as Post;
       }
       return {...data, slug: data.slug, content} as Post;
+    });
+    // ドラフト記事を除外する。
+    return posts.filter((post) => {
+      return !post.draft;
     });
   }
   

@@ -8,6 +8,7 @@ export type Post = {
     slug: string;
     content: string;
     thumbnail: string;
+    draft: boolean;
 };
 
 export type ZennArticle = {
