@@ -30,7 +30,7 @@ export default async function Index(props: { searchParams: SearchParams }) {
     return (
         <main>
             <Header />
-            <Hero />
+            <Hero  />
             <Blog posts={filteredPosts} />
             <Footer />
         </main>

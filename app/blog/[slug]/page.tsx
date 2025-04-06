@@ -1,6 +1,5 @@
 import Footer from "@/app/modules/Footer";
 import Header from "../../modules/Header";
-import Hero from "../../modules/Hero";
 import IntroductionBox from "../../modules/IntroductionBox";
 import { getPostBySlug } from "@/src/fetch";
 import React from "react";
@@ -10,9 +9,23 @@ import breaks from 'remark-breaks';
 import CodeBlock from "../../modules/CodeBlock";
 import LikeButton from "@/app/modules/LikeButton";
 import type { Metadata } from "next";
+import ArticleThumbnail from "@/app/modules/ArticleThumbnail";
 
 export async function generateMetadata({ params } : { params: {slug: string } }): Promise<Metadata> {
   const post = await getPostBySlug(params.slug);
+  const images = post.hero ? [
+    {
+      url: `https://myblackcat913.com${post.hero}`,
+      width: 1200,
+      height: 630,
+    },
+  ] : [
+    {
+      url: "https://myblackcat913.com/images/logo.webp",
+      width: 1200,
+      height: 630,
+    },
+  ];
   return {
     title: post.title,
     description: post.description,
@@ -23,11 +36,7 @@ export async function generateMetadata({ params } : { params: {slug: string } })
       description: post.description,
       siteName: "くろねこ。の実験室",
       url: `https://myblackcat913.com/blog/${post.slug}`,
-      images: [
-        {
-          url: "https://myblackcat913.com/images/logo.webp",
-        },
-      ],
+      images: images,
     },
   };
 }
@@ -47,7 +56,7 @@ export default async function BlogPage({ params }: { params: { slug: string } })
   return (
     <main>
       <Header />
-      <Hero />
+      <ArticleThumbnail src={post.hero} />
       <h1 className="px-4 sm:px-20 pt-10 pb-4 text-2xl font-bold">{post.title}</h1>
       <p className="px-4 sm:px-20">Date: {
         new Date(post.date).toLocaleDateString("ja-jp", { year:'numeric', month:'2-digit', day: '2-digit', hour: "2-digit", minute: "2-digit" })
