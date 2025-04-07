@@ -42,12 +42,26 @@ https://zenn.dev/kuroneko913
 https://qiita.com/myblackcat7112
 ```
 ```link
-https://twitter.com/myblackcat7112
+https://x.com/myblackcat7112
 ```
+
+以前書いてたブログ「diary-my’s diary」(5記事)
+```link
+https://blog.hatena.ne.jp/myblackcat7112/diary-my.hateblo.jp/
+```
+
+以前書こうとしていた痕跡「黒猫の備忘録的な何か。」
+![黒猫の備忘録的な何か。の下書き](/images/uploaded/202504/blackcat913.draft-list.PNG)
+
 ## 最近読んだ本
 ![読書メーター](/images/uploaded/screenshot-2024-09-23-232342.png)
 
 ## スライドなど
+
+**[PHPerKaigi 2025]PHPで巨大データ検索の高速化: strposと計算量の重要性**
+```link
+https://speakerdeck.com/myblackcat7112/phpteju-da-tetajian-suo-nogao-su-hua-strpostoji-suan-liang-nozhong-yao-xing
+```
 
 **[PHP Conference Japan 2024]var_dumpとvar_exportの理解から始めるPHPのソースコードリーディング**
 ```link
