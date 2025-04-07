@@ -47,11 +47,8 @@ https://x.com/myblackcat7112
 
 以前書いてたブログ「diary-my’s diary」(5記事)
 ```link
-https://blog.hatena.ne.jp/myblackcat7112/diary-my.hateblo.jp/
+https://diary-my.hateblo.jp/
 ```
-
-以前書こうとしていた痕跡「黒猫の備忘録的な何か。」
-![黒猫の備忘録的な何か。の下書き](/images/uploaded/202504/blackcat913.draft-list.PNG)
 
 ## 最近読んだ本
 ![読書メーター](/images/uploaded/screenshot-2024-09-23-232342.png)
