@@ -1,16 +1,49 @@
 import { NextResponse } from 'next/server';
+import axios from 'axios';
 
 export async function POST(req: Request): Promise<Response> {
     const reqBody = await req.json();
     const { arguments: { location } } = reqBody;
-    const description = "晴れ"; // ここではダミーの天気情報を使用しています
-    const temp = "25"; // ここではダミーの気温情報を使用しています
-
+    const cityMap: Record<string, string> = {
+        '東京': 'Tokyo,JP',
+        '大阪': 'Osaka,JP',
+        '名古屋': 'Nagoya,JP',
+        '札幌': 'Sapporo,JP',
+        '福岡': 'Fukuoka,JP',
+        '横浜': 'Yokohama,JP',
+    }
+    const city = cityMap[location.toLowerCase()] || location;
+    // OpenWeatherMap APIを使用して天気情報を取得
+    console.time("weather")
+    let description = '不明';
+    let temp = '不明';
+    try {
+        const weatherRes = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
+            params: {
+            q: city,
+            appid: process.env.OPENWEATHER_API_KEY,
+            units: 'metric',
+            lang: 'ja',
+            },
+            timeout: 2000,
+        })
+        description = weatherRes.data?.weather?.[0]?.description ?? '不明'
+        temp = weatherRes.data?.main?.temp ?? '不明' 
+    } catch (error) {
+        console.error('Error fetching weather data:', error);
+        return NextResponse.json({
+            "tool_response": {
+                "name": "get_weather",
+                "result": "天気情報の取得に失敗しました。"
+            },
+        });
+    }
+    console.timeEnd("weather")
     // ChatGPTが呼び出せるようにMCPツールのレスポンスを生成
     return NextResponse.json({
         "tool_response": {
             "name": "get_weather",
-            "result":`${location}の天気は${description}で気温は${temp}℃です。`,
+            "result":`${city}の天気は${description}で気温は${temp}度です。`,
         },
     });
 }
