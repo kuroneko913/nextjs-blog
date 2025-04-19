@@ -41,7 +41,7 @@ export async function GET() {
 
   const stream = new ReadableStream({
     start(controller) {
-      const data = `data: ${JSON.stringify(tools)}\n\n`;
+      const data = `event: tools\ndata: ${JSON.stringify(tools)}\n\n`;
       controller.enqueue(encoder.encode(data));
       controller.close();
     }
