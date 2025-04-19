@@ -1,5 +1,7 @@
+// MCPサーバのツールを取得する
 export async function GET() {
-  const toolList = {
+  const encoder = new TextEncoder();
+  const tools = {
     tools: [
       {
         name: "get_weather",
@@ -37,13 +39,18 @@ export async function GET() {
     ]
   };
 
-  const ssePayload = `data: ${JSON.stringify(toolList)}\n\n`;
+  const stream = new ReadableStream({
+    start(controller) {
+      const data = `data: ${JSON.stringify(tools)}\n\n`;
+      controller.enqueue(encoder.encode(data));
+      controller.close();
+    }
+  });
 
-  return new Response(ssePayload, {
-    status: 200,
+  return new Response(stream, {
     headers: {
       "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
+      "Cache-Control": "no-store",
       "Connection": "keep-alive",
     }
   });
