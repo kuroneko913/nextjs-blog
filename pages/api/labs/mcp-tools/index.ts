@@ -3,13 +3,47 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    res.writeHead(200, {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-store',
-      'Connection': 'keep-alive',
-    })
-  
-    const tools = {
+    try {
+      res.setHeader('Content-Type', 'text/event-stream');
+      res.setHeader('Cache-Control', 'no-cache');
+      res.setHeader('Connection', 'keep-alive');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+
+      const response = {
+        jsonrpc: "2.0",
+        id: 1,
+        method: "get_tools",
+        ...getTools()
+      };
+
+      res.write(`data: ${JSON.stringify(response)}\n\n`);
+
+      // 20秒に1度コメント行で心拍を送る
+      const keepAlive = setInterval(() => {
+        res.write(': ping\n\n');
+      }, 20000);
+
+      req.on('close', () => {
+        clearInterval(keepAlive);
+        res.end();
+      });
+
+    } catch (error) {
+      console.error('Error in SSE handler:', error);
+      res.status(500).end('Internal Server Error');
+    }
+  } else {
+    res.setHeader('Allow', ['GET']);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
+}
+
+/**
+ * ツールのリストを取得する
+ * @returns {Object} ツールのリスト
+ */
+const getTools = () => {
+  return {
     tools: [
       {
         name: "get_weather",
@@ -45,15 +79,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       }
     ]
-    };
-    res.write(`event: tools\ndata: ${JSON.stringify(tools)}\n\n`);
-
-    // 20秒に1度コメント行で心拍を送る
-    const keepAlive = setInterval(() => res.write(': ping\n\n'), 20_000);
-
-    req.socket.on('close', () => {
-      clearInterval(keepAlive);
-      res.end();
-    });
-  }
+  };
 }
