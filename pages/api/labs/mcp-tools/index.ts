@@ -11,11 +11,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       const response = {
         jsonrpc: "2.0",
-        id: 1,
-        method: "get_tools",
-        ...getTools()
+        id: 2,
+        result: {
+          tools: getTools().tools
+        }
       };
 
+      // データを送信
       res.write(`data: ${JSON.stringify(response)}\n\n`);
 
       // 20秒に1度コメント行で心拍を送る
