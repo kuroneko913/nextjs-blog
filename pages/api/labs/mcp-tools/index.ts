@@ -16,6 +16,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     headers: req.headers,
     body: req.body
   });
+  
+  if (req.method === 'GET' && req.headers.accept === 'text/event-stream') {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.flushHeaders();
+  
+    // 最初の接続確認用データを送信
+    res.write(`data: ${JSON.stringify({ status: "connected" })}\n\n`);
+  
+    // 接続維持が不要であれば、ここで終わってOK
+    req.on('close', () => {
+      res.end();
+    });
+    return;
+  }
 
   if (req.method !== 'POST') {
     return res.status(405).json({
