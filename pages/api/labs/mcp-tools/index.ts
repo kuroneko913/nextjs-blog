@@ -24,7 +24,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.flushHeaders();
   
     // 最初の接続確認用データを送信
-    res.write(`data: ${JSON.stringify({ status: "connected" })}\n\n`);
+    res.write(`data: ${JSON.stringify({
+      jsonrpc: "2.0",
+      method: "event",
+      params: {
+        type: "ping",
+        message: "connected"
+      }
+    })}\n\n`);
   
     // 接続維持が不要であれば、ここで終わってOK
     req.on('close', () => {
@@ -75,7 +82,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 const createInitializeResponse = (body: JsonRpcRequest) => {
   return { 
     jsonrpc: "2.0", 
-    id: body.id, 
+    id: body.id ?? null,
     result: {
       protocolVersion: "2024-11-05",
       capabilities: {
