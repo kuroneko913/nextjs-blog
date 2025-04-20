@@ -42,7 +42,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       method: "event",
       params: {
         type: "ready",
-        message: "MCP tools initialized"
+        message: "MCP tools initialized",
+        serverInfo: {
+          name: "mcp_tools",
+          version: "0.0.1",
+          description: "https://myblackcat913.com MCP tools"
+        }
       }
     }
     res.write(`data: ${JSON.stringify(ready)}\n\n`);
