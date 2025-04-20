@@ -9,6 +9,7 @@ type JsonRpcRequest = {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  res.flushHeaders();
   // デバッグログ
   console.log('Received request:', {
     method: req.method,
@@ -17,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     body: req.body
   });
   
-  if (req.method === 'GET' && req.headers.accept === 'text/event-stream') {
+  if (req.method === 'GET' && req.headers.accept?.includes('text/event-stream')) {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
@@ -32,6 +33,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         message: "connected"
       }
     })}\n\n`);
+
+    setInterval(() => {
+      res.write(`data: ${JSON.stringify({
+        jsonrpc: "2.0",
+        method: "event",
+        params: {
+          type: "heartbeat",
+          message: "still alive"
+        }
+      })}\n\n`);
+    }, 30000);
   
     // 接続維持が不要であれば、ここで終わってOK
     req.on('close', () => {
