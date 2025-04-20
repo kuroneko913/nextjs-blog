@@ -71,6 +71,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
   console.log('[MCP] Connection established');
 
+  // デバッグログ
+  console.log('[MCP] Received POST request:', {
+    method: req.method,
+    url: req.url,
+    headers: req.headers,
+    body: req.body
+  });
   const body: JsonRpcRequest = req.body;
   console.log('[MCP] body:', body);
 
