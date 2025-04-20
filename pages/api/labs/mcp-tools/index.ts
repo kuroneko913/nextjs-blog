@@ -32,16 +32,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     })}\n\n`);
 
+    // イベントループを保持する
+    res.socket?.on('error', (err) => {
+      console.error('SSE socket error:', err);
+    });
+
     setInterval(() => {
       res.write(`data: ${JSON.stringify({
         jsonrpc: "2.0",
         method: "event",
         params: {
-          type: "heartbeat",
+          type: "ping",
           message: "still alive"
         }
       })}\n\n`);
-    }, 30000);
+    }, 10000);
   
     // 接続維持が不要であれば、ここで終わってOK
     req.on('close', () => {
