@@ -17,7 +17,8 @@ function streamResponse(send: (writer: WritableStreamDefaultWriter) => void) {
 
 /* ---------- GET ＝ SSE 接続 ---------- */
 export async function GET(req: Request) {
-  if (req.headers.get('accept') !== 'text/event-stream') {
+  const accept = req.headers.get('accept') || '';
+  if (!accept.includes('text/event-stream')) {
     return new Response('Bad Request', { status: 400 });
   }
 
@@ -38,7 +39,7 @@ export async function GET(req: Request) {
 
     // Netlify Functions (Node) は 30 秒以上開いたままのソケットを許容しない。
     // MVP ではハンドシェイクだけ送ってストリームを閉じる。
-    writer.close();
+    setTimeout(() => writer.close(), 1000);
   });
 }
 
