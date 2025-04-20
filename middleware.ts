@@ -3,34 +3,34 @@ import { NextRequest, NextResponse } from "next/server";
 export function middleware(req: NextRequest): NextResponse {
     const url = req.nextUrl.clone();
     const pathname = url.pathname;
-    const accept = req.headers.get('accept') || '';
-    const ua = req.headers.get('user-agent')?.toLowerCase() || '';
+    // const accept = req.headers.get('accept') || '';
+    // const ua = req.headers.get('user-agent')?.toLowerCase() || '';
 
-    // CursorやAIエージェントからのMCPっぽいアクセス判定
-    const isRootPath = pathname === '/'
-    const isJsonRequest = accept.includes('application/json')
-    const isFromCursor = ua.includes('cursor')
-    const isFromClaude = ua.includes('anthropic') || ua.includes('claude')
-    const isFromOpenAI = ua.includes('openai') || ua.includes('gpt')
+    // // CursorやAIエージェントからのMCPっぽいアクセス判定
+    // const isRootPath = pathname === '/'
+    // const isJsonRequest = accept.includes('application/json')
+    // const isFromCursor = ua.includes('cursor')
+    // const isFromClaude = ua.includes('anthropic') || ua.includes('claude')
+    // const isFromOpenAI = ua.includes('openai') || ua.includes('gpt')
 
-    const isMCPClient = isJsonRequest && (isFromCursor || isFromClaude || isFromOpenAI)
+    // const isMCPClient = isJsonRequest && (isFromCursor || isFromClaude || isFromOpenAI)
 
-    // MCPクライアントがルートに来たときのみ、MCP情報を返す
-    if (isRootPath && isMCPClient) {
-      return new NextResponse(
-        JSON.stringify({
-          name: 'My BlackCat MCP Server',
-          description: 'Hybrid blog & MCP server (weather tool available)',
-          version: '0.1.0',
-        }),
-        {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-    }
+    // // MCPクライアントがルートに来たときのみ、MCP情報を返す
+    // if (isRootPath && isMCPClient) {
+    //   return new NextResponse(
+    //     JSON.stringify({
+    //       name: 'My BlackCat MCP Server',
+    //       description: 'Hybrid blog & MCP server (weather tool available)',
+    //       version: '0.1.0',
+    //     }),
+    //     {
+    //       status: 200,
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //     }
+    //   )
+    // }
 
     if (pathname === "/") {
       return NextResponse.next();

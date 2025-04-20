@@ -4,3 +4,8 @@
 
 [[plugins]]
     package = "@netlify/plugin-nextjs"
+    
+[[headers]]
+  for = "/api/labs/mcp-tools/*"
+  [headers.values]
+    Cache-Control = "no-cache"
