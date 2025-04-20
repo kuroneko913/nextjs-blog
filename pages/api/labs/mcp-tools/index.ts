@@ -32,32 +32,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
     })}\n\n`);
 
-    // イベントループを保持する
-    res.socket?.on('error', (err) => {
-      console.error('SSE socket error:', err);
-    });
+    let count = 0;
+    const interval = setInterval(() => {
+      if (count >= 1) {
+        clearInterval(interval);
+        res.end();
+        return;
+      }
 
-    const heartbeatInterval = setInterval(() => {
-      try {
-        res.write(`data: ${JSON.stringify({
-          jsonrpc: "2.0",
-          method: "event",
-          params: {
+      res.write(`data: ${JSON.stringify({
+        jsonrpc: "2.0",
+        method: "event",
+        params: {
           type: "heartbeat",
           message: "still alive"
-          }
-        })}\n\n`);
-      } catch (error) {
-        console.error('SSE socket error(heartbeat) : ', error);
-      }
-    }, 10000);
-  
-    // 接続維持が不要であれば、ここで終わってOK
-    req.on('close', () => {
-      clearInterval(heartbeatInterval);
-      res.end();
-    });
-    return;
+        }
+      })}\n\n`);
+      count++;
+    }, 5000);
   }
 
   if (req.method !== 'POST') {
