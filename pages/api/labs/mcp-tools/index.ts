@@ -9,7 +9,7 @@ type JsonRpcRequest = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // デバッグログ
-  console.log('Received request:', {
+  console.log('[MCP] Received request:', {
     method: req.method,
     url: req.url,
     headers: req.headers,
@@ -23,14 +23,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.flushHeaders();
 
     // 最初の接続確認用データを送信
-    res.write(`data: ${JSON.stringify({
+    const ready = {
       jsonrpc: "2.0",
       method: "event",
       params: {
         type: "ready",
         message: "MCP tools initialized"
       }
-    })}\n\n`);
+    }
+    res.write(`data: ${JSON.stringify(ready)}\n\n`);
+    console.log('[SSE] ready:', ready);
 
     let count = 0;
     const interval = setInterval(() => {
@@ -39,53 +41,72 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.end();
         return;
       }
-
-      res.write(`data: ${JSON.stringify({
+      const heartbeat = {
         jsonrpc: "2.0",
         method: "event",
         params: {
           type: "heartbeat",
           message: "still alive"
         }
-      })}\n\n`);
+      }
+      res.write(`data: ${JSON.stringify(heartbeat)}\n\n`);
+      console.log('[SSE] heartbeat:', heartbeat);
       count++;
     }, 5000);
   }
+  console.log('[MCP] Connection established');
 
   if (req.method !== 'POST') {
-    res.setHeader('Content-Type', 'application/json');
-    return res.status(405).json({
+    const methodNotFound = {
+      jsonrpc: "2.0",
+      id: null,
       error: {
         code: -32600,
         message: "Method not found"
       }
-    });
+    }
+    res.setHeader('Content-Type', 'application/json');
+    res.write(`data: ${JSON.stringify(methodNotFound)}\n\n`);
+    console.log('[MCP] methodNotFound:', methodNotFound);
+    return;
   }
   const body: JsonRpcRequest = req.body;
+  console.log('[MCP] body:', body);
 
   // initialize method
   if (body.method === 'initialize') {
+    const initialize = {
+      jsonrpc: "2.0",
+      id: body.id ?? null,
+      result: createInitializeResponse(body)
+    }
     res.setHeader('Content-Type', 'application/json');
-    res.status(200).json(createInitializeResponse(body));
+    res.status(200).json(initialize);
+    console.log('[MCP] Handling initialize request:', body);
     return;
   }
   // tools/list method
   if (body.method === 'tools/list') {
+    const toolsList = {
+      jsonrpc: "2.0",
+      id: body.id ?? null,
+      result: createToolsListResponse(body)
+    }
     res.setHeader('Content-Type', 'application/json');
-    console.log('Handling tools/list request:', body);
-    res.status(200).json(createToolsListResponse(body));
+    res.status(200).json(toolsList);
+    console.log('[MCP] Handling tools/list request:', body);
     return;
   }
   // tools/invoke method
   if (body.method === 'tools/invoke') {
+    console.log('[MCP] Handling tools/invoke request:', body);
     res.setHeader('Content-Type', 'application/json');
-    console.log('Handling tools/invoke request:', body);
     await invokeTool(body, res);
     return;
   }
 
   // method not found error
-  console.log('Method not found:', body.method);
+  console.log('[MCP] Method not found:', body.method);
   res.setHeader('Content-Type', 'application/json');
   res.status(400).json(createMethodNotFoundErrorResponse(body));
 }
@@ -141,10 +162,10 @@ const invokeTool = async (body: JsonRpcRequest, res: NextApiResponse) => {
       return;
     }
     try {
-      console.log(`invokeTool: ${tool}`);
-      console.log(`args: ${JSON.stringify(args)}`);
-      console.log(`endpoint: ${process.env.NEXT_PUBLIC_API_URL}/api/labs/mcp-tools/${tool}`);
-      console.log(`body: ${JSON.stringify(body)}`);
+      console.log(`[TOOL] invokeTool: ${tool}`);
+      console.log(`[TOOL] args: ${JSON.stringify(args)}`);
+      console.log(`[TOOL] endpoint: ${process.env.NEXT_PUBLIC_API_URL}/api/labs/mcp-tools/${tool}`);
+      console.log(`[TOOL] body: ${JSON.stringify(body)}`);
       const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/api/labs/mcp-tools/${tool}`;
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -152,7 +173,7 @@ const invokeTool = async (body: JsonRpcRequest, res: NextApiResponse) => {
         body: JSON.stringify({ arguments: args }),
       });
       const data = await response.json();
-      console.log(`data: ${JSON.stringify(data)}`);
+      console.log(`[TOOL] data: ${JSON.stringify(data)}`);
       res.status(200).json({
         jsonrpc: "2.0",
         id: body.id ?? null,
@@ -164,7 +185,7 @@ const invokeTool = async (body: JsonRpcRequest, res: NextApiResponse) => {
         }
       });
     } catch (error) {
-      console.error(`tools/invoke error:`, error);
+      console.error(`[ERROR] tools/invoke error:`, error);
       return res.status(200).json({
         jsonrpc: "2.0",
         id: body.id,
