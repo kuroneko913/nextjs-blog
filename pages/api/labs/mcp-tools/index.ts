@@ -3,11 +3,13 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-store');
-    res.setHeader('Connection', 'keep-alive');
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-store',
+      'Connection': 'keep-alive',
+    })
   
-  const tools = {
+    const tools = {
     tools: [
       {
         name: "get_weather",
@@ -43,14 +45,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
       }
     ]
-  };
+    };
+    res.write(`event: tools\ndata: ${JSON.stringify(tools)}\n\n`);
 
-  res.write(`event: tools\ndata: ${JSON.stringify(tools)}\n\n`);
-    res.end();
-  } else if (req.method === 'POST') {
-    // POST 処理…
-  } else {
-    res.setHeader('Allow', ['GET','POST']);
-    res.status(405).end();
+    // 20秒に1度コメント行で心拍を送る
+    const keepAlive = setInterval(() => res.write(': ping\n\n'), 20_000);
+
+    req.socket.on('close', () => {
+      clearInterval(keepAlive);
+      res.end();
+    });
   }
 }
