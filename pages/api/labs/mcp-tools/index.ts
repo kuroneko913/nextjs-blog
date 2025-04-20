@@ -37,19 +37,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       console.error('SSE socket error:', err);
     });
 
-    setInterval(() => {
-      res.write(`data: ${JSON.stringify({
-        jsonrpc: "2.0",
-        method: "event",
-        params: {
-          type: "ping",
+    const heartbeatInterval = setInterval(() => {
+      try {
+        res.write(`data: ${JSON.stringify({
+          jsonrpc: "2.0",
+          method: "event",
+          params: {
+          type: "heartbeat",
           message: "still alive"
-        }
-      })}\n\n`);
+          }
+        })}\n\n`);
+      } catch (error) {
+        console.error('SSE socket error(heartbeat) : ', error);
+      }
     }, 10000);
   
     // 接続維持が不要であれば、ここで終わってOK
     req.on('close', () => {
+      clearInterval(heartbeatInterval);
       res.end();
     });
     return;
