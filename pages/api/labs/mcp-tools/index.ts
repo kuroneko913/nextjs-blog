@@ -9,6 +9,14 @@ type JsonRpcRequest = {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // デバッグログ
+  console.log('Received request:', {
+    method: req.method,
+    url: req.url,
+    headers: req.headers,
+    body: req.body
+  });
+
   if (req.method !== 'POST') {
     return res.status(405).json({
       error: {
@@ -21,21 +29,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   // initialize method
   if (body.method === 'initialize') {
+    console.log('Handling initialize request:', body);
     res.status(200).json(createInitializeResponse(body));
     return;
   }
   // tools/list method
   if (body.method === 'tools/list') {
+    console.log('Handling tools/list request:', body);
     res.status(200).json(createToolsListResponse(body));
     return;
   }
   // tools/invoke method
   if (body.method === 'tools/invoke') {
+    console.log('Handling tools/invoke request:', body);
     await invokeTool(body, res);
     return;
   }
 
   // method not found error
+  console.log('Method not found:', body.method);
   res.status(400).json(createMethodNotFoundErrorResponse(body));
 }
 
@@ -56,11 +68,11 @@ const createInitializeResponse = (body: JsonRpcRequest) => {
         prompts: false,
       },
       serverInfo: {
-        name: "kuroneko-mcp-tools",
+        name: "mcp_tools",
         version: "0.0.1",
         description: "https://myblackcat913.com MCP tools",
       },
-      instructions: "kuroneko-mcp-tools is a experimental tools for learning by kuroneko913.",
+      instructions: "This server provides tools like 'get_weather'. Try asking about the weather in a city!",
       _meta: {
         version: "0.0.1",
         description: "https://myblackcat913.com MCP tools",
@@ -90,6 +102,10 @@ const invokeTool = async (body: JsonRpcRequest, res: NextApiResponse) => {
       return;
     }
     try {
+      console.log(`invokeTool: ${tool}`);
+      console.log(`args: ${JSON.stringify(args)}`);
+      console.log(`endpoint: ${process.env.NEXT_PUBLIC_API_URL}/api/labs/mcp-tools/${tool}`);
+      console.log(`body: ${JSON.stringify(body)}`);
       const endpoint = `${process.env.NEXT_PUBLIC_API_URL}/api/labs/mcp-tools/${tool}`;
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -97,6 +113,7 @@ const invokeTool = async (body: JsonRpcRequest, res: NextApiResponse) => {
         body: JSON.stringify({ arguments: args }),
       });
       const data = await response.json();
+      console.log(`data: ${JSON.stringify(data)}`);
       res.status(200).json({
         jsonrpc: "2.0",
         id: body.id ?? null,
@@ -114,7 +131,7 @@ const invokeTool = async (body: JsonRpcRequest, res: NextApiResponse) => {
         id: body.id,
         error: {
           code: -32000,
-          message: `Tool "${tool}" invocation failed`,
+          message: `Tool "${tool}" invocation failed: ${error}`,
         }
       });
     }
