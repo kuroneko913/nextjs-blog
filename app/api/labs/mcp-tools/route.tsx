@@ -1,3 +1,5 @@
+export const runtime = "nodejs";
+
 // MCPサーバのツールを取得する
 export async function GET() {
   const encoder = new TextEncoder();
