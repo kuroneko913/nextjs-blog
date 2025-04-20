@@ -1,8 +1,12 @@
-export const runtime = "nodejs";
+// pages/api/labs/mcp-tools.ts
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-// MCPサーバのツールを取得する
-export async function GET() {
-  const encoder = new TextEncoder();
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method === 'GET') {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('Connection', 'keep-alive');
+  
   const tools = {
     tools: [
       {
@@ -41,19 +45,12 @@ export async function GET() {
     ]
   };
 
-  const stream = new ReadableStream({
-    start(controller) {
-      const data = `event: tools\ndata: ${JSON.stringify(tools)}\n\n`;
-      controller.enqueue(encoder.encode(data));
-      controller.close();
-    }
-  });
-
-  return new Response(stream, {
-    headers: {
-      "Content-Type": "text/event-stream",
-      "Cache-Control": "no-store",
-      "Connection": "keep-alive",
-    }
-  });
+  res.write(`event: tools\ndata: ${JSON.stringify(tools)}\n\n`);
+    res.end();
+  } else if (req.method === 'POST') {
+    // POST 処理…
+  } else {
+    res.setHeader('Allow', ['GET','POST']);
+    res.status(405).end();
+  }
 }
