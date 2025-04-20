@@ -15,6 +15,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     headers: req.headers,
     body: req.body
   });
+
+  // POSTかGETかつtext/event-streamを含む場合は許可
+  if (req.method !== 'POST' && !(req.method === 'GET' && req.headers.accept?.includes('text/event-stream'))) {
+    console.log('[MCP] Method not allowed:', req.method);
+    res.status(405).json({
+      jsonrpc: "2.0",
+      id: null,
+      error: {
+        code: -32600,
+        message: `Method ${req.method} not allowed`
+      }
+    });
+    return;
+  }
   
   if (req.method === 'GET' && req.headers.accept?.includes('text/event-stream')) {
     res.setHeader('Content-Type', 'text/event-stream');
@@ -53,23 +67,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       console.log('[SSE] heartbeat:', heartbeat);
       count++;
     }, 5000);
+    return;
   }
   console.log('[MCP] Connection established');
 
-  if (req.method !== 'POST') {
-    const methodNotFound = {
-      jsonrpc: "2.0",
-      id: null,
-      error: {
-        code: -32600,
-        message: "Method not found"
-      }
-    }
-    res.setHeader('Content-Type', 'application/json');
-    res.write(`data: ${JSON.stringify(methodNotFound)}\n\n`);
-    console.log('[MCP] methodNotFound:', methodNotFound);
-    return;
-  }
   const body: JsonRpcRequest = req.body;
   console.log('[MCP] body:', body);
 
