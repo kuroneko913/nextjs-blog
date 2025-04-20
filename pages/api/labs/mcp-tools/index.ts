@@ -1,4 +1,3 @@
-// pages/api/labs/mcp-tools.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 type JsonRpcRequest = {
@@ -9,7 +8,6 @@ type JsonRpcRequest = {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  res.flushHeaders();
   // デバッグログ
   console.log('Received request:', {
     method: req.method,
@@ -23,14 +21,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
     res.flushHeaders();
-  
+
     // 最初の接続確認用データを送信
     res.write(`data: ${JSON.stringify({
       jsonrpc: "2.0",
       method: "event",
       params: {
-        type: "ping",
-        message: "connected"
+        type: "ready",
+        message: "MCP tools initialized"
       }
     })}\n\n`);
 
@@ -53,6 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (req.method !== 'POST') {
+    res.setHeader('Content-Type', 'application/json');
     return res.status(405).json({
       error: {
         code: -32600,
@@ -64,18 +63,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   // initialize method
   if (body.method === 'initialize') {
-    console.log('Handling initialize request:', body);
+    res.setHeader('Content-Type', 'application/json');
     res.status(200).json(createInitializeResponse(body));
     return;
   }
   // tools/list method
   if (body.method === 'tools/list') {
+    res.setHeader('Content-Type', 'application/json');
     console.log('Handling tools/list request:', body);
     res.status(200).json(createToolsListResponse(body));
     return;
   }
   // tools/invoke method
   if (body.method === 'tools/invoke') {
+    res.setHeader('Content-Type', 'application/json');
     console.log('Handling tools/invoke request:', body);
     await invokeTool(body, res);
     return;
@@ -83,6 +84,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   // method not found error
   console.log('Method not found:', body.method);
+  res.setHeader('Content-Type', 'application/json');
   res.status(400).json(createMethodNotFoundErrorResponse(body));
 }
 
