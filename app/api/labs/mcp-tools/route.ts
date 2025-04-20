@@ -36,14 +36,9 @@ export async function GET(req: Request) {
     // 1.5) endpoint イベント (JSON ではなくプレーン文字列で送る ― MCP 仕様例より)
     writer.write(encoder.encode('event: endpoint\ndata: /api/labs/mcp-tools\n\n'));
 
-    // 2) ハートビート
-    const id = setInterval(() => write('heartbeat', {}), 25_000);
-
-    // クライアント切断時の後処理
-    req.signal.addEventListener('abort', () => {
-      clearInterval(id);
-      writer.close();
-    });
+    // Netlify Functions (Node) は 30 秒以上開いたままのソケットを許容しない。
+    // MVP ではハンドシェイクだけ送ってストリームを閉じる。
+    writer.close();
   });
 }
 
