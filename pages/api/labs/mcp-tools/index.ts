@@ -24,6 +24,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(200).json(createInitializeResponse(body));
     return;
   }
+  if (body.method === 'tools/list') {
+    res.status(200).json(createToolsListResponse(body));
+    return;
+  }
 
   // method not found error
   res.status(400).json(createMethodNotFoundErrorResponse(body));
@@ -57,6 +61,36 @@ const createInitializeResponse = (body: JsonRpcRequest) => {
       }
     } 
   }
+}
+
+const createToolsListResponse = (body: JsonRpcRequest) => {
+  return {
+    jsonrpc: "2.0",
+    id: body.id ?? null,
+    result: getTools().tools
+  }
+}
+
+/**
+ * ツールのリストを取得する
+ * @returns {Object} ツールのリスト
+ */
+const getTools = () => {
+  return {
+    tools: [
+      {
+        name: "get_weather",
+        description: "都市の天気を取得します。",
+        parameters: {
+          type: "object",
+          properties: {
+            location: { type: "string", description: "都市名(Ex. Tokyo,JP)" }
+          },
+          required: ["location"]
+        }
+      }
+    ]
+  };
 }
 
 /**
@@ -182,48 +216,4 @@ const createMethodNotFoundErrorResponse = (body: JsonRpcRequest) => {
 //     res.setHeader('Allow', ['GET', 'POST']);
 //     res.status(405).end(`Method ${req.method} Not Allowed`);
 //   }
-// }
-
-// /**
-//  * ツールのリストを取得する
-//  * @returns {Object} ツールのリスト
-//  */
-// const getTools = () => {
-//   return {
-//     tools: [
-//       {
-//         name: "get_weather",
-//         description: "都市の天気を取得します。",
-//         method: "POST",
-//         url: "https://myblackcat913.com/api/labs/mcp-tools/get_weather",
-//         requestSchema: {
-//           type: "object",
-//           properties: {
-//             arguments: {
-//               type: "object",
-//               properties: {
-//                 location: { type: "string" }
-//               },
-//               required: ["location"]
-//             }
-//           },
-//           required: ["arguments"]
-//         },
-//         responseSchema: {
-//           type: "object",
-//           properties: {
-//             tool_response: {
-//               type: "object",
-//               properties: {
-//                 name: { type: "string" },
-//                 result: { type: "string" }
-//               },
-//               required: ["name", "result"]
-//             }
-//           },
-//           required: ["tool_response"]
-//         }
-//       }
-//     ]
-//   };
 // }
