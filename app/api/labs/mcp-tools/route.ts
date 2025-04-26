@@ -23,9 +23,19 @@ export async function GET(req: Request) {
   }
 
   return streamResponse(writer => {
-    writer.write(encoder.encode(`data: ${JSON.stringify({ hello: 'world' })}\n\n`));
+    const serverInfo = {
+      jsonrpc: "2.0",
+      id: "server_info",
+      result: {
+        name: "mcp_tools",
+        version: "0.0.1",
+        capabilities: { tools: true },
+        instructions: "Use get_weather(location) to get today's weather."
+      }
+    };
 
-    // Close the connection after a short delay
+    writer.write(encoder.encode(`data: ${JSON.stringify(serverInfo)}\n\n`));
+
     setTimeout(() => writer.close(), 1000);
   });
 }
