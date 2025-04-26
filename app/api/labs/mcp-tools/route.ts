@@ -1,11 +1,18 @@
 export const runtime = 'edge';
 const encoder = new TextEncoder();
 
-// 共通で使う util
-function streamResponse(send: (writer: WritableStreamDefaultWriter) => void) {
+// グローバルでSSEのwriterを管理
+let streamWriter: WritableStreamDefaultWriter | null = null;
+
+/* ---------- GET ＝ SSE 接続 ---------- */
+export async function GET(req: Request) {
+  const accept = req.headers.get('accept') || '';
+  if (!accept.includes('text/event-stream')) {
+    return new Response('Bad Request', { status: 400 });
+  }
+
   const { readable, writable } = new TransformStream();
-  const writer = writable.getWriter();
-  send(writer);                 // SSE データを書き込む
+  streamWriter = writable.getWriter();
   return new Response(readable, {
     headers: {
       'Content-Type': 'text/event-stream',
@@ -15,50 +22,31 @@ function streamResponse(send: (writer: WritableStreamDefaultWriter) => void) {
   });
 }
 
-/* ---------- GET ＝ SSE 接続 ---------- */
-export async function GET(req: Request) {
-  const accept = req.headers.get('accept') || '';
-  if (!accept.includes('text/event-stream')) {
-    return new Response('Bad Request', { status: 400 });
-  }
-
-  return streamResponse(writer => {
-    const serverInfo = {
-      jsonrpc: "2.0",
-      id: "server_info",
-      result: {
-        name: "mcp_tools",
-        version: "0.0.1",
-        capabilities: { tools: true },
-        instructions: "Use get_weather(location) to get today's weather."
-      }
-    };
-
-    writer.write(encoder.encode(`data: ${JSON.stringify(serverInfo)}\n\n`));
-
-    setTimeout(() => writer.close(), 1000);
-  });
-}
-
 /* ---------- POST ＝ JSON‑RPC メッセージ ---------- */
 export async function POST(req: Request) {
+  if (!streamWriter) {
+    return new Response('Bad Request', { status: 400 });
+  }
   const rpc = await req.json();
 
   // 簡易ルータ
   switch (rpc.method) {
     case 'initialize':
-      return Response.json({
-        jsonrpc: '2.0',
+      const serverInfo = {
+        jsonrpc: "2.0",
         id: rpc.id ?? null,
         result: {
-          protocolVersion: '2024-11-05',
+          name: "mcp_tools",
+          version: "0.0.1", 
           capabilities: { tools: true },
-          serverInfo: { name: 'mcp_tools', version: '0.0.1' },
+          instructions: "Use get_weather(location) to get today's weather.",
         },
-      });
+      };
+      await streamWriter.write(encoder.encode(`data: ${JSON.stringify(serverInfo)}\n\n`));
+      return new Response(null, { status: 204 });
 
     case 'tools/list':
-      return Response.json({
+      const tools = {
         jsonrpc: '2.0',
         id: rpc.id ?? null,
         result: [
@@ -74,22 +62,28 @@ export async function POST(req: Request) {
             },
           },
         ],
-      });
+      };
+      await streamWriter.write(encoder.encode(`data: ${JSON.stringify(tools)}\n\n`));
+      return new Response(null, { status: 204 });
 
     case 'tools/invoke':
       // 実際には OpenWeatherMap 等を呼ぶ
       const weather = { location: rpc.params.args.location, temp: 18, cond: 'Cloudy' };
-      return Response.json({
+      const result = {
         jsonrpc: '2.0',
         id: rpc.id ?? null,
         result: { tool_response: { name: 'get_weather', result: weather } },
-      });
+      };
+      await streamWriter.write(encoder.encode(`data: ${JSON.stringify(result)}\n\n`));
+      return new Response(null, { status: 204 });
 
     default:
-      return Response.json({
+      const error = {
         jsonrpc: '2.0',
         id: rpc.id ?? null,
         error: { code: -32601, message: `Unknown method ${rpc.method}` },
-      });
+      };
+      await streamWriter.write(encoder.encode(`data: ${JSON.stringify(error)}\n\n`));
+      return new Response(null, { status: 204 });
   }
 }
