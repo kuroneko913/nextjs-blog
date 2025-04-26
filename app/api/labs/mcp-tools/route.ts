@@ -23,22 +23,9 @@ export async function GET(req: Request) {
   }
 
   return streamResponse(writer => {
-    const write = (e: string, d: unknown) =>
-      writer.write(encoder.encode(`event: ${e}\ndata: ${JSON.stringify(d)}\n\n`));
+    writer.write(encoder.encode(`data: ${JSON.stringify({ hello: 'world' })}\n\n`));
 
-    // 1) 必須: server_info
-    write('server_info', {
-      name: 'mcp_tools',
-      version: '0.0.1',
-      capabilities: { tools: true },
-      instructions: 'Use get_weather(location) to get today\'s weather.',
-    });
-
-    // 1.5) endpoint イベント (JSON ではなくプレーン文字列で送る ― MCP 仕様例より)
-    writer.write(encoder.encode('event: endpoint\ndata: /api/labs/mcp-tools\n\n'));
-
-    // Netlify Functions (Node) は 30 秒以上開いたままのソケットを許容しない。
-    // MVP ではハンドシェイクだけ送ってストリームを閉じる。
+    // Close the connection after a short delay
     setTimeout(() => writer.close(), 1000);
   });
 }
