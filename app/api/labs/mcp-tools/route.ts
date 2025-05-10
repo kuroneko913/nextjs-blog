@@ -1,3 +1,5 @@
+import toolsDef from './tools.json';
+
 export const runtime = 'edge';
 const encoder = new TextEncoder();
 
@@ -13,7 +15,7 @@ export async function POST(req: Request) {
           // クライアントがサポートするバージョンを使用
           const clientProtocolVersion = rpc.params?.protocolVersion;
           if (clientProtocolVersion !== "2024-11-05") {
-            throw new Error("Unsupported protocol version");
+            console.warn(`[MCP] Unexpected protocolVersion: ${clientProtocolVersion}`);
           }
           const serverInfo = {
             jsonrpc: "2.0",
@@ -56,19 +58,7 @@ export async function POST(req: Request) {
             jsonrpc: '2.0',
             id: rpc.id ?? null,
             result: {
-              tools: [
-                {
-                  name: 'get_weather',
-                  description: '都市の天気を取得します',
-                  inputSchema: {
-                    type: 'object',
-                    properties: {
-                      location: { type: 'string', description: '都市名 (例: Tokyo,JP)' },
-                    },
-                    required: ['location'],
-                  },
-                },
-              ],
+              tools: toolsDef.tools
             },
           };
           controller.enqueue(encoder.encode(JSON.stringify(tools) + "\n"));
