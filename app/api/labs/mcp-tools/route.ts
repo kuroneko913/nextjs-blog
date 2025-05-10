@@ -6,7 +6,6 @@ const encoder = new TextEncoder();
 /* ---------- POST ＝ JSON‑RPC メッセージ ---------- */
 export async function POST(req: Request) {
   const rpc = await req.json();
-
   const stream = new ReadableStream({
     async start(controller) {
       // ここでswitch文でメソッドごとにレスポンスを返す
@@ -72,7 +71,7 @@ export async function POST(req: Request) {
               throw new Error(`Tool ${toolName} not found`);
             }
             const handler = await import(`./${tool.name}/logic`);
-            console.time("weather");
+            console.log(tool.name);
             try {
               const res = await handler[tool.name](args);
               controller.enqueue(encoder.encode(JSON.stringify({
@@ -91,7 +90,7 @@ export async function POST(req: Request) {
               };
               controller.enqueue(encoder.encode(JSON.stringify(error) + "\n"));
             } finally {
-              console.timeEnd("weather");
+              console.timeEnd(tool.name);
             }
           } catch (e) {
             const error = {
