@@ -4,6 +4,20 @@ import axios from 'axios';
 export async function POST(req: Request): Promise<Response> {
     const reqBody = await req.json();
     const { arguments: { location } } = reqBody;
+    const result = await get_weather({ location });
+    return NextResponse.json(result);
+}
+
+export async function get_weather(args: { location: string }) {
+    const { location } = args;
+    if (!location) {
+        return {
+            "tool_response": {
+                "name": "get_weather",
+                "result": "場所を指定してください。"
+            },
+        };
+    }
     const cityMap: Record<string, string> = {
         '東京': 'Tokyo,JP',
         '大阪': 'Osaka,JP',
@@ -20,10 +34,10 @@ export async function POST(req: Request): Promise<Response> {
     try {
         const weatherRes = await axios.get('https://api.openweathermap.org/data/2.5/weather', {
             params: {
-            q: city,
-            appid: process.env.OPENWEATHER_API_KEY,
-            units: 'metric',
-            lang: 'ja',
+                q: city,
+                appid: process.env.OPENWEATHER_API_KEY,
+                units: 'metric',
+                lang: 'ja',
             },
             timeout: 2000,
         })
@@ -38,12 +52,11 @@ export async function POST(req: Request): Promise<Response> {
             },
         });
     }
-    console.timeEnd("weather")
-    // ChatGPTが呼び出せるようにMCPツールのレスポンスを生成
-    return NextResponse.json({
+    
+    return {
         "tool_response": {
             "name": "get_weather",
             "result":`${city}の天気は${description}で気温は${temp}度です。`,
         },
-    });
+    };
 }

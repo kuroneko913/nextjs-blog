@@ -66,25 +66,38 @@ export async function POST(req: Request) {
 
         case 'tools/call':
           try {
-            const location = rpc.params?.arguments?.location;
-            if (!location) {
-              throw new Error("location is required");
+            const { name: toolName, arguments: args } = rpc.params;
+            const tool = toolsDef.tools.find(t => t.name === toolName);
+            if (!tool) {
+              throw new Error(`Tool ${toolName} not found`);
             }
-            const weather = { location, temp: 18, cond: 'Cloudy' };
-            const result = {
-              jsonrpc: '2.0',
-              id: rpc.id ?? null,
-              result: { output: { name: 'get_weather', result: weather } },
-            };
-            controller.enqueue(encoder.encode(JSON.stringify(result) + "\n"));
+            const handler = await import(`./${tool.name}/route`);
+            console.time("weather");
+            try {
+              const res = await handler[tool.name](args);
+              controller.enqueue(encoder.encode(JSON.stringify({
+                jsonrpc: '2.0',
+                id: rpc.id ?? null,
+                result: res
+              }) + "\n"));
+            } catch (e) {
+              const error = {
+                jsonrpc: '2.0',
+                id: rpc.id ?? null,
+                error: { 
+                  code: -32602, 
+                  message: (e instanceof Error) ? e.message : 'Invalid params' 
+                },
+              };
+              controller.enqueue(encoder.encode(JSON.stringify(error) + "\n"));
+            } finally {
+              console.timeEnd("weather");
+            }
           } catch (e) {
             const error = {
               jsonrpc: '2.0',
               id: rpc.id ?? null,
-              error: { 
-                code: -32602, 
-                message: (e instanceof Error) ? e.message : 'Invalid params' 
-              },
+              error: { code: -32601, message: `Unknown method ${rpc.method}` },
             };
             controller.enqueue(encoder.encode(JSON.stringify(error) + "\n"));
           }
