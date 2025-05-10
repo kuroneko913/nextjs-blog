@@ -10,48 +10,94 @@ export async function POST(req: Request) {
       // ここでswitch文でメソッドごとにレスポンスを返す
       switch (rpc.method) {
         case 'initialize':
+          // クライアントがサポートするバージョンを使用
+          const clientProtocolVersion = rpc.params?.protocolVersion;
+          if (clientProtocolVersion !== "2024-11-05") {
+            throw new Error("Unsupported protocol version");
+          }
           const serverInfo = {
             jsonrpc: "2.0",
             id: rpc.id,
             result: {
-              name: "mcp_tools",
-              version: "0.0.1",
-              capabilities: { tools: true },
-              instructions: "Use get_weather(location) to get today's weather.",
-            },
+              protocolVersion: clientProtocolVersion,
+              capabilities: {
+                tools: {
+                  listChanged: true
+                },
+                logging: {},
+                resources: {
+                  subscribe: true,
+                  listChanged: true
+                }
+              },
+              serverInfo: {
+                name: "mcp_tools",
+                version: "0.0.1",
+                description: "MCP Tools Server"
+              },
+              instructions: "Use get_weather(location) to get today's weather."
+            }
           };
           controller.enqueue(encoder.encode(JSON.stringify(serverInfo) + "\n"));
+          break;
+
+        case 'notifications/initialized':
+          // initialized通知を受け取った後の処理
+          const initializedResponse = {
+            jsonrpc: "2.0",
+            id: rpc.id,
+            result: null
+          };
+          controller.enqueue(encoder.encode(JSON.stringify(initializedResponse) + "\n"));
           break;
 
         case 'tools/list':
           const tools = {
             jsonrpc: '2.0',
             id: rpc.id ?? null,
-            result: [
-              {
-                name: 'get_weather',
-                description: '都市の天気を取得します',
-                parameters: {
-                  type: 'object',
-                  properties: {
-                    location: { type: 'string', description: '都市名 (例: Tokyo,JP)' },
+            result: {
+              tools: [
+                {
+                  name: 'get_weather',
+                  description: '都市の天気を取得します',
+                  inputSchema: {
+                    type: 'object',
+                    properties: {
+                      location: { type: 'string', description: '都市名 (例: Tokyo,JP)' },
+                    },
+                    required: ['location'],
                   },
-                  required: ['location'],
                 },
-              },
-            ],
+              ],
+            },
           };
           controller.enqueue(encoder.encode(JSON.stringify(tools) + "\n"));
           break;
 
-        case 'tools/invoke':
-          const weather = { location: rpc.params.args.location, temp: 18, cond: 'Cloudy' };
-          const result = {
-            jsonrpc: '2.0',
-            id: rpc.id ?? null,
-            result: { tool_response: { name: 'get_weather', result: weather } },
-          };
-          controller.enqueue(encoder.encode(JSON.stringify(result) + "\n"));
+        case 'tools/call':
+          try {
+            const location = rpc.params?.arguments?.location;
+            if (!location) {
+              throw new Error("location is required");
+            }
+            const weather = { location, temp: 18, cond: 'Cloudy' };
+            const result = {
+              jsonrpc: '2.0',
+              id: rpc.id ?? null,
+              result: { output: { name: 'get_weather', result: weather } },
+            };
+            controller.enqueue(encoder.encode(JSON.stringify(result) + "\n"));
+          } catch (e) {
+            const error = {
+              jsonrpc: '2.0',
+              id: rpc.id ?? null,
+              error: { 
+                code: -32602, 
+                message: (e instanceof Error) ? e.message : 'Invalid params' 
+              },
+            };
+            controller.enqueue(encoder.encode(JSON.stringify(error) + "\n"));
+          }
           break;
 
         default:
