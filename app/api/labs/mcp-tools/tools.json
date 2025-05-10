@@ -10,6 +10,17 @@
           },
           "required": ["location"]
         }
+      },
+      {
+        "name": "now",
+        "description": "現在の時刻を取得します",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "timezone": { "type": "string", "description": "タイムゾーン (例: Asia/Tokyo)" }
+          },
+          "required": ["timezone"]
+        }
       }
     ]
 }
