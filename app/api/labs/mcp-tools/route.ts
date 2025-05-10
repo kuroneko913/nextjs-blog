@@ -71,7 +71,7 @@ export async function POST(req: Request) {
             if (!tool) {
               throw new Error(`Tool ${toolName} not found`);
             }
-            const handler = await import(`./${tool.name}/route`);
+            const handler = await import(`./${tool.name}/logic`);
             console.time("weather");
             try {
               const res = await handler[tool.name](args);
