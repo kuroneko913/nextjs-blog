@@ -90,12 +90,6 @@ export default function SpeakerDeckSlideList() {
                     スライドが見つかりませんでした
                 </div>
             )}
-            
-            {cacheRef.current && (
-                <div className="mt-4 text-xs text-gray-500 text-center">
-                    最終更新: {new Date(cacheRef.current.timestamp).toLocaleString('ja-JP')}
-                </div>
-            )}
         </div>
     );
 } 

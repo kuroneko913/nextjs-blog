@@ -23,6 +23,22 @@ export default function SpeakerDeckSlideBox({ slide }: SpeakerDeckSlideBoxProps)
         setImageError(false);
     };
 
+    // 投稿日をフォーマット
+    const formatDate = (dateString: string) => {
+        try {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ja-JP', {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric'
+            });
+        } catch (error) {
+            return null;
+        }
+    };
+
+    const formattedDate = formatDate(slide.published_at);
+
     return (
         <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 w-full max-w-sm hover:scale-105">
             <a href={slide.url} target="_blank" rel="noopener noreferrer">
@@ -58,13 +74,6 @@ export default function SpeakerDeckSlideBox({ slide }: SpeakerDeckSlideBoxProps)
                             </div>
                         </div>
                     )}
-                    
-                    {/* プレゼンテーションアイコンのオーバーレイ */}
-                    <div className="absolute top-2 right-2 bg-black bg-opacity-50 rounded-full p-2 z-20">
-                        <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd"/>
-                        </svg>
-                    </div>
                 </div>
                 
                 <div className="p-4">
@@ -99,9 +108,11 @@ export default function SpeakerDeckSlideBox({ slide }: SpeakerDeckSlideBoxProps)
                         <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium">
                             📊 SpeakerDeck
                         </span>
-                        <span className="text-xs text-gray-500">
-                            {new Date(slide.published_at).toLocaleDateString('ja-JP')}
-                        </span>
+                        {formattedDate && (
+                            <span className="text-xs text-gray-500">
+                                {formattedDate}
+                            </span>
+                        )}
                     </div>
                 </div>
             </a>

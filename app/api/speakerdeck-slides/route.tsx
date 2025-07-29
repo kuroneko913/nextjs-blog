@@ -9,8 +9,8 @@ const CACHE_DURATION = 15 * 60 * 1000; // 15分
 // 除外するスラッグのリスト
 const EXCLUDED_SLUGS = ['following', 'followers', 'stars'];
 
-// 個別スライドページから1枚目の画像を取得する関数
-async function getSlidePreviewImage(slideUrl: string): Promise<string> {
+// 個別スライドページから1枚目の画像と投稿日を取得する関数
+async function getSlidePreviewImageAndDate(slideUrl: string): Promise<{thumbnail_url: string, published_at: string}> {
     try {
         const res = await axios.get(slideUrl, {
             timeout: 8000,
@@ -21,21 +21,35 @@ async function getSlidePreviewImage(slideUrl: string): Promise<string> {
 
         const $ = cheerio.load(res.data);
         
+        // 投稿日をJSON-LDスキーマから取得
+        let published_at = new Date().toISOString();
+        try {
+            const jsonLdScript = $('script[type="application/ld+json"]').text();
+            if (jsonLdScript) {
+                const jsonLd = JSON.parse(jsonLdScript);
+                if (jsonLd.datePublished) {
+                    published_at = new Date(jsonLd.datePublished).toISOString();
+                }
+            }
+        } catch (error) {
+            console.warn('Failed to parse JSON-LD for date:', error);
+        }
+        
         // 優先順位1: og:imageメタタグから高解像度画像を取得
         const ogImage = $('meta[property="og:image"]').attr('content');
         if (ogImage && ogImage.includes('slide_0.jpg')) {
-            return ogImage;
+            return { thumbnail_url: ogImage, published_at };
         }
 
         // 優先順位2: twitter:image:srcメタタグから取得
         const twitterImage = $('meta[name="twitter:image:src"]').attr('content');
         if (twitterImage && twitterImage.includes('slide_0.jpg')) {
-            return twitterImage;
+            return { thumbnail_url: twitterImage, published_at };
         }
 
         // 優先順位3: その他のog:image
         if (ogImage) {
-            return ogImage;
+            return { thumbnail_url: ogImage, published_at };
         }
 
         // 優先順位4: SpeakerDeckの埋め込み画像を取得
@@ -52,14 +66,15 @@ async function getSlidePreviewImage(slideUrl: string): Promise<string> {
             const img = $(selector).first();
             const src = img.attr('src') || img.attr('data-src');
             if (src && src.includes('speakerdeck')) {
-                return src.startsWith('//') ? `https:${src}` : src;
+                const thumbnail_url = src.startsWith('//') ? `https:${src}` : src;
+                return { thumbnail_url, published_at };
             }
         }
 
-        return '';
+        return { thumbnail_url: '', published_at };
     } catch (error) {
         console.error(`Error fetching preview for ${slideUrl}:`, error);
-        return '';
+        return { thumbnail_url: '', published_at: new Date().toISOString() };
     }
 }
 
@@ -122,14 +137,14 @@ export async function GET(): Promise<NextResponse> {
             if (title && href && slug && title.length > 10) { // タイトルが短すぎるものは除外
                 const slideUrl = `https://speakerdeck.com${href}`;
                 
-                // 各スライドの1枚目画像を並行して取得
-                const slidePromise = getSlidePreviewImage(slideUrl).then(thumbnail_url => ({
+                // 各スライドの1枚目画像と投稿日を並行して取得
+                const slidePromise = getSlidePreviewImageAndDate(slideUrl).then(({thumbnail_url, published_at}) => ({
                     id: slug,
                     title: title,
                     slug: slug,
                     url: slideUrl,
                     thumbnail_url: thumbnail_url,
-                    published_at: new Date().toISOString(),
+                    published_at: published_at,
                     view_count: view_count,
                     star_count: star_count,
                     description: '',
@@ -158,13 +173,13 @@ export async function GET(): Promise<NextResponse> {
                 
                 const slideUrl = `https://speakerdeck.com${href}`;
                 
-                const slidePromise = getSlidePreviewImage(slideUrl).then(thumbnail_url => ({
+                const slidePromise = getSlidePreviewImageAndDate(slideUrl).then(({thumbnail_url, published_at}) => ({
                     id: slug,
                     title: title.split('\n')[0].trim(),
                     slug: slug,
                     url: slideUrl,
                     thumbnail_url: thumbnail_url,
-                    published_at: new Date().toISOString(),
+                    published_at: published_at,
                     view_count: 0,
                     star_count: 0,
                     description: '',
@@ -178,12 +193,13 @@ export async function GET(): Promise<NextResponse> {
         // 全てのスライドの画像取得を並行実行
         const slidesWithImages = await Promise.all(slidePromises);
 
-        // 重複を削除し、除外スラッグを再度フィルタリング
+        // 重複を削除し、除外スラッグを再度フィルタリング、投稿日でソート
         const uniqueSlides = slidesWithImages
             .filter((slide, index, self) => 
                 index === self.findIndex(s => s.slug === slide.slug)
             )
-            .filter(slide => !EXCLUDED_SLUGS.includes(slide.slug));
+            .filter(slide => !EXCLUDED_SLUGS.includes(slide.slug))
+            .sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime()); // 新しい順
 
         // キャッシュを更新
         cachedData = {
