@@ -1,5 +1,6 @@
 import { SpeakerDeckSlide } from "@/src/interfaces/post";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Image from "next/image";
 
 interface SpeakerDeckSlideBoxProps {
     slide: SpeakerDeckSlide;
@@ -10,12 +11,17 @@ export default function SpeakerDeckSlideBox({ slide }: SpeakerDeckSlideBoxProps)
     const [imageLoading, setImageLoading] = useState(true);
 
     const handleImageError = () => {
+        console.error(`Image load error for slide: ${slide.title}`, {
+            url: slide.thumbnail_url
+        });
         setImageError(true);
         setImageLoading(false);
     };
 
     const handleImageLoad = () => {
+        console.log(`Image loaded successfully for slide: ${slide.title}`);
         setImageLoading(false);
+        setImageError(false);
     };
 
     return (
@@ -25,19 +31,20 @@ export default function SpeakerDeckSlideBox({ slide }: SpeakerDeckSlideBoxProps)
                     {slide.thumbnail_url && !imageError ? (
                         <>
                             {imageLoading && (
-                                <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+                                <div className="absolute inset-0 flex items-center justify-center bg-gray-100 z-10">
                                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                                 </div>
                             )}
-                            <img 
-                                src={slide.thumbnail_url} 
+                            <Image
+                                src={slide.thumbnail_url}
                                 alt={slide.title}
-                                className={`w-full h-full object-contain transition-all duration-300 ${
+                                fill
+                                className={`object-contain transition-all duration-300 ${
                                     imageLoading ? 'opacity-0' : 'opacity-100'
                                 } hover:scale-110`}
-                                loading="lazy"
                                 onError={handleImageError}
                                 onLoad={handleImageLoad}
+                                unoptimized={true}
                             />
                         </>
                     ) : (
@@ -45,12 +52,17 @@ export default function SpeakerDeckSlideBox({ slide }: SpeakerDeckSlideBoxProps)
                             <div className="text-white text-center">
                                 <div className="text-4xl mb-2">📊</div>
                                 <div className="text-sm opacity-80">SpeakerDeck</div>
+                                {imageError && (
+                                    <div className="text-xs mt-1 opacity-60">
+                                        画像読み込みエラー
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )}
                     
                     {/* プレゼンテーションアイコンのオーバーレイ */}
-                    <div className="absolute top-2 right-2 bg-black bg-opacity-50 rounded-full p-2">
+                    <div className="absolute top-2 right-2 bg-black bg-opacity-50 rounded-full p-2 z-20">
                         <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd"/>
                         </svg>
