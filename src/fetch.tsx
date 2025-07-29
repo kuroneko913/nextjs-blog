@@ -21,6 +21,9 @@ const allowedSearchKeys:AllowedSearchKeys = {category: 'categories', tag: 'tags'
       if (data.thumbnail === undefined) {
         data.thumbnail = '/images/hero.webp';
       }
+      if (data.hero === undefined) {
+        data.hero = '/images/hero.webp';
+      }
       if (data.slug === undefined) {
         return {...data, slug: fromFileSlug, content} as Post;
       }

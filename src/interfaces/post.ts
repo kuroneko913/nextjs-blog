@@ -1,25 +1,26 @@
 // 記事の型定義
-export interface Post {
+export type Post = {
     title: string;
+    date: Date;
+    description: string;
+    categories: string[];
+    tags: string[];
     slug: string;
-    date: string;
-    category: string;
     content: string;
-    image?: string;
-}
+    thumbnail: string;
+    hero: string;
+    draft: boolean;
+};
 
-export interface ZennArticle {
-    id: number;
+export type ZennArticle = {
     title: string;
     slug: string;
     body_updated_at: string;
-    published_at: string;
     path: string;
     emoji: string;
-    type: string;
-    topics: { name: string }[];
-    publication: any;
-}
+    article_type: string;
+    liked_count: number;
+};
 
 export interface SpeakerDeckSlide {
     id: string;
