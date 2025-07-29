@@ -84,12 +84,6 @@ export default function ZennArticleList() {
                     <ZennArticleBox article={article} key={article.slug} />
                 ))}
             </div>
-            
-            {cacheRef.current && (
-                <div className="mt-4 text-xs text-gray-500 text-center">
-                    最終更新: {new Date(cacheRef.current.timestamp).toLocaleString('ja-JP')}
-                </div>
-            )}
         </div>
     );
 }
