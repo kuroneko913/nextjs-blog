@@ -1,6 +1,5 @@
 import { SpeakerDeckSlide } from "@/src/interfaces/post";
-import { useState, useEffect } from "react";
-import Image from "next/image";
+import { useState } from "react";
 
 interface SpeakerDeckSlideBoxProps {
     slide: SpeakerDeckSlide;
@@ -35,16 +34,15 @@ export default function SpeakerDeckSlideBox({ slide }: SpeakerDeckSlideBoxProps)
                                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                                 </div>
                             )}
-                            <Image
+                            <img
                                 src={slide.thumbnail_url}
                                 alt={slide.title}
-                                fill
-                                className={`object-contain transition-all duration-300 ${
+                                className={`w-full h-full object-contain transition-all duration-300 ${
                                     imageLoading ? 'opacity-0' : 'opacity-100'
                                 } hover:scale-110`}
                                 onError={handleImageError}
                                 onLoad={handleImageLoad}
-                                unoptimized={true}
+                                loading="lazy"
                             />
                         </>
                     ) : (
