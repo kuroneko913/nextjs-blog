@@ -5,6 +5,7 @@ import ContentList from "./ContentList";
 import { RecomendedPostsFilter, UpdatedArticleFilter } from "@/src/ArticleFilter";
 import { Post } from "@/src/interfaces/post";
 import TwitterTimeLine from "./TwitterTimeLine";
+import SuzuriBanner from "./SuzuriBanner";
 
 export default function Top(prop: { posts: Post[] }) {
     const updatedPosts = UpdatedArticleFilter(prop.posts, 8);
@@ -20,6 +21,7 @@ export default function Top(prop: { posts: Post[] }) {
             <div className="w-full sm:w-1/4 md:w-1/2 md:px-8 lg:px-0 lg:w-1/4 sm:mt-0 mt-10">
                 <IntroductionBox props={{ marginTop: "100px" }} />
                 <TwitterTimeLine />
+                <SuzuriBanner />
             </div>
         </div>
     );
