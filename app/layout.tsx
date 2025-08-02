@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { GoogleAnalytics } from '@next/third-parties/google';
-import { AdsenseBlock } from "./modules/AdsenseBlock";
+import Script from "next/script";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -25,6 +25,9 @@ export const metadata: Metadata = {
   verification: {
     google: "ChlpdBy_k7fv6vJPBEIcVrALoANld5sNqdHa2hBAo10"
   },
+  other: {
+    'google-adsense-account': 'ca-pub-3191328913162172'
+  },
 };
 
 export default function RootLayout({
@@ -35,7 +38,12 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <head>
-        <AdsenseBlock />
+        <Script 
+          async 
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3191328913162172"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <link 
           rel="alternate"
           type="application/rss+xml"
