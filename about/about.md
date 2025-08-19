@@ -55,6 +55,12 @@ https://diary-my.hateblo.jp/
 
 ## スライドなど
 
+**私たちはなぜ PHP をこまめにアップデートしないといけないのか？ 〜攻めと守り、両面から見たバージョンアップの本当の意味〜**
+```link
+https://speakerdeck.com/myblackcat7112/si-tatihanaze-php-wokomameniatupudetosinaitoikenainoka-gong-metoshou-ri-liang-mian-karajian-tabaziyonatupunoben-dang-noyi-wei
+```
+
+
 **[PHPerKaigi 2025]PHPで巨大データ検索の高速化: strposと計算量の重要性**
 ```link
 https://speakerdeck.com/myblackcat7112/phpteju-da-tetajian-suo-nogao-su-hua-strpostoji-suan-liang-nozhong-yao-xing
