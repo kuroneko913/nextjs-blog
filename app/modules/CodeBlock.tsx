@@ -23,7 +23,6 @@ const SyntaxHighlighterBlock = dynamic(
         );
         return Component;
     },
-    { ssr: false }
 );
 
 const YoutubeEmbed = dynamic(
