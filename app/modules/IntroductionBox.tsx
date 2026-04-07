@@ -9,8 +9,7 @@ export default function IntroductionBox(props: { props?: { marginTop: string } }
               src="/images/logo.webp"
               alt="Hero"
               fill
-              priority 
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              sizes="100px"
               style={{ objectFit: 'cover' }}
             />
             </div>

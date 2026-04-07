@@ -15,8 +15,7 @@ export default function ArticleBox(prop: { post: Post, likeNum: number }) {
               src={post.thumbnail}
               alt="Hero"
               fill
-              priority 
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              sizes="280px"
               style={{ objectFit: 'cover' }}
             />
           </div>
