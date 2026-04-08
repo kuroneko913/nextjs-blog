@@ -3,24 +3,26 @@ const { cert } = require('firebase-admin/app');
 const { getFirestore } = require('firebase-admin/firestore');
 const admin = require('firebase-admin');
 
-// Firebaseの初期化
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n') ?? '',
-    }),
-  });
+// Firebaseの初期化をリクエスト時に遅延実行する
+function getDb() {
+  if (!admin.apps.length) {
+    admin.initializeApp({
+      credential: cert({
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n') ?? '',
+      }),
+    });
+  }
+  return getFirestore();
 }
-
-const db = getFirestore();
 
 // POSTリクエストに対応
 export async function POST(req: NextRequest) {
   const COLLECTION_NAME = 'blog-likes';
 
   try {
+    const db = getDb();
     const body = await req.json(); // リクエストボディをJSONとしてパース
     const likesRef = db.collection(COLLECTION_NAME);
 
@@ -49,6 +51,7 @@ export async function GET(req: NextRequest) {
   const COLLECTION_NAME = 'blog-likes';
   const slug = req.nextUrl.searchParams.get('slug') ?? '';
   try {
+    const db = getDb();
     const likesRef = db.collection(COLLECTION_NAME);
     const snapshot = await likesRef.get();
     if (snapshot.empty) {
