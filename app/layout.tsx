@@ -3,12 +3,19 @@ import { Inter } from "next/font/google";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from "next/script";
 import "./globals.css";
+import ServiceWorkerRegister from "./modules/ServiceWorkerRegister";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "くろねこ。の実験室",
   description: "自由気ままに書くブログサイト",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "くろねこ。の実験室",
+  },
   openGraph: {
     type: "website",
     locale: "ja_JP",
@@ -38,20 +45,25 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <head>
-        <Script 
-          async 
+        <meta name="theme-color" content="#1e1e2e" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <Script
+          async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3191328913162172"
           crossOrigin="anonymous"
           strategy="lazyOnload"
         />
-        <link 
+        <link
           rel="alternate"
           type="application/rss+xml"
           title="RSSフィード - くろねこ。の実験室"
           href="/blog/feed.xml"
         />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {children}
+        <ServiceWorkerRegister />
+      </body>
       <GoogleAnalytics gaId="G-0SJ770PTHM" />
     </html>
   );
