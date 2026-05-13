@@ -1,8 +1,6 @@
 const CACHE_NAME = "kuroneko-blog-v1";
-const STATIC_ASSETS = [
-  "/",
-  "/blog",
-  "/about",
+// Only precache truly static assets; runtime routes are cached on first visit
+const PRECACHE_ASSETS = [
   "/icons/icon-192x192.png",
   "/icons/icon-512x512.png",
 ];
@@ -11,7 +9,12 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
       .open(CACHE_NAME)
-      .then((cache) => cache.addAll(STATIC_ASSETS))
+      .then((cache) =>
+        // Use individual adds so one failure doesn't abort the whole install
+        Promise.all(
+          PRECACHE_ASSETS.map((url) => cache.add(url).catch(() => {}))
+        )
+      )
       .then(() => self.skipWaiting())
   );
 });
@@ -32,7 +35,7 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
-  // Only handle GET requests for same-origin and https
+  // Only handle GET requests for same-origin
   if (
     event.request.method !== "GET" ||
     !event.request.url.startsWith(self.location.origin)
@@ -52,17 +55,17 @@ self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) {
-        // Return cached version, revalidate in background
-        const fetchPromise = fetch(event.request)
+        // Return cached version; keep SW alive while revalidating in background
+        const revalidatePromise = fetch(event.request)
           .then((response) => {
             if (response && response.status === 200) {
-              caches.open(CACHE_NAME).then((cache) => {
-                cache.put(event.request, response.clone());
-              });
+              return caches.open(CACHE_NAME).then((cache) =>
+                cache.put(event.request, response.clone())
+              );
             }
-            return response;
           })
-          .catch(() => cached);
+          .catch(() => {});
+        event.waitUntil(revalidatePromise);
         return cached;
       }
 
