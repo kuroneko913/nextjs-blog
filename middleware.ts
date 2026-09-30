@@ -32,7 +32,7 @@ export function middleware(req: NextRequest): NextResponse {
     //   )
     // }
 
-    if (pathname === "/") {
+    if (pathname === "/" || pathname === "/notes" || pathname.startsWith("/notes/") || ["/sw.js", "/manifest.webmanifest"].includes(pathname) || pathname.startsWith("/icons/")) {
       return NextResponse.next();
     }
 

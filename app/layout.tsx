@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { GoogleAnalytics } from '@next/third-parties/google';
-import Script from "next/script";
+import SiteScripts from "./modules/SiteScripts";
 import "./globals.css";
 import ServiceWorkerRegister from "./modules/ServiceWorkerRegister";
 
@@ -47,12 +46,6 @@ export default function RootLayout({
       <head>
         <meta name="theme-color" content="#1e1e2e" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3191328913162172"
-          crossOrigin="anonymous"
-          strategy="lazyOnload"
-        />
         <link
           rel="alternate"
           type="application/rss+xml"
@@ -63,8 +56,8 @@ export default function RootLayout({
       <body className={inter.className}>
         {children}
         <ServiceWorkerRegister />
+        <SiteScripts />
       </body>
-      <GoogleAnalytics gaId="G-0SJ770PTHM" />
     </html>
   );
 }

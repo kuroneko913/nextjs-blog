@@ -62,18 +62,20 @@ export default function Header() {
                 <ul className="space-y-8 text-xl font-bold text-gray-900 px-6 w-full">
                    <li><a className="block hover:text-gray-500 py-2 px-4 w-full" href="/">Home</a></li>
                    <li><a className="block hover:text-gray-500 py-2 px-4 w-full" href="/blog">Blog</a></li>
+                   <li><a className="block hover:text-gray-500 py-2 px-4 w-full" href="/notes">実験メモ</a></li>
                    <li><a className="block hover:text-gray-500 py-2 px-4 w-full" href="/about">About</a></li>
                    <li><a className="block hover:text-gray-500 py-2 px-4 w-full" href="/lab">Lab</a></li>
                </ul>
             </div>
             {/* 通常のメニュー: sm以上で表示 */}
-            <ul className="hidden sm:flex sm:space-x-16 text-gray-900 font-bold items-center">
+            <ul className="hidden sm:flex sm:space-x-6 text-gray-900 font-bold items-center whitespace-nowrap">
                 <li>
                     <a className="hover:text-gray-500" href="/">Home</a>
                 </li>
                 <li>
                     <a className="hover:text-gray-500" href="/blog">Blog</a>
                 </li>
+                <li><a className="hover:text-gray-500" href="/notes">実験メモ</a></li>
                 <li>
                     <a className="hover:text-gray-500" href="/about">About</a>
                 </li>

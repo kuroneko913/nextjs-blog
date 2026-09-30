@@ -26,7 +26,10 @@ jobs:
       - name: Lint
         run: yarn lint
 
-      - name: Build
+      - name: Test notes
+        run: yarn test
+
+      - name: Production build
         run: yarn build
         env:
           NEXT_TELEMETRY_DISABLED: 1
