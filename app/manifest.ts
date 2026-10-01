@@ -6,6 +6,12 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: "くろねこ。",
     description: "自由気ままに書くブログサイト",
     start_url: "/",
+    id: "/",
+    scope: "/",
+    shortcuts: [
+      { name: "実験メモを書く", short_name: "メモを書く", url: "/notes/new", description: "試したことをひとこと残す" },
+      { name: "実験メモを読む", short_name: "実験メモ", url: "/notes" },
+    ],
     display: "standalone",
     background_color: "#ffffff",
     theme_color: "#1e1e2e",
