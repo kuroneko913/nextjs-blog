@@ -5,6 +5,7 @@ import { getNotesDb } from "./db";
 
 // GitHub's immutable numeric ID, not a renameable login or email address.
 export const OWNER_GITHUB_ID = 20674685; // kuroneko913
+export const NOTES_ORIGIN = "https://myblackcat913.com";
 export const SESSION_COOKIE = "blackcat-notes-github-session";
 export const LEGACY_SESSION_COOKIE = "blackcat-notes-session";
 export const SESSION_SECONDS = 60 * 60 * 24 * 30;
@@ -55,5 +56,10 @@ export async function requireOwner(req: NextRequest) {
 }
 
 export function requireSameOrigin(req: NextRequest) {
-  if (req.headers.get("origin") !== req.nextUrl.origin) throw new NoteError(403, "投稿画面を開き直してお試しください。");
+  const origin = req.headers.get("origin");
+  // A hosting proxy can rewrite the request URL. Compare the browser's Origin
+  // with the configured public site, never with a caller-supplied forwarded host.
+  const localDevelopment = process.env.NODE_ENV !== "production" &&
+    ["localhost", "127.0.0.1", "[::1]"].includes(req.nextUrl.hostname) && origin === req.nextUrl.origin;
+  if (origin !== NOTES_ORIGIN && !localDevelopment) throw new NoteError(403, "投稿画面を開き直してお試しください。");
 }
