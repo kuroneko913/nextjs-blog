@@ -7,7 +7,7 @@ export const CALLBACK_PATH = "/api/notes/oauth/callback";
 export const OAUTH_COOKIE = "blackcat-notes-oauth";
 export const OAUTH_SECONDS = 10 * 60;
 export const oauthCookieOptions = { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax" as const, path: "/api/notes/oauth" };
-export type LoginResult = "success" | "cancelled" | "denied" | "expired" | "failed" | "unavailable" | "production";
+export type LoginResult = "success" | "cancelled" | "denied" | "expired" | "failed" | "unavailable";
 
 function sign(value: string) {
   return createHmac("sha256", githubConfig().clientSecret).update(`blackcat-notes-oauth-v1:${value}`).digest("hex");
@@ -43,8 +43,8 @@ export function oauthVerifier(req: NextRequest) {
   return verifier;
 }
 
-export function loginRedirect(req: NextRequest, result: LoginResult) {
-  const url = new URL("/notes/new", req.nextUrl.origin);
+export function loginRedirect(result: LoginResult) {
+  const url = new URL("/notes/new", AUTH_ORIGIN);
   url.searchParams.set("login", result);
   const response = NextResponse.redirect(url, 303);
   response.headers.set("Cache-Control", "no-store");
