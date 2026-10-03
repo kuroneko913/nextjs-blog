@@ -14,9 +14,9 @@ export function validId(value: unknown): value is string {
 }
 
 export function parseNote(value: unknown): NoteInput {
-  if (!value || typeof value !== "object") throw new NoteError(400, "メモを入力してください。");
+  if (!value || typeof value !== "object") throw new NoteError(400, "ノートを入力してください。");
   const input = value as Record<string, unknown>;
-  if (!validId(input.id)) throw new NoteError(400, "メモの識別子が無効です。画面を開き直してください。");
+  if (!validId(input.id)) throw new NoteError(400, "ノートの識別子が無効です。画面を開き直してください。");
   if (typeof input.body !== "string" || !input.body.trim() || input.body.length > MAX_BODY) {
     throw new NoteError(400, `本文は1〜${MAX_BODY}文字で入力してください。`);
   }
@@ -37,7 +37,7 @@ export function noteDate(date: string) {
 
 export function articleDraft(notes: Note[]) {
   const ordered = [...notes].sort((a, b) => a.createdAt.localeCompare(b.createdAt));
-  const title = ordered.find(note => note.title)?.title || "実験メモから育てる記事";
+  const title = ordered.find(note => note.title)?.title || "ノートから育てる記事";
   const tags = Array.from(new Set(ordered.flatMap(note => note.tags)));
-  return `---\ntitle: ${JSON.stringify(title)}\ndate: ${JSON.stringify(new Date().toISOString())}\ndraft: true\ntags: ${JSON.stringify(tags)}\n---\n\n## 試したこと\n\n\n## わかったこと\n\n\n## 次に試すこと\n\n\n## 元の実験メモ\n\n${ordered.map(note => `### ${note.title || noteDate(note.createdAt)}\n\n${note.body}\n\n[元のメモ](https://myblackcat913.com/notes/${note.id})`).join("\n\n")}\n`;
+  return `---\ntitle: ${JSON.stringify(title)}\ndate: ${JSON.stringify(new Date().toISOString())}\ndraft: true\ntags: ${JSON.stringify(tags)}\n---\n\n## 試したこと\n\n\n## わかったこと\n\n\n## 次に試すこと\n\n\n## 元のノート\n\n${ordered.map(note => `### ${note.title || noteDate(note.createdAt)}\n\n${note.body}\n\n[元のノート](https://myblackcat913.com/notes/${note.id})`).join("\n\n")}\n`;
 }

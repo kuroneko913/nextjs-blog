@@ -62,7 +62,7 @@ export default function Header() {
                 <ul className="space-y-8 text-xl font-bold text-gray-900 px-6 w-full">
                    <li><a className="block hover:text-gray-500 py-2 px-4 w-full" href="/">Home</a></li>
                    <li><a className="block hover:text-gray-500 py-2 px-4 w-full" href="/blog">Blog</a></li>
-                   <li><a className="block hover:text-gray-500 py-2 px-4 w-full" href="/notes">実験メモ</a></li>
+                   <li><a className="block hover:text-gray-500 py-2 px-4 w-full" href="/notes">Notes</a></li>
                    <li><a className="block hover:text-gray-500 py-2 px-4 w-full" href="/about">About</a></li>
                    <li><a className="block hover:text-gray-500 py-2 px-4 w-full" href="/lab">Lab</a></li>
                </ul>
@@ -75,7 +75,7 @@ export default function Header() {
                 <li>
                     <a className="hover:text-gray-500" href="/blog">Blog</a>
                 </li>
-                <li><a className="hover:text-gray-500" href="/notes">実験メモ</a></li>
+                <li><a className="hover:text-gray-500" href="/notes">Notes</a></li>
                 <li>
                     <a className="hover:text-gray-500" href="/about">About</a>
                 </li>

@@ -1,4 +1,4 @@
-const CACHE_NAME = "kuroneko-blog-v3";
+const CACHE_NAME = "kuroneko-blog-v5";
 const PRECACHE_ASSETS = ["/icons/icon-192x192.png", "/icons/icon-512x512.png"];
 
 async function cacheComposer(cache) {
@@ -49,7 +49,7 @@ self.addEventListener("fetch", (event) => {
       return response;
     } catch {
       if (cached) return cached;
-      if (navigation) return new Response('<!doctype html><html lang="ja"><meta name="viewport" content="width=device-width,initial-scale=1"><meta charset="utf-8"><title>オフラインです</title><body style="font-family:sans-serif;padding:32px;background:#f6f5f0;color:#243a32"><h1>いまはオフラインです</h1><p>一度開いた投稿画面では、書きかけを残せます。</p><a href="/notes/new">実験メモを書く</a><p>初めて開くときは、インターネットに接続してください。</p></body></html>', { status: 503, headers: { "Content-Type": "text/html;charset=utf-8" } });
+      if (navigation) return new Response('<!doctype html><html lang="ja"><meta name="viewport" content="width=device-width,initial-scale=1"><meta charset="utf-8"><title>オフラインです</title><body style="font-family:sans-serif;padding:32px;background:#f6f5f0;color:#243a32"><h1>いまはオフラインです</h1><p>一度開いた投稿画面では、書きかけを残せます。</p><a href="/notes/new">ノートを書く</a><p>初めて開くときは、インターネットに接続してください。</p></body></html>', { status: 503, headers: { "Content-Type": "text/html;charset=utf-8" } });
       return Response.error();
     }
   })());
