@@ -1,5 +1,11 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Lab
+
+`/lab` は実験の入口です。Genetic Codeは `/lab/genetic-codes` に移し、toy toi boxのnoteとこのサイトのNotesも並べています。
+
+実験を追加するときは `src/labs/experiments.ts` の `experiments` に1件追加します。`id` は重複しない値、`title`・`category`・`description`・`action` は表示文、`icon` は `writing` / `dna` / `notes` から選びます。サイト内は `href: "/lab/…"` などを指定し、新しいツールなら `app/lab/<slug>/page.tsx` にページを作ります。外部の実験は `href: "https://…"` と `external: true` だけで追加でき、別タブで開きます。一覧の件数・カードは自動で更新されます。
+
 ## Notes
 
 - `/notes/new`: スマホ用投稿画面。本文のみで公開でき、タイトル・タグは任意。

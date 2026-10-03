@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 
 export default function Product() {
@@ -73,7 +75,7 @@ export default function Product() {
     };
 
     return (
-        <div className="product-area w-full sm:w-[50vw]">
+        <div className="product-area w-full">
             <div className="text-right">
                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg" onClick={sendKeyGenerateRequest}>
                     鍵を生成する
