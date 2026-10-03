@@ -4,7 +4,7 @@ type ExperimentDetails = {
   category: string;
   description: string;
   action: string;
-  icon: "writing" | "dna" | "notes";
+  icon: "agent" | "writing" | "dna" | "notes";
 };
 
 export type Experiment = ExperimentDetails & (
@@ -17,12 +17,11 @@ export const experiments: readonly Experiment[] = [
   {
     id: "toytoibox",
     title: "toy toi box",
-    category: "AIと文章",
-    description: "問いを立て、AIのカナデに記事を書いてもらう。人が確認しながら、文章づくりと発信の仕組みを試しています。",
-    href: "https://note.com/toytoibox",
-    external: true,
-    action: "noteで読む",
-    icon: "writing",
+    category: "AIエージェント",
+    description: "AIエージェントに仕事を任せ、継続して動かす仕組みを試しています。noteへの発信も、その活動のひとつです。",
+    href: "/lab/toytoibox",
+    action: "実験を見る",
+    icon: "agent",
   },
   {
     id: "genetic-codes",
