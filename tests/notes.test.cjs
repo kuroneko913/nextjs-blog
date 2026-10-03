@@ -243,6 +243,54 @@ function provider(t, { id = auth.OWNER_GITHUB_ID, scope = '', tokenOk = true, pr
   return calls;
 }
 
+test('OAuth completes on the canonical site when a proxy rewrites start and callback URLs', async t => {
+  const calls = provider(t);
+  for (const serverOrigin of ['http://localhost:8888','https://myblackcat913-blog.netlify.app']) {
+    const start = await oauthStart.POST(new NextRequest(serverOrigin+'/api/notes/oauth/start', {
+      method:'POST', headers:{origin,'x-forwarded-host':'attacker.example'},
+    }));
+    assert.equal(start.status,200);
+    const url = new URL((await start.json()).url);
+    assert.equal(url.searchParams.get('redirect_uri'),origin+oauth.CALLBACK_PATH);
+    const callback = new NextRequest(serverOrigin+oauth.CALLBACK_PATH+'?'+new URLSearchParams({
+      code:'test-code',state:url.searchParams.get('state'),
+    }), {headers:{cookie:`${oauth.OAUTH_COOKIE}=${start.cookies.get(oauth.OAUTH_COOKIE).value}`,'x-forwarded-host':'attacker.example'}});
+    // Returning from GitHub is a navigation, so it does not carry a POST Origin.
+    const completed = await oauthCallback.GET(callback);
+    assert.equal(completed.headers.get('location'),origin+'/notes/new?login=success');
+    assert.equal(completed.headers.get('cache-control'),'no-store');
+    const cookie = completed.cookies.get(auth.SESSION_COOKIE);
+    if (process.env.NODE_ENV === 'production') assert.equal(cookie.secure,true);
+    assert.equal(cookie.httpOnly,true);
+    assert.equal(cookie.domain,undefined);
+    assert.equal(await auth.authenticated(request('/api/notes',{token:cookie.value})),true);
+  }
+  assert.equal(calls.length,4);
+});
+
+test('OAuth start rejects missing, opaque, preview and forged browser origins', async () => {
+  for (const value of [null,'null','https://other.example','https://preview.example','http://localhost:3000','http://myblackcat913.com','https://myblackcat913.com:444','https://myblackcat913.com.attacker.example']) {
+    const headers = value === null ? {} : {origin:value};
+    headers['x-forwarded-host']='myblackcat913.com';
+    const response = await oauthStart.POST(new NextRequest(origin+'/api/notes/oauth/start',{method:'POST',headers}));
+    assert.equal(response.status,403);
+    assert.equal(response.cookies.get(oauth.OAUTH_COOKIE),undefined);
+  }
+  assert.equal(records.size,0);
+});
+
+test('invalid OAuth callbacks return to the canonical site without trusting the request host', async t => {
+  const calls = provider(t); const flow = await beginOAuth();
+  const callback = new NextRequest('https://preview.example'+oauth.CALLBACK_PATH+'?code=test-code&state=wrong', {
+    headers:{cookie:`${oauth.OAUTH_COOKIE}=${flow.cookie}`,'x-forwarded-host':'attacker.example'},
+  });
+  const response = await oauthCallback.GET(callback);
+  assert.equal(response.headers.get('location'),origin+'/notes/new?login=expired');
+  assert.equal(response.cookies.get(auth.SESSION_COOKIE),undefined);
+  assert.equal(response.cookies.get(oauth.OAUTH_COOKIE).value,'');
+  assert.equal(calls.length,0); assert.equal(records.size,0);
+});
+
 test('OAuth requires same-origin POST, canonical origin, random state and S256 PKCE with no scopes', async () => {
   assert.equal((await oauthStart.POST(request('/api/notes/oauth/start',{method:'POST',requestOrigin:'https://other.example'}))).status,403);
   const preview = await oauthStart.POST(new NextRequest('https://preview.example/api/notes/oauth/start', { method:'POST', headers:{origin:'https://preview.example'} }));
