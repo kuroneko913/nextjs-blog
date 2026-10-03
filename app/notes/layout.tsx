@@ -5,7 +5,7 @@ import "./notes.css";
 
 export const metadata: Metadata = {
   manifest: "/notes/manifest.webmanifest",
-  title: "実験メモ | くろねこ。の実験室",
+  title: "Notes | くろねこ。の実験室",
   description: "試したこと、つまずいたこと、次にやりたいこと。実験途中の小さな記録。",
 };
 
@@ -15,7 +15,11 @@ export default function NotesLayout({ children }: { children: React.ReactNode })
   return <div className="notes-app">
     <header className="notes-header">
       <Link href="/" className="notes-brand"><Image src="/images/logo-transparent.png" alt="" width={34} height={34} /><span>くろねこ。の実験室<small>LABORATORY / FIELD NOTES</small></span></Link>
-      <Link href="/blog" className="notes-blog-link">ブログ ↗</Link>
+      <nav className="notes-nav" aria-label="メインナビゲーション">
+        <Link href="/">Home</Link>
+        <Link href="/blog">Blog</Link>
+        <Link href="/notes" aria-current="location">Notes</Link>
+      </nav>
     </header>
     <main className="notes-main">{children}</main>
     <footer className="notes-footer">うまくいった日も、いかなかった日も。</footer>

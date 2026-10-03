@@ -20,7 +20,7 @@ export function xShareUrl(note: Pick<Note, "id" | "title" | "body">) {
 }
 
 export function noteMetadata(note: Note): Metadata {
-  const title = `${excerpt(note.title.trim() || note.body, 60)} | 実験メモ`;
+  const title = `${excerpt(note.title.trim() || note.body, 60)} | Notes`;
   const description = excerpt(note.body, 160);
   const image = `${SITE_URL}/icons/icon-512x512.png`;
   return {

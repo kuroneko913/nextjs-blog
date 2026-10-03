@@ -34,7 +34,7 @@ export function authenticated(req: NextRequest) {
 }
 
 export function requireOwner(req: NextRequest) {
-  if (!authenticated(req)) throw new NoteError(401, "投稿するにはログインしてください。入力したメモはこの端末に残っています。");
+  if (!authenticated(req)) throw new NoteError(401, "投稿するにはログインしてください。入力したノートはこの端末に残っています。");
 }
 
 export function requireSameOrigin(req: NextRequest) {
