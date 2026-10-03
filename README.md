@@ -5,6 +5,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 - `/notes/new`: スマホ用投稿画面。本文のみで公開でき、タイトル・タグは任意。
 - `/notes`: 公開メモの一覧。複数選択して記事のMarkdown下書きを保存できる。
 - `/notes/<id>`: メモ固有の公開URL。
+- 公開後・一覧・詳細の「X（Twitter）でシェア」から、タイトル（空欄なら本文の抜粋）と公開URLを入力したXの投稿画面を開ける。送信は本人がX上で行う。
+- メモ固有ページにはタイトル・本文抜粋・PNGアイコン・canonical URLを含むOGP/Twitterカードをサーバー側で出力する。既存のX投稿に表示されるカードはX側のキャッシュによりすぐ更新されない場合がある。
 - 投稿画面からホーム画面に追加すると、投稿画面を直接開くPWAになる。既存ブログPWAの起動先は維持する。
 
 ### 本番設定（Netlify）

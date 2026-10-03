@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { MAX_BODY, MAX_TITLE, validId } from "@/src/notes/model";
+import { MAX_BODY, MAX_TITLE, validId, type Note } from "@/src/notes/model";
+import ShareNote from "./ShareNote";
 
 const DRAFT_KEY = "blackcat-experiment-draft-v1";
 type Draft = { id: string; body: string; title: string; tags: string };
@@ -17,7 +18,7 @@ export default function NoteComposer() {
   const [busy, setBusy] = useState(false);
   const [online, setOnline] = useState(true);
   const [error, setError] = useState("");
-  const [published, setPublished] = useState<string | null>(null);
+  const [published, setPublished] = useState<Note | null>(null);
   const [conflict, setConflict] = useState(false);
   const bodyRef = useRef<HTMLTextAreaElement>(null);
 
@@ -71,7 +72,7 @@ export default function NoteComposer() {
       if (response.status === 401) { setOwner(false); setShowLogin(true); }
       if (response.status === 409) setConflict(true);
       if (!response.ok) throw new Error(data.error || "公開できませんでした。");
-      setPublished(data.note.id);
+      setPublished(data.note);
       persist(emptyDraft());
       setSaveStatus("公開しました。次のメモもどうぞ");
       bodyRef.current?.focus();
@@ -95,7 +96,7 @@ export default function NoteComposer() {
     <h1 className="notes-title">いまの実験を、ひとこと。</h1>
     <p className="notes-description">試したことも、つまずいたことも。<br />結論が出ていなくても、そのまま残しておこう。</p>
     {!online && <p className="notes-message" role="status">オフラインです。書きかけはこの端末に保存できます。接続後に「公開する」を押してください。</p>}
-    {published && <div className="notes-message" role="status">メモを公開しました。<div className="notes-saved-links"><Link href={`/notes/${published}`}>公開したメモを見る ↗</Link><Link href="/notes">一覧を見る</Link></div></div>}
+    {published && <div className="notes-message" role="status">メモを公開しました。<div className="notes-saved-links"><Link href={`/notes/${published.id}`}>公開したメモを見る ↗</Link><Link href="/notes">一覧を見る</Link></div><ShareNote note={published} /></div>}
     <form onSubmit={publish}>
       <div className="notes-editor">
         <div className="notes-editor-top"><span role="status"><span className="notes-status-dot" />{saveStatus}</span><span>{draft?.body.length || 0} / {MAX_BODY}</span></div>

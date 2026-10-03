@@ -48,4 +48,8 @@
 .notes-footer { max-width: 780px; margin: auto; padding: 32px 24px calc(24px + env(safe-area-inset-bottom)); font-size: 11px; color: #859082; text-align: center; }
 .notes-back { display: inline-block; margin-bottom: 28px; }
 .notes-saved-links { display: flex; gap: 16px; flex-wrap: wrap; }
+.notes-card-actions { display: flex; justify-content: flex-end; margin-top: 20px; padding-top: 14px; border-top: 1px solid #eaede5; }
+.notes-share-link { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 14px; border: 1px solid #ccd6ca; border-radius: 8px; color: var(--ink); font-size: 12px; font-weight: 600; text-decoration: none; }
+.notes-share-link:hover { background: #edf1e8; }
+.notes-message .notes-share-link { margin-top: 12px; text-decoration: none; }
 @media (max-width: 600px) { .notes-header { padding: 18px 20px; } .notes-main { padding: 32px 18px 20px; } .notes-body-input { min-height: 280px; padding: 20px; } .notes-card { padding: 20px; } .notes-compose-actions { align-items: flex-start; } .notes-compose-actions .notes-primary { flex-shrink: 0; } .notes-title { font-size: 28px; } .notes-heading-row { align-items: flex-start; } }

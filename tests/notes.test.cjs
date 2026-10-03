@@ -120,3 +120,31 @@ test('PWA and notes routes bypass legacy redirects, legacy articles keep redirec
   for(const url of ['/notes','/notes/new','/sw.js','/manifest.webmanifest','/icons/icon-192x192.png']) assert.equal(middleware(request(url)).headers.get('location'),null);
   assert.equal(middleware(request('/old-article')).headers.get('location'),origin+'/blog/old-article');
 });
+
+test('X share links preserve Japanese, emoji, and reserved characters without adding parameters', () => {
+  const { xShareUrl } = require('../src/notes/sharing.ts');
+  const body = '音声入力 & "実験" #メモ 🐈\n次は https://example.com/?a=1&b=2';
+  const url = new URL(xShareUrl({ ...note, body }));
+  assert.equal(url.origin, 'https://twitter.com');
+  assert.equal(url.pathname, '/intent/tweet');
+  assert.deepEqual([...url.searchParams.keys()], ['text', 'url']);
+  assert.equal(url.searchParams.get('text'), body.replace(/\s+/g, ' '));
+  assert.equal(url.searchParams.get('url'), `${origin}/notes/${note.id}`);
+  const long = new URL(xShareUrl({ ...note, body: '🐈'.repeat(150) })).searchParams.get('text');
+  assert.equal(Array.from(long).length, 100);
+  assert.equal(long, '🐈'.repeat(99) + '…');
+});
+test('shared cards identify the individual note, including when it has no title', () => {
+  const { noteMetadata, xShareUrl } = require('../src/notes/sharing.ts');
+  const published = { ...note, createdAt: '2026-10-03T10:23:00.000Z' };
+  const metadata = noteMetadata(published);
+  assert.equal(metadata.alternates.canonical, `${origin}/notes/${note.id}`);
+  assert.equal(metadata.openGraph.url, metadata.alternates.canonical);
+  assert.equal(metadata.twitter.card, 'summary');
+  assert.ok(metadata.title.startsWith('音声入力を試した。 次は技術用語。'));
+  assert.equal(metadata.twitter.title, metadata.title);
+  assert.equal(metadata.twitter.description, metadata.description);
+  assert.equal(metadata.openGraph.images[0].type, 'image/png');
+  assert.equal(metadata.twitter.images[0].url, metadata.openGraph.images[0].url);
+  assert.equal(new URL(xShareUrl({ ...note, title: '短いタイトル' })).searchParams.get('text'), '短いタイトル');
+});
