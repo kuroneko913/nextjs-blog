@@ -5,7 +5,7 @@ import "./lab.css";
 
 export const metadata: Metadata = {
   title: "Lab | くろねこ。の実験室",
-  description: "AIと文章、小さなツール、日々の記録。くろねこ。がつくって試している実験の入口。",
+  description: "AIエージェントの運用、小さなツール、日々の記録。くろねこ。がつくって試している実験の入口。",
 };
 
 export default function LabLayout({ children }: { children: React.ReactNode }) {
