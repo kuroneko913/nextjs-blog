@@ -1,6 +1,6 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## 実験メモ
+## Notes
 
 - `/notes/new`: スマホ用投稿画面。本文のみで公開でき、タイトル・タグは任意。
 - `/notes`: 公開メモの一覧。複数選択して記事のMarkdown下書きを保存できる。
@@ -14,7 +14,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 既存の `FIREBASE_PROJECT_ID` / `FIREBASE_CLIENT_EMAIL` / `FIREBASE_PRIVATE_KEY` を使います。認証はGitHub OAuthです。許可する投稿者は `src/notes/auth.ts` の `OWNER_GITHUB_ID = 20674685`（kuroneko913）だけで、変更可能なユーザー名やメールアドレスでは判定しません。
 
 1. 本人が [GitHubのOAuth App登録画面](https://github.com/settings/applications/new) で専用アプリを作ります。
-   - Application name: `くろねこ。の実験メモ`
+   - Application name: `くろねこ。のNotes`
    - Homepage URL: `https://myblackcat913.com`
    - Authorization callback URL: `https://myblackcat913.com/api/notes/oauth/callback`
    - Device Flowは不要です。公開プロフィールによる本人確認だけで、追加スコープは要求しません。

@@ -51,7 +51,7 @@ export async function revokeSession(req: NextRequest) {
 }
 
 export async function requireOwner(req: NextRequest) {
-  if (!await authenticated(req)) throw new NoteError(401, "投稿するにはGitHubでログインしてください。入力したメモはこの端末に残っています。");
+  if (!await authenticated(req)) throw new NoteError(401, "投稿するにはGitHubでログインしてください。入力したノートはこの端末に残っています。");
 }
 
 export function requireSameOrigin(req: NextRequest) {

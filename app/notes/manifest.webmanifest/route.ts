@@ -1,6 +1,6 @@
 export function GET() {
   return Response.json({
-    id: "/notes", name: "くろねこ。の実験メモ", short_name: "実験メモ",
+    id: "/notes", name: "くろねこ。のNotes", short_name: "Notes",
     description: "試したことを、ひとこと残す。", lang: "ja",
     start_url: "/notes/new", scope: "/notes", display: "standalone",
     background_color: "#f6f5f0", theme_color: "#f6f5f0",

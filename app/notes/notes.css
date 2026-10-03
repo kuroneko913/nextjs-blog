@@ -2,7 +2,11 @@
 .notes-header { max-width: 1080px; margin: auto; padding: 24px 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #dcdfd7; gap: 12px; }
 .notes-brand { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 700; }
 .notes-brand small { display: block; color: var(--muted); font-size: 9px; letter-spacing: .12em; margin-top: 3px; font-weight: 500; }
-.notes-blog-link, .notes-back { font-size: 13px; color: var(--muted); white-space: nowrap; }
+.notes-back { font-size: 13px; color: var(--muted); white-space: nowrap; }
+.notes-nav { display: flex; align-items: center; gap: 4px; font-size: 13px; color: var(--muted); }
+.notes-nav a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 12px; border-radius: 8px; }
+.notes-nav a:hover, .notes-nav a[aria-current] { background: #e8efe5; color: var(--ink); }
+.notes-nav a[aria-current] { font-weight: 700; }
 .notes-main { max-width: 780px; margin: auto; padding: 48px 24px 32px; }
 .notes-eyebrow { color: var(--green); font-size: 11px; letter-spacing: .18em; margin-bottom: 12px; font-weight: 700; }
 .notes-title { font-size: clamp(28px, 5vw, 40px); line-height: 1.5; font-weight: 700; letter-spacing: .03em; }
@@ -52,4 +56,4 @@
 .notes-share-link { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 14px; border: 1px solid #ccd6ca; border-radius: 8px; color: var(--ink); font-size: 12px; font-weight: 600; text-decoration: none; }
 .notes-share-link:hover { background: #edf1e8; }
 .notes-message .notes-share-link { margin-top: 12px; text-decoration: none; }
-@media (max-width: 600px) { .notes-header { padding: 18px 20px; } .notes-main { padding: 32px 18px 20px; } .notes-body-input { min-height: 280px; padding: 20px; } .notes-card { padding: 20px; } .notes-compose-actions { align-items: flex-start; } .notes-compose-actions .notes-primary { flex-shrink: 0; } .notes-title { font-size: 28px; } .notes-heading-row { align-items: flex-start; } }
+@media (max-width: 600px) { .notes-header { padding: 18px 20px; flex-wrap: wrap; } .notes-nav { width: 100%; } .notes-main { padding: 32px 18px 20px; } .notes-body-input { min-height: 280px; padding: 20px; } .notes-card { padding: 20px; } .notes-compose-actions { align-items: flex-start; } .notes-compose-actions .notes-primary { flex-shrink: 0; } .notes-title { font-size: 28px; } .notes-heading-row { align-items: flex-start; } }

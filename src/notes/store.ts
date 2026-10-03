@@ -10,7 +10,7 @@ export async function saveNote(input: NoteInput): Promise<{ note: Note; created:
     const existing = await transaction.get(ref);
     if (existing.exists) {
       const note = existing.data() as Note;
-      if (!sameNote(note, input)) throw new NoteError(409, "このメモはすでに公開済みです。一覧を確認し、続きは新しいメモに残してください。");
+      if (!sameNote(note, input)) throw new NoteError(409, "このノートはすでに公開済みです。一覧を確認し、続きは新しいノートに残してください。");
       return { note, created: false };
     }
     const note = { ...input, createdAt: new Date().toISOString() };
