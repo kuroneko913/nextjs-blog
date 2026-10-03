@@ -1,31 +1,27 @@
 import { NextRequest } from "next/server";
-import { authenticated, consumeLoginAttempt, correctKey, createSession, requireSameOrigin, resetLoginAttempts, SESSION_COOKIE, SESSION_SECONDS } from "@/src/notes/auth";
-import { failure, json, readJson } from "@/src/notes/http";
-import { NoteError } from "@/src/notes/model";
+import { authenticated, cookieOptions, LEGACY_SESSION_COOKIE, requireSameOrigin, revokeSession, SESSION_COOKIE } from "@/src/notes/auth";
+import { failure, json } from "@/src/notes/http";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-export async function GET(req: NextRequest) { return json({ authenticated: authenticated(req) }); }
+export async function GET(req: NextRequest) {
+  try { return json({ authenticated: await authenticated(req) }); }
+  catch (error) { return failure(error); }
+}
 
-export async function POST(req: NextRequest) {
-  try {
-    requireSameOrigin(req);
-    const body = await readJson(req, 2048) as { key?: unknown } | null;
-    await consumeLoginAttempt();
-    if (!correctKey(body?.key)) throw new NoteError(401, "投稿キーが違うようです。もう一度確認してください。");
-    await resetLoginAttempts();
-    const response = json({ authenticated: true });
-    response.cookies.set(SESSION_COOKIE, createSession(), { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict", path: "/api/notes", maxAge: SESSION_SECONDS });
-    return response;
-  } catch (error) { return failure(error); }
+export async function POST() {
+  // No fallback to the old shared key, including while OAuth is unconfigured.
+  return json({ error: "投稿キーでのログインは終了しました。画面を更新し、GitHubでログインしてください。" }, 410);
 }
 
 export async function DELETE(req: NextRequest) {
   try {
     requireSameOrigin(req);
+    await revokeSession(req);
     const response = json({ authenticated: false });
-    response.cookies.set(SESSION_COOKIE, "", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict", path: "/api/notes", maxAge: 0 });
+    response.cookies.set(SESSION_COOKIE, "", { ...cookieOptions, maxAge: 0 });
+    response.cookies.set(LEGACY_SESSION_COOKIE, "", { ...cookieOptions, maxAge: 0 });
     return response;
   } catch (error) { return failure(error); }
 }

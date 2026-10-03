@@ -1,63 +1,59 @@
-import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { createHash, createHmac, randomBytes } from "node:crypto";
 import { NextRequest } from "next/server";
 import { NoteError } from "./model";
 import { getNotesDb } from "./db";
 
-export const SESSION_COOKIE = "blackcat-notes-session";
-export const SESSION_SECONDS = 60 * 60 * 24 * 90;
+// GitHub's immutable numeric ID, not a renameable login or email address.
+export const OWNER_GITHUB_ID = 20674685; // kuroneko913
+export const SESSION_COOKIE = "blackcat-notes-github-session";
+export const LEGACY_SESSION_COOKIE = "blackcat-notes-session";
+export const SESSION_SECONDS = 60 * 60 * 24 * 30;
+export const cookieOptions = { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict" as const, path: "/api/notes" };
 
-function secret() {
-  const key = process.env.NOTES_ADMIN_KEY;
-  if (!key || key.length < 32) throw new NoteError(503, "投稿の準備中です。しばらくしてからお試しください。");
-  return key;
+export function githubConfig() {
+  const clientId = process.env.NOTES_GITHUB_CLIENT_ID;
+  const clientSecret = process.env.NOTES_GITHUB_CLIENT_SECRET;
+  if (!clientId || !clientSecret || clientSecret.length < 32) throw new NoteError(503, "GitHubログインを設定中です。書きかけはこの端末に残せます。");
+  return { clientId, clientSecret };
 }
 
-function sign(value: string) { return createHmac("sha256", secret()).update(value).digest("hex"); }
-function equal(a: string, b: string) { return a.length === b.length && timingSafeEqual(Buffer.from(a), Buffer.from(b)); }
-
-export function correctKey(value: unknown) {
-  if (typeof value !== "string" || value.length > 512) return false;
-  return equal(sign(`login:${value}`), sign(`login:${secret()}`));
+function sessionVersion() {
+  return createHmac("sha256", githubConfig().clientSecret).update("blackcat-notes-session-version-v1").digest("hex");
 }
 
-export function createSession() {
-  const payload = `${Math.floor(Date.now() / 1000) + SESSION_SECONDS}.${randomBytes(16).toString("hex")}`;
-  return `${payload}.${sign(`session:${payload}`)}`;
+function sessionRef(token: string) {
+  const hash = createHash("sha256").update(token).digest("hex");
+  return getNotesDb().collection("experiment-notes-private").doc(`session-${hash}`);
 }
 
-export function authenticated(req: NextRequest) {
-  const value = req.cookies.get(SESSION_COOKIE)?.value;
-  if (!value || !/^\d{10}\.[0-9a-f]{32}\.[0-9a-f]{64}$/.test(value)) return false;
-  const [expires, nonce, signature] = value.split(".");
-  if (Number(expires) <= Date.now() / 1000) return false;
-  try { return equal(signature, sign(`session:${expires}.${nonce}`)); } catch { return false; }
+export async function createSession(githubId: number) {
+  if (githubId !== OWNER_GITHUB_ID) throw new NoteError(403, "このGitHubアカウントでは投稿できません。");
+  const version = sessionVersion();
+  const token = randomBytes(32).toString("base64url");
+  await sessionRef(token).create({ githubId, version, expiresAt: new Date(Date.now() + SESSION_SECONDS * 1000) });
+  return token;
 }
 
-export function requireOwner(req: NextRequest) {
-  if (!authenticated(req)) throw new NoteError(401, "投稿するにはログインしてください。入力したメモはこの端末に残っています。");
+export async function authenticated(req: NextRequest) {
+  const token = req.cookies.get(SESSION_COOKIE)?.value;
+  if (!token || !/^[A-Za-z0-9_-]{43}$/.test(token)) return false;
+  // Missing configuration, legacy sessions and rotated credentials all fail closed.
+  let version: string;
+  try { version = sessionVersion(); } catch { return false; }
+  const record = (await sessionRef(token).get()).data();
+  const expiresAt = record?.expiresAt?.toDate?.() ?? record?.expiresAt;
+  return record?.githubId === OWNER_GITHUB_ID && record?.version === version && expiresAt instanceof Date && expiresAt.getTime() > Date.now();
+}
+
+export async function revokeSession(req: NextRequest) {
+  const token = req.cookies.get(SESSION_COOKIE)?.value;
+  if (token && /^[A-Za-z0-9_-]{43}$/.test(token)) await sessionRef(token).delete();
+}
+
+export async function requireOwner(req: NextRequest) {
+  if (!await authenticated(req)) throw new NoteError(401, "投稿するにはGitHubでログインしてください。入力したメモはこの端末に残っています。");
 }
 
 export function requireSameOrigin(req: NextRequest) {
   if (req.headers.get("origin") !== req.nextUrl.origin) throw new NoteError(403, "投稿画面を開き直してお試しください。");
-}
-
-// Persist the limit across serverless instances; never trust a caller-supplied IP.
-// A single-owner app uses one bucket. A successful login resets it.
-export async function consumeLoginAttempt() {
-  secret();
-  const db = getNotesDb();
-  const ref = db.collection("experiment-notes-private").doc("login-rate-limit");
-  await db.runTransaction(async transaction => {
-    const snapshot = await transaction.get(ref);
-    const previous = snapshot.data();
-    const now = Date.now();
-    const active = previous && previous.resetAt > now;
-    const count = active ? previous.count : 0;
-    if (count >= 10) throw new NoteError(429, "ログインを何度か試したため、15分ほど待ってからお試しください。");
-    transaction.set(ref, { count: count + 1, resetAt: active ? previous.resetAt : now + 15 * 60 * 1000 });
-  });
-}
-
-export async function resetLoginAttempts() {
-  await getNotesDb().collection("experiment-notes-private").doc("login-rate-limit").delete();
 }

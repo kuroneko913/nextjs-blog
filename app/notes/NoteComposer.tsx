@@ -14,7 +14,7 @@ export default function NoteComposer() {
   const [saveStatus, setSaveStatus] = useState("読み込み中…");
   const [owner, setOwner] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
-  const [key, setKey] = useState("");
+  const [loginNotice, setLoginNotice] = useState("");
   const [busy, setBusy] = useState(false);
   const [online, setOnline] = useState(true);
   const [error, setError] = useState("");
@@ -34,12 +34,35 @@ export default function NoteComposer() {
       setSaveStatus(raw ? "書きかけを復元しました" : "この端末に自動保存");
     } catch { setSaveStatus("自動保存を利用できません"); }
     setDraft(initial);
+    const currentUrl = new URL(window.location.href);
+    const loginResult = currentUrl.searchParams.get("login");
+    const loginMessages: Record<string, string> = {
+      cancelled: "ログインをキャンセルしました。書きかけはこの端末に残っています。",
+      denied: "このGitHubアカウントでは投稿できません。kuroneko913のアカウントでログインしてください。",
+      expired: "ログインをやり直してください。書きかけはこの端末に残っています。",
+      failed: "GitHubに接続できませんでした。もう一度ログインしてください。",
+      unavailable: "GitHubログインを設定中です。書きかけはこの端末に残せます。",
+      production: "ログインはmyblackcat913.comで利用できます。この画面の書きかけは、移動前にコピーしてください。",
+    };
+    if (loginResult) {
+      if (loginMessages[loginResult]) { setError(loginMessages[loginResult]); setShowLogin(true); }
+      currentUrl.searchParams.delete("login");
+      window.history.replaceState(window.history.state, "", currentUrl);
+    }
     const updateOnline = () => setOnline(navigator.onLine);
     updateOnline();
     window.addEventListener("online", updateOnline);
     window.addEventListener("offline", updateOnline);
-    fetch("/api/notes/session", { cache: "no-store" }).then(res => res.json()).then(data => setOwner(data.authenticated === true)).catch(() => {});
-    return () => { window.removeEventListener("online", updateOnline); window.removeEventListener("offline", updateOnline); };
+    const checkSession = () => fetch("/api/notes/session", { cache: "no-store" }).then(res => res.json()).then(data => {
+      const loggedIn = data.authenticated === true;
+      setOwner(loggedIn);
+      if (loggedIn) setShowLogin(false);
+      if (loggedIn && loginResult === "success") setLoginNotice("GitHubでログインしました。「公開する」を押すとメモを公開できます。");
+    }).catch(() => {});
+    void checkSession();
+    const resume = () => { setBusy(false); void checkSession(); };
+    window.addEventListener("pageshow", resume);
+    return () => { window.removeEventListener("online", updateOnline); window.removeEventListener("offline", updateOnline); window.removeEventListener("pageshow", resume); };
   }, []);
 
   function persist(next: Draft) {
@@ -48,23 +71,33 @@ export default function NoteComposer() {
     catch { setSaveStatus("保存できません。本文をコピーしてください"); }
   }
 
-  async function login(event: FormEvent) {
+  async function prepareLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    // Save before leaving the PWA for GitHub. Never auto-publish on return.
+    try {
+      if (!draft) throw new Error("Draft not ready");
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    } catch {
+      setError("書きかけを保存できません。ログイン前に本文をコピーし、このブラウザの保存設定を確認してください。");
+      return;
+    }
     setBusy(true); setError("");
     try {
-      const response = await fetch("/api/notes/session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key }) });
+      const response = await fetch("/api/notes/oauth/start", { method: "POST" });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "ログインできませんでした。");
-      setOwner(true); setShowLogin(false); setKey(""); bodyRef.current?.focus();
-    } catch (cause) { setError(cause instanceof Error ? cause.message : "接続できませんでした。"); }
-    finally { setBusy(false); }
+      if (!response.ok) throw new Error(data.error || "ログインを開始できませんでした。");
+      window.location.assign(data.url);
+    } catch (cause) {
+      setBusy(false);
+      setError(cause instanceof Error ? cause.message : "接続できませんでした。書きかけはこの端末に残っています。");
+    }
   }
 
   async function publish(event: FormEvent) {
     event.preventDefault();
     if (!draft || busy) return;
     if (!owner) { setShowLogin(true); return; }
-    setBusy(true); setError(""); setPublished(null); setConflict(false);
+    setBusy(true); setError(""); setPublished(null); setConflict(false); setLoginNotice("");
     try {
       const tags = draft.tags.split(/[,、]/).map(tag => tag.trim()).filter(Boolean);
       const response = await fetch("/api/notes", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...draft, tags }) });
@@ -86,6 +119,7 @@ export default function NoteComposer() {
       const response = await fetch("/api/notes/session", { method: "DELETE" });
       if (!response.ok) throw new Error("ログアウトできませんでした。");
       setOwner(false);
+      setLoginNotice("");
     } catch { setError("ログアウトできませんでした。接続を確認してください。"); }
     finally { setBusy(false); }
   }
@@ -96,6 +130,7 @@ export default function NoteComposer() {
     <h1 className="notes-title">いまの実験を、ひとこと。</h1>
     <p className="notes-description">試したことも、つまずいたことも。<br />結論が出ていなくても、そのまま残しておこう。</p>
     {!online && <p className="notes-message" role="status">オフラインです。書きかけはこの端末に保存できます。接続後に「公開する」を押してください。</p>}
+    {loginNotice && <p className="notes-message" role="status">{loginNotice}</p>}
     {published && <div className="notes-message" role="status">メモを公開しました。<div className="notes-saved-links"><Link href={`/notes/${published.id}`}>公開したメモを見る ↗</Link><Link href="/notes">一覧を見る</Link></div><ShareNote note={published} /></div>}
     <form onSubmit={publish}>
       <div className="notes-editor">
@@ -110,12 +145,11 @@ export default function NoteComposer() {
       <div className="notes-compose-actions"><p className="notes-hint">公開すると、誰でも読めます。<br />タイトルなし・一文だけでもOK。</p><button className="notes-primary" type="submit" disabled={!draft?.body.trim() || busy || !online}>{busy ? "処理中…" : "公開する ↗"}</button></div>
     </form>
     {error && <div className="notes-message notes-error" role="alert">{error}{conflict && draft && <div className="notes-saved-links"><Link href={`/notes/${draft.id}`}>公開済みのメモを確認</Link><button onClick={() => { persist({ ...draft, id: crypto.randomUUID() }); setConflict(false); setError(""); }}>入力内容を新しいメモにする</button></div>}</div>}
-    {showLogin && <form className="notes-login" onSubmit={login}>
-      <h2>投稿用にログイン</h2><p className="notes-hint">自分の投稿キーを入力してください。<br />この端末では90日間ログインしたままになります。</p>
-      <label className="notes-field" htmlFor="notes-key">投稿キー<input id="notes-key" type="password" autoComplete="current-password" value={key} onChange={event => setKey(event.target.value)} required maxLength={512} /></label>
-      <div className="notes-login-actions"><button className="notes-primary" disabled={busy || !online}>{busy ? "確認中…" : "ログイン"}</button><button type="button" className="notes-secondary" onClick={() => setShowLogin(false)}>あとで</button></div>
+    {showLogin && <form className="notes-login" action="/api/notes/oauth/start" method="post" onSubmit={prepareLogin}>
+      <h2>GitHubで投稿用にログイン</h2><p className="notes-hint">投稿できるのはkuroneko913のアカウントだけです。<br />書きかけを保存してGitHubに移動します。この端末では30日間ログインを保持します。</p>
+      <div className="notes-login-actions"><button className="notes-primary" disabled={!draft || busy || !online}>{busy ? "GitHubに移動中…" : "GitHubでログイン"}</button><button type="button" className="notes-secondary" onClick={() => setShowLogin(false)}>あとで</button></div>
     </form>}
-    <div className="notes-compose-actions"><Link className="notes-hint" href="/notes">たまったメモを眺める →</Link>{owner && <button className="notes-hint" disabled={busy} onClick={logout}>ログアウト</button>}</div>
+    <div className="notes-compose-actions"><Link className="notes-hint" href="/notes">たまったメモを眺める →</Link>{owner ? <button className="notes-hint" disabled={busy} onClick={logout}>ログアウト</button> : <button className="notes-hint" disabled={busy} onClick={() => setShowLogin(true)}>投稿用にログイン</button>}</div>
     <p className="notes-hint" style={{ marginTop: 28 }}>ホーム画面に追加すると、ここからすぐ書き始められます。<br />書きかけはこのブラウザだけに保存されます。</p>
   </>;
 }
