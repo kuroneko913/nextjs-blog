@@ -15,7 +15,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     requireSameOrigin(req);
-    requireOwner(req);
+    await requireOwner(req);
     const result = await saveNote(parseNote(await readJson(req)));
     return json(result, result.created ? 201 : 200);
   } catch (error) { return failure(error); }

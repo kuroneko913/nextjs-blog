@@ -1,4 +1,4 @@
-const CACHE_NAME = "kuroneko-blog-v7";
+const CACHE_NAME = "kuroneko-blog-v8";
 const PRECACHE_ASSETS = ["/icons/icon-192x192.png", "/icons/icon-512x512.png"];
 
 async function cacheComposer(cache) {
