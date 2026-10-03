@@ -74,6 +74,33 @@ test('anonymous and cross-origin callers cannot publish', async () => {
   assert.equal((await routes.POST(request('/api/notes',{method:'POST',body:note,token:await auth.createSession(auth.OWNER_GITHUB_ID),requestOrigin:'https://other.example'}))).status,403);
   assert.equal([...records.keys()].filter(key=>key.startsWith('experiment-notes/')).length,0);
 });
+test('canonical site mutations remain valid when a proxy changes the server request URL', async (t) => {
+  const previousMode = process.env.NODE_ENV;
+  process.env.NODE_ENV = 'production';
+  t.after(() => { if (previousMode === undefined) delete process.env.NODE_ENV; else process.env.NODE_ENV = previousMode; });
+  const token = await auth.createSession(auth.OWNER_GITHUB_ID);
+  function proxied(path, method, body) {
+    return new NextRequest('https://myblackcat913-blog.netlify.app'+path, {method,
+      headers: {origin, 'content-type':'application/json', cookie:`${auth.SESSION_COOKIE}=${token}`},
+      ...(body ? {body:JSON.stringify(body)} : {})});
+  }
+  assert.equal((await routes.POST(proxied('/api/notes','POST',note))).status,201);
+  assert.equal((await routes.POST(proxied('/api/notes','POST',{...note,id:'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb'}))).status,201);
+  assert.equal((await sessions.DELETE(proxied('/api/notes/session','DELETE'))).status,200);
+  assert.equal(await auth.authenticated(request('/api/notes',{token})),false);
+});
+test('mutations reject unknown, missing, opaque, preview and forged origins in production', (t) => {
+  const previousMode = process.env.NODE_ENV;
+  process.env.NODE_ENV = 'production';
+  t.after(() => { if (previousMode === undefined) delete process.env.NODE_ENV; else process.env.NODE_ENV = previousMode; });
+  for (const value of [null,'null','https://other.example','https://myblackcat913.com.attacker.example','http://myblackcat913.com','https://myblackcat913.com:444','https://deploy-preview-9--myblackcat913-blog.netlify.app','http://localhost:3000']) {
+    const headers = value === null ? {} : {origin:value};
+    // Spoofed forwarding headers must not make an untrusted origin pass.
+    headers['x-forwarded-host']='myblackcat913.com';
+    const req = new NextRequest(origin+'/api/notes',{method:'POST',headers});
+    assert.throws(()=>auth.requireSameOrigin(req),{status:403});
+  }
+});
 test('sessions reject tampering, expiry, other owners, missing records and credential rotation', async () => {
   const token = await auth.createSession(auth.OWNER_GITHUB_ID);
   assert.equal(await auth.authenticated(request('/api/notes',{token})),true);

@@ -1,8 +1,8 @@
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
-import { githubConfig, OWNER_GITHUB_ID } from "./auth";
+import { githubConfig, NOTES_ORIGIN, OWNER_GITHUB_ID } from "./auth";
 
-export const AUTH_ORIGIN = "https://myblackcat913.com";
+export const AUTH_ORIGIN = NOTES_ORIGIN;
 export const CALLBACK_PATH = "/api/notes/oauth/callback";
 export const OAUTH_COOKIE = "blackcat-notes-oauth";
 export const OAUTH_SECONDS = 10 * 60;

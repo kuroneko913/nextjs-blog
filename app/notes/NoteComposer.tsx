@@ -117,10 +117,11 @@ export default function NoteComposer() {
     setBusy(true); setError("");
     try {
       const response = await fetch("/api/notes/session", { method: "DELETE" });
-      if (!response.ok) throw new Error("ログアウトできませんでした。");
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "ログアウトできませんでした。");
       setOwner(false);
       setLoginNotice("");
-    } catch { setError("ログアウトできませんでした。接続を確認してください。"); }
+    } catch (cause) { setError(cause instanceof Error ? cause.message : "ログアウトできませんでした。接続を確認してください。"); }
     finally { setBusy(false); }
   }
 
