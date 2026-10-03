@@ -4,6 +4,7 @@ export const PAGE_SIZE = 20;
 
 export type NoteInput = { id: string; body: string; title: string; tags: string[] };
 export type Note = NoteInput & { createdAt: string };
+export type DiscardedNote = Note & { discardedAt: string };
 
 export class NoteError extends Error {
   constructor(public status: number, message: string) { super(message); }

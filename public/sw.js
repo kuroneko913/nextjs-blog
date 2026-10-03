@@ -1,4 +1,4 @@
-const CACHE_NAME = "kuroneko-blog-v6";
+const CACHE_NAME = "kuroneko-blog-v8";
 const PRECACHE_ASSETS = ["/icons/icon-192x192.png", "/icons/icon-512x512.png"];
 
 async function cacheComposer(cache) {
@@ -31,6 +31,8 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET" || url.origin !== self.location.origin) return;
   // Never cache credentials, API responses, RSC payloads, or development bundles.
   if (url.pathname.startsWith("/api/") || request.headers.has("RSC") || url.searchParams.has("_rsc") || (url.pathname.startsWith("/_next/") && !url.pathname.startsWith("/_next/static/"))) return;
+  // A discarded note must not reappear from an offline navigation cache.
+  if ((url.pathname === "/notes" || url.pathname.startsWith("/notes/")) && url.pathname !== "/notes/new") return;
   const staticAsset = url.pathname.startsWith("/_next/static/") || url.pathname.startsWith("/icons/") || url.pathname.startsWith("/images/");
   const navigation = request.mode === "navigate";
   if (!staticAsset && !navigation) return;

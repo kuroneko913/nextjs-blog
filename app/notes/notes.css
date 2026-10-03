@@ -52,8 +52,31 @@
 .notes-footer { max-width: 780px; margin: auto; padding: 32px 24px calc(24px + env(safe-area-inset-bottom)); font-size: 11px; color: #859082; text-align: center; }
 .notes-back { display: inline-block; margin-bottom: 28px; }
 .notes-saved-links { display: flex; gap: 16px; flex-wrap: wrap; }
-.notes-card-actions { display: flex; justify-content: flex-end; margin-top: 20px; padding-top: 14px; border-top: 1px solid #eaede5; }
+.notes-card-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 20px; padding-top: 14px; border-top: 1px solid #eaede5; }
 .notes-share-link { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 14px; border: 1px solid #ccd6ca; border-radius: 8px; color: var(--ink); font-size: 12px; font-weight: 600; text-decoration: none; }
 .notes-share-link:hover { background: #edf1e8; }
 .notes-message .notes-share-link { margin-top: 12px; text-decoration: none; }
+.notes-owner-links { display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-bottom: 16px; font-size: 12px; color: var(--muted); }
+.notes-owner-links a { padding: 10px 0; min-height: 44px; text-decoration: underline; text-underline-offset: 4px; }
+.notes-owner-links span { font-size: 11px; }
+.notes-discard { margin-right: auto; color: #796b57; font-size: 12px; min-height: 44px; padding: 10px 12px; border-radius: 8px; border: 1px dashed #d6cdbc; }
+.notes-discard:hover { background: #f2ede3; }
+.notes-discard:disabled { opacity: .5; }
+.notes-discard-notice .notes-saved-links { margin-top: 10px; align-items: center; }
+.notes-crumpling { pointer-events: none; transform-origin: 80% 80%; animation: notes-crumple .45s ease-in forwards; }
+@keyframes notes-crumple { 35% { transform: rotate(-3deg) scale(.92,.85); border-radius: 30%; } 75% { transform: rotate(8deg) scale(.35,.4); border-radius: 45%; opacity: .8; } to { transform: translateY(35px) rotate(16deg) scale(.08); border-radius: 50%; opacity: 0; } }
+.notes-trash-card { display: flex; align-items: flex-start; gap: 22px; padding: 26px 22px; margin-bottom: 18px; background: #eeece4; border: 1px solid #ded9cb; border-radius: 15px; }
+.notes-paper-ball { flex: 0 0 64px; width: 64px; height: 70px; margin-top: 10px; background: conic-gradient(from 20deg at 35% 32%, #fdfbf4 0deg, #d5d0c1 55deg, #faf7ee 57deg, #e4decc 132deg, #fffef8 134deg, #cec8b6 217deg, #f6f1e3 220deg, #e5dfcd 302deg, #fdfbf4 305deg); clip-path: polygon(20% 5%, 51% 0, 79% 10%, 94% 34%, 88% 58%, 100% 77%, 74% 94%, 40% 100%, 14% 84%, 0 55%, 9% 30%); box-shadow: inset 5px 7px 12px #fff9, inset -7px -8px 12px #aaa38c80; transform: rotate(-12deg); }
+.notes-paper-ball::after { content: ""; display: block; height: 100%; background: linear-gradient(35deg, transparent 47%, #aaa38d66 49%, #fff9 51%, transparent 53%), linear-gradient(115deg, transparent 53%, #b9b19a66 55%, #fffa 57%, transparent 59%); }
+.notes-trash-record { flex: 1; min-width: 0; }
+.notes-trash-date { font-size: 11px; color: #817763; margin-bottom: 12px; line-height: 1.8; }
+.notes-trash-record summary { cursor: pointer; font-size: 15px; line-height: 1.8; overflow-wrap: anywhere; }
+.notes-trash-record summary span { display: block; color: var(--muted); font-size: 11px; margin-top: 5px; }
+.notes-trash-record details[open] { background: #fffdf5; padding: 16px; border-radius: 3px; box-shadow: 0 3px 10px #4b443511; }
+.notes-trash-record details[open] .notes-content { margin: 18px 0; }
+.notes-trash-restore { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin-top: 18px; }
+.notes-trash-restore small { font-size: 11px; color: var(--muted); }
+.notes-basket-icon { font-size: 42px; color: #a99e87; }
+@media (prefers-reduced-motion: reduce) { .notes-crumpling { animation: none; } }
+@media (max-width: 420px) { .notes-trash-card { gap: 14px; padding: 20px 16px; } .notes-paper-ball { flex-basis: 42px; width: 42px; height: 48px; } }
 @media (max-width: 600px) { .notes-header { padding: 18px 20px; flex-wrap: wrap; } .notes-nav { width: 100%; } .notes-main { padding: 32px 18px 20px; } .notes-body-input { min-height: 280px; padding: 20px; } .notes-card { padding: 20px; } .notes-compose-actions { align-items: flex-start; } .notes-compose-actions .notes-primary { flex-shrink: 0; } .notes-title { font-size: 28px; } .notes-heading-row { align-items: flex-start; } }
