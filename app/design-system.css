@@ -41,5 +41,7 @@ body { background: var(--site-bg); color: var(--site-ink); }
 @media (max-width: 600px) { .site-content { padding: 32px 20px 48px; } .site-article-card { width: 100%; } .site-article-card > a > div:first-child { width: 100%; } .site-article-card h2, .site-article-card p { width: 100%; } }
 
 .site-home-grid { display: grid; grid-template-columns: minmax(0, 1fr) 260px; }
-.site-footer .social-icons { justify-content: center; padding: 0; margin-bottom: 20px; height: auto !important; }
+.site-footer .social-icons { justify-content: center; padding: 0; margin-bottom: 20px; }
 @media (max-width: 850px) { .site-home-grid { grid-template-columns: minmax(0, 1fr); } }
+
+.notes-primary, .notes-secondary, .lab-output-link { border-radius: var(--site-radius-control); }

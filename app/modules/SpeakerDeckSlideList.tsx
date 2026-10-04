@@ -63,7 +63,7 @@ export default function SpeakerDeckSlideList() {
         return (
             <div className="sm:p-10">
                 <div className="flex items-center justify-center py-8">
-                    <div className="text-gray-600">スライドを読み込み中...</div>
+                    <div className="text-[var(--site-muted)]">スライドを読み込み中...</div>
                 </div>
             </div>
         );
@@ -86,7 +86,7 @@ export default function SpeakerDeckSlideList() {
             </div>
             
             {slides.length === 0 && !loading && (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-[var(--site-muted)]">
                     スライドが見つかりませんでした
                 </div>
             )}

@@ -79,11 +79,11 @@ export default function SpeakerDeckSlideBox({ slide }: SpeakerDeckSlideBoxProps)
                 </div>
                 
                 <div className="p-4">
-                    <h3 className="font-bold text-lg mb-2 line-clamp-2 text-gray-900 hover:text-[var(--site-accent)] transition-colors leading-tight">
+                    <h3 className="font-bold text-lg mb-2 line-clamp-2 text-[var(--site-ink)] hover:text-[var(--site-accent)] transition-colors leading-tight">
                         {slide.title}
                     </h3>
                     
-                    <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+                    <div className="flex items-center justify-between text-sm text-[var(--site-muted)] mb-2">
                         <div className="flex items-center space-x-4">
                             {(slide.view_count ?? 0) > 0 && (
                                 <span className="flex items-center">
@@ -111,7 +111,7 @@ export default function SpeakerDeckSlideBox({ slide }: SpeakerDeckSlideBoxProps)
                             📊 SpeakerDeck
                         </span>
                         {formattedDate && (
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-[var(--site-muted)]">
                                 {formattedDate}
                             </span>
                         )}

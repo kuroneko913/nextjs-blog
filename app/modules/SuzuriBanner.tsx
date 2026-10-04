@@ -10,19 +10,19 @@ export default function SuzuriBanner() {
                 className="block text-center group"
             >
                 <div className="mb-3">
-                    <div className="text-lg font-bold text-gray-800 mb-1 group-hover:text-[var(--site-accent)] transition-colors">
+                    <div className="text-lg font-bold text-[var(--site-ink)] mb-1 group-hover:text-[var(--site-accent)] transition-colors">
                         🎨 オリジナルグッズつくってみた！
                     </div>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-[var(--site-muted)]">
                         くろねこ。のSUZURIショップ
                     </div>
                 </div>
                 
                 <div className="bg-[var(--site-surface)] rounded-md p-3 group-hover:bg-[var(--site-soft)] transition-colors">
-                    <div className="text-xs text-gray-500 mb-2">SUZURI by GMOペパボ</div>
+                    <div className="text-xs text-[var(--site-muted)] mb-2">SUZURI by GMOペパボ</div>
                     <div className="flex items-center justify-center space-x-2">
                         <span className="text-2xl">👕</span>
-                        <span className="text-sm font-medium text-gray-700">
+                        <span className="text-sm font-medium text-[var(--site-ink)]">
                             Tシャツなど
                         </span>
                         <span className="text-2xl">😸</span>
