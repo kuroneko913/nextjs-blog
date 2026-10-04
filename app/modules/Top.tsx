@@ -11,13 +11,13 @@ export default function Top(prop: { posts: Post[] }) {
     const RecomendedPosts = RecomendedPostsFilter(prop.posts, 8);
 
     return (
-        <div className="flex p-10 mt-10 justify-between flex-wrap">
-            <div className="w-full sm:w-3/4 md:w-1/2 lg:w-3/4">
+        <div className="site-content site-home-grid">
+            <div className="min-w-0">
                 <UpdateArticle posts={updatedPosts} />
                 <RecommendArticle posts={RecomendedPosts} />
             </div>
-            <div className="w-full sm:w-1/4 md:w-1/2 md:px-8 lg:px-0 lg:w-1/4 sm:mt-0 mt-10">
-                <IntroductionBox props={{ marginTop: "100px" }} />
+            <div className="min-w-0">
+                <IntroductionBox />
                 <TwitterTimeLine />
                 <SuzuriBanner />
             </div>

@@ -48,7 +48,7 @@ export default function LikeNum(prop: {slug: string, like?: number}) {
     return (
     <div className="w-full flex justify-end p-4">
       <button onClick={toggleLike} disabled={loading} className="flex items-center">
-        <FontAwesomeIcon icon={faThumbsUp} className={`mr-2 ${loading ? 'animate-pulse' : 'text-green-500'}`} />
+        <FontAwesomeIcon icon={faThumbsUp} className={`mr-2 ${loading ? 'animate-pulse' : 'text-[var(--site-accent)]'}`} />
         <span>{likeNum}</span>
       </button>
     </div>

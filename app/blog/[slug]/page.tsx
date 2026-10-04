@@ -62,7 +62,7 @@ export default async function BlogPage({ params }: { params: { slug: string } })
         new Date(post.date).toLocaleDateString("ja-jp", { year:'numeric', month:'2-digit', day: '2-digit', hour: "2-digit", minute: "2-digit" })
       }</p>
       <p className="px-4 sm:px-20">Category: {categories}</p>
-      <div className="flex p-4 sm:p-10 flex-col sm:flex-row max-auto">
+      <div className="site-content flex flex-col sm:flex-row">
         <div className="w-full sm:w-3/4 markdown mb-16">
           <div className="sm:px-10 markdown overflow-x-auto">
             <ReactMarkdown 

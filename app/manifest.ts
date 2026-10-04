@@ -13,8 +13,8 @@ export default function manifest(): MetadataRoute.Manifest {
       { name: "実験メモを読む", short_name: "実験メモ", url: "/notes" },
     ],
     display: "standalone",
-    background_color: "#ffffff",
-    theme_color: "#1e1e2e",
+    background_color: "#f6f5f0",
+    theme_color: "#f6f5f0",
     orientation: "portrait",
     icons: [
       {

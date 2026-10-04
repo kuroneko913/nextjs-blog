@@ -93,3 +93,9 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+### 共通デザイン
+
+Labから抽出した色、幅、角丸、余白を `app/design-system.css` の `--site-*` 変数で管理します。生成りの背景、深い緑の文字、緑のアクセント、薄い境界線を共通に使い、ページ固有のレイアウトはLab・NotesのCSSに残します。共通部品は `site-header`、`site-footer`、`site-card`、`site-button`、`site-content`。Home・Blog・Aboutと各実験も同じ定義を参照します。エラー表示と紙を丸めた表現、記事画像、コードの構文色は用途に合わせた色を維持します。
+
+Copyrightはクライアントで現在年を表示し、開いたまま年を越した場合も更新します。静的ビルド時の年には依存しません。

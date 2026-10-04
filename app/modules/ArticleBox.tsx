@@ -7,7 +7,7 @@ export default function ArticleBox(prop: { post: Post, likeNum: number }) {
     const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
   
     return (
-      <div className="flex-none w-[280px] group hover:bg-gray-100" key={post.slug}>
+      <div className="site-card site-article-card flex-none group" key={post.slug}>
         <a href={`/blog/${post.slug}`}>
           {/* 画像部分 */}
           <div className="relative w-[280px] h-[200px] overflow-hidden">
@@ -21,7 +21,7 @@ export default function ArticleBox(prop: { post: Post, likeNum: number }) {
           </div>
           <div className="relative mt-4">
             <h2 className="text-xl w-[280px] truncate" title={post.title}>{post.title}</h2>
-            <div className="absolute left-0 top-0 w-full group-hover:bg-gray-100 pt-2 pb-2 z-10 hidden group-hover:flex">
+            <div className="absolute left-0 top-0 w-full group-hover:bg-[var(--site-soft)] pt-2 pb-2 z-10 hidden group-hover:flex">
               <h2 className="text-sm">{post.title}</h2>
             </div>
           </div>

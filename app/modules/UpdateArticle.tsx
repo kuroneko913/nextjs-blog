@@ -5,7 +5,7 @@ import fetchBlogLike from '@/src/api/fetchBlogLike';
 export default async function UpdateArticle(prop: { posts: Post[] }) {
     const likes = await fetchBlogLike();
     return (
-        <div className="sm:p-10">
+        <div className="">
             <h1 className="text-2xl pb-10 font-bold">Update</h1>
             <div className="flex gap-8 flex-wrap justify-start items-start">
                 {prop.posts.map((post) => (

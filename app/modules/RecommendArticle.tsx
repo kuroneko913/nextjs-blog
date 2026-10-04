@@ -5,7 +5,7 @@ import fetchBlogLike from "@/src/api/fetchBlogLike";
 export default async function RecommendArticle(prop: { posts: Post[] }) {
     const likes = await fetchBlogLike();
     return (
-        <div className="w-full sm:p-10 mt-16">
+        <div className="w-full  mt-16">
             <h1 className="text-2xl pb-10 font-bold">Recommend</h1>
             <div className="flex sm:flex-row gap-8 flex-wrap justify-start items-start">
                 {prop.posts.map((post) => (

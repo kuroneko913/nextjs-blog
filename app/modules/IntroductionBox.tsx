@@ -3,7 +3,7 @@ import Image from 'next/image';
 export default function IntroductionBox(props: { props?: { marginTop: string } }) {
 
     return (
-        <div className="p-10 max-w-sm border-2 mx-auto h-fit leading-relaxed" style={{ marginTop: props.props?.marginTop }}>
+        <div className="site-card site-profile max-w-sm mx-auto h-fit leading-relaxed" style={{ marginTop: props.props?.marginTop }}>
             <div style={{ width: "100px", height: "100px", overflow: "hidden", position: "relative", borderRadius: "50%", margin: "auto" }}>
             <Image
               src="/images/logo.webp"

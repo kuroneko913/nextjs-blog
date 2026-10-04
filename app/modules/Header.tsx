@@ -7,7 +7,7 @@ import Image from 'next/image';
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     return (
-        <header className="top-0 bg-white flex justify-between items-center px-4 sm:px-20 py-4 shadow-md w-full">
+        <header className="site-header top-0 flex justify-between items-center px-4 sm:px-20 py-4 shadow-md w-full">
             {/* ハンバーガーメニュー(クローズ時) */}
             <div className={`w-full ${isMenuOpen ? 'hidden' : 'flex'} justify-between items-center`}>
                 <div className="logo">
@@ -27,14 +27,14 @@ export default function Header() {
                     </a>
                 </div>
                 {/* ハンバーガーメニューのアイコンをsm未満では出す */}
-                <div className="flex sm:hidden items-center px-4">
-                    <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-gray-900 focus:outline-none">
+                <div className="site-menu-toggle flex sm:hidden items-center px-4">
+                    <button onClick={() => setIsMenuOpen(!isMenuOpen)} aria-label={isMenuOpen ? "メニューを閉じる" : "メニューを開く"} aria-expanded={isMenuOpen} className="text-gray-900">
                         <FontAwesomeIcon icon={isMenuOpen ? faXmark : faBars} />
                     </button>
                 </div>
             </div>
             {/* ハンバーガーメニュー(オープン時) */}
-            <div className={`${isMenuOpen ? 'flex' : 'hidden'} sm:hidden fixed inset-0 bg-white flex-col justify-start items-center z-50`}>
+            <div className={`${isMenuOpen ? 'flex' : 'hidden'} sm:hidden fixed inset-0 site-menu flex-col justify-start items-center z-50`}>
                 <div className="w-full flex justify-between items-center py-6 px-4">
                     <div className="logo">
                         <a className="text-2xl text-gray-900 font-bold color-black" href="/">
@@ -53,8 +53,8 @@ export default function Header() {
                         </a>
                     </div>
                     {/* ハンバーガーメニューのアイコンをsm未満では出す */}
-                    <div className="flex sm:hidden items-center px-4">
-                        <button onClick={() => setIsMenuOpen(false)} className="text-gray-900 focus:outline-none">
+                    <div className="site-menu-toggle flex sm:hidden items-center px-4">
+                        <button onClick={() => setIsMenuOpen(false)} aria-label="メニューを閉じる" className="text-gray-900">
                            <FontAwesomeIcon icon={faXmark} />
                         </button>
                     </div>
@@ -68,7 +68,7 @@ export default function Header() {
                </ul>
             </div>
             {/* 通常のメニュー: sm以上で表示 */}
-            <ul className="hidden sm:flex sm:space-x-6 text-gray-900 font-bold items-center whitespace-nowrap">
+            <ul className="site-desktop-nav hidden sm:flex sm:space-x-6 text-gray-900 font-bold items-center whitespace-nowrap">
                 <li>
                     <a className="hover:text-gray-500" href="/">Home</a>
                 </li>

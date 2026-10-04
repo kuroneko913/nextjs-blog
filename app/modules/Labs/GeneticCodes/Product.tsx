@@ -77,7 +77,7 @@ export default function Product() {
     return (
         <div className="product-area w-full">
             <div className="text-right">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg" onClick={sendKeyGenerateRequest}>
+                <button className="site-button" onClick={sendKeyGenerateRequest}>
                     鍵を生成する
                 </button>
                 {/* <UploadKeyFileForm /> */}
@@ -91,7 +91,7 @@ export default function Product() {
 
             <textarea className="w-full border-2 rounded p-4 my-4" placeholder="ここになにか文字を入力" onChange={updatePlainMessage}></textarea>
             <div className="text-right">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg" onClick={sendEncodeRequest}>
+                <button className="site-button" onClick={sendEncodeRequest}>
                     暗号化する
                 </button>
             </div>
@@ -100,13 +100,13 @@ export default function Product() {
                 <p className="whitespace-normal break-words">{encodeMessage}</p>
             </div>
             <div className="text-right">
-                <button className="bg-gray-500 hover:bg-gray-700 text-white text-right font-bold py-2 px-4 rounded-lg mb-4" onClick={copyEncodedToDecode}>
+                <button className="site-button mb-4" onClick={copyEncodedToDecode}>
                     復号エリアにコピー
                 </button>
             </div>
             <textarea className="w-full border-2 rounded p-4 my-4" placeholder="ここになにか文字を入力" onChange={updateEncodedMessage} value={encodedMessage}></textarea>
             <div className="text-right">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg" onClick={sendDecodeRequest}>
+                <button className="site-button" onClick={sendDecodeRequest}>
                     復号する
                 </button>
             </div>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import SiteScripts from "./modules/SiteScripts";
 import "./globals.css";
+import "./design-system.css";
 import ServiceWorkerRegister from "./modules/ServiceWorkerRegister";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -44,7 +45,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <head>
-        <meta name="theme-color" content="#1e1e2e" />
+        <meta name="theme-color" content="#f6f5f0" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         <link
           rel="alternate"
