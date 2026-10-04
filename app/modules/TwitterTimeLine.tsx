@@ -1,36 +1,25 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+
+const Timeline = dynamic(
+    () => import("react-twitter-widgets").then((module) => module.Timeline),
+    { ssr: false },
+);
+
+const dataSource = { sourceType: "profile", screenName: "myblackcat7112" };
+const options = { height: 600, lang: "ja", dnt: true };
 
 export default function TwitterTimeLine() {
-    const [isMobile, setIsMobile] = useState(false);
-    useEffect(()=>{
-        const userAgent = window.navigator.userAgent.toLowerCase();
-        const isMobile = /iphone|ipod|ipad|android/.test( userAgent );
-        setIsMobile(isMobile);
-    }, []);
-    useEffect(()=>{
-        if (isMobile) {
-            return;
-        }
-        const script = document.createElement("script");
-        script.src = "https://platform.twitter.com/widgets.js";
-        script.async = true;
-        document.body.appendChild(script);
-    }, [isMobile]);
-    // Twitterタイムラインがスマホからだと表示されないようなので、スマホの場合は何も表示しない。
-    if (isMobile) {
-        return (
-            <div></div>
-        );
-    }
     return (
-        <div className="mt-10 max-w-sm mx-auto h-[50vh] sm:h-[100vh] overflow-scroll">
-            <a className="twitter-timeline" 
-                href="https://twitter.com/myblackcat7112?ref_src=twsrc%5Etfw"
-            >
-                Tweets by myblackcat7112
+        <section className="site-card mt-10 p-4" aria-labelledby="x-timeline-title">
+            <h2 id="x-timeline-title" className="font-bold mb-3">X</h2>
+            <a className="site-button mb-4" href="https://x.com/myblackcat7112"
+                target="_blank" rel="noopener noreferrer">
+                @myblackcat7112 を見る ↗
             </a>
-        </div>
+            <Timeline dataSource={dataSource} options={options}
+                renderError={() => <p className="text-sm">投稿はXでご覧いただけます。</p>} />
+        </section>
     );
 }
