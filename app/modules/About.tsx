@@ -21,7 +21,7 @@ export default async function About() {
     <main>
       <Header />
       <Hero />
-      <div className="flex p-4 sm:p-10 flex-col sm:flex-row max-auto">
+      <div className="site-content flex flex-col sm:flex-row">
         <div className="w-full sm:w-3/4 markdown mb-16">
           <div className="sm:px-10 markdown overflow-x-auto">
             <ReactMarkdown 

@@ -63,7 +63,7 @@ export default function ZennArticleList() {
         return (
             <div className="sm:p-10">
                 <div className="flex items-center justify-center py-8">
-                    <div className="text-gray-600">記事を読み込み中...</div>
+                    <div className="text-[var(--site-muted)]">記事を読み込み中...</div>
                 </div>
             </div>
         );

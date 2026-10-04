@@ -39,7 +39,7 @@ export default function LikeButton({ slug }: { slug: string }) {
 
     return (
         <div className="w-full flex justify-end">
-            <button className="mt-8 w-40 rounded-full bg-green-500 py-2 px-4 font-bold text-white hover:bg-green-700 flex-end"
+            <button className="site-button mt-8 w-40"
             onClick={toggleLike}>
                 <FontAwesomeIcon icon={faThumbsUp} className="mr-2"/>いいね！<span>{likeNum}</span>
             </button>

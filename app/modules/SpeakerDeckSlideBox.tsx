@@ -41,7 +41,7 @@ export default function SpeakerDeckSlideBox({ slide }: SpeakerDeckSlideBoxProps)
     const formattedDate = formatDate(slide.published_at);
 
     return (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 w-full max-w-sm hover:scale-105">
+        <div className="site-card shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 w-full max-w-sm hover:scale-105">
             <a href={slide.url} target="_blank" rel="noopener noreferrer">
                 <div className="aspect-[4/3] bg-gray-200 flex items-center justify-center relative overflow-hidden">
                     {slide.thumbnail_url && !imageError ? (
@@ -64,7 +64,7 @@ export default function SpeakerDeckSlideBox({ slide }: SpeakerDeckSlideBoxProps)
                             />
                         </>
                     ) : (
-                        <div className="bg-gradient-to-br from-blue-500 to-purple-600 w-full h-full flex items-center justify-center">
+                        <div className="bg-gradient-to-br from-[var(--site-accent)] to-[var(--site-ink)] w-full h-full flex items-center justify-center">
                             <div className="text-white text-center">
                                 <div className="text-4xl mb-2">📊</div>
                                 <div className="text-sm opacity-80">SpeakerDeck</div>
@@ -79,11 +79,11 @@ export default function SpeakerDeckSlideBox({ slide }: SpeakerDeckSlideBoxProps)
                 </div>
                 
                 <div className="p-4">
-                    <h3 className="font-bold text-lg mb-2 line-clamp-2 text-gray-900 hover:text-blue-600 transition-colors leading-tight">
+                    <h3 className="font-bold text-lg mb-2 line-clamp-2 text-[var(--site-ink)] hover:text-[var(--site-accent)] transition-colors leading-tight">
                         {slide.title}
                     </h3>
                     
-                    <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+                    <div className="flex items-center justify-between text-sm text-[var(--site-muted)] mb-2">
                         <div className="flex items-center space-x-4">
                             {(slide.view_count ?? 0) > 0 && (
                                 <span className="flex items-center">
@@ -107,11 +107,11 @@ export default function SpeakerDeckSlideBox({ slide }: SpeakerDeckSlideBoxProps)
                     </div>
                     
                     <div className="flex items-center justify-between">
-                        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium">
+                        <span className="text-xs bg-[var(--site-soft)] text-[var(--site-accent)] px-2 py-1 rounded-full font-medium">
                             📊 SpeakerDeck
                         </span>
                         {formattedDate && (
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-[var(--site-muted)]">
                                 {formattedDate}
                             </span>
                         )}
