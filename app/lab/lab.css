@@ -38,7 +38,8 @@
 .lab-project-output { margin-top: 36px; border-top: 1px solid #dcdfd7; padding-top: 28px; }
 .lab-project-output h2 { font-size: 17px; font-weight: 600; margin-bottom: 12px; }
 .lab-project-output p { color: var(--lab-muted); font-size: 14px; line-height: 1.95; }
-.lab-output-link { display: inline-flex; align-items: center; gap: 16px; min-height: 46px; margin-top: 18px; padding: 10px 16px; border: 1px solid #ccd6ca; border-radius: 10px; background: #fffefa; font-size: 13px; color: var(--lab-green); font-weight: 600; }
+.lab-output-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+.lab-output-link { display: inline-flex; align-items: center; gap: 16px; min-height: 46px; padding: 10px 16px; border: 1px solid #ccd6ca; border-radius: 10px; background: #fffefa; font-size: 13px; color: var(--lab-green); font-weight: 600; }
 .lab-output-link:hover { background: #edf1e8; }
 .lab-tool .markdown h2 { font-size: 21px; line-height: 1.6; }
 .lab-tool .markdown p { line-height: 1.9; overflow-wrap: anywhere; }

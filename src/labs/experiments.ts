@@ -18,7 +18,7 @@ export const experiments: readonly Experiment[] = [
     id: "ai-agent-operations",
     title: "AIエージェント運用",
     category: "運用の実験",
-    description: "AIエージェントに仕事を任せ、日々の活動を続ける実験。「問いのおもちゃ箱」toy toi boxの活動などを通じて、運用の仕組みを試しています。",
+    description: "カナデ・カモメ・カナメに、XやWebサイトの情報をランダムに渡す。気になるものをためてもらい、書けるときに記事を書く運用を試しています。",
     href: "/lab/ai-agent-operations",
     action: "実験を見る",
     icon: "agent",
