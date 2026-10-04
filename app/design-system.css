@@ -52,3 +52,4 @@ body { background: var(--site-bg); color: var(--site-ink); }
 
 .site-reading-grid { display: grid; grid-template-columns: minmax(0, 1fr) 260px; align-items: start; }
 @media (max-width: 850px) { .site-reading-grid { grid-template-columns: minmax(0, 1fr); } }
+.site-home-grid .site-profile, .site-reading-grid .site-profile { width: 100%; max-width: none; margin-left: 0; margin-right: 0; }
