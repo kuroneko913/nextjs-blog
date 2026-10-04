@@ -1,5 +1,5 @@
-import Link from "next/link";
-import Image from "next/image";
+import Header from "@/app/modules/Header";
+import Footer from "@/app/modules/Footer";
 import type { Metadata, Viewport } from "next";
 import "./notes.css";
 
@@ -13,15 +13,8 @@ export const viewport: Viewport = { width: "device-width", initialScale: 1, view
 
 export default function NotesLayout({ children }: { children: React.ReactNode }) {
   return <div className="notes-app">
-    <header className="notes-header">
-      <Link href="/" className="notes-brand"><Image src="/images/logo-transparent.png" alt="" width={34} height={34} /><span>くろねこ。の実験室<small>LABORATORY / FIELD NOTES</small></span></Link>
-      <nav className="notes-nav" aria-label="メインナビゲーション">
-        <Link href="/">Home</Link>
-        <Link href="/blog">Blog</Link>
-        <Link href="/notes" aria-current="location">Notes</Link>
-      </nav>
-    </header>
+    <Header />
     <main className="notes-main">{children}</main>
-    <footer className="notes-footer">うまくいった日も、いかなかった日も。</footer>
+    <Footer />
   </div>;
 }
