@@ -11,7 +11,7 @@ export default function Top(prop: { posts: Post[] }) {
     const RecomendedPosts = RecomendedPostsFilter(prop.posts, 8);
 
     return (
-        <div className="site-content site-home-grid">
+        <div className="site-content site-home-grid site-listing">
             <div className="min-w-0">
                 <UpdateArticle posts={updatedPosts} />
                 <RecommendArticle posts={RecomendedPosts} />
