@@ -11,7 +11,7 @@ export default async function Blog(prop: { posts: Post[] }) {
     const archives = await getArchiveList();
 
     return (
-        <div className="site-content site-home-grid">
+        <div className="site-content site-home-grid site-listing">
             <BlogList posts={updatedPosts} />
             <CategoryArchive categories={categories} archives={archives} />
         </div>
