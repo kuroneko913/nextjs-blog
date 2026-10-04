@@ -1,13 +1,6 @@
-.notes-app { --ink: var(--site-ink); --green: var(--site-accent); --muted: var(--site-muted); background: var(--site-bg); color: var(--ink); min-height: 100dvh; font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; }
-.notes-header { max-width: 1080px; margin: auto; padding: 24px 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--site-divider); gap: 12px; }
-.notes-brand { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 700; }
-.notes-brand small { display: block; color: var(--muted); font-size: 9px; letter-spacing: .12em; margin-top: 3px; font-weight: 500; }
+.notes-app { --ink: var(--site-ink); --green: var(--site-accent); --muted: var(--site-muted); background: var(--site-bg); color: var(--ink); min-height: 100dvh; display: flex; flex-direction: column; font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; }
 .notes-back { font-size: 13px; color: var(--muted); white-space: nowrap; }
-.notes-nav { display: flex; align-items: center; gap: 4px; font-size: 13px; color: var(--muted); }
-.notes-nav a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 12px; border-radius: 8px; }
-.notes-nav a:hover, .notes-nav a[aria-current] { background: #e8efe5; color: var(--ink); }
-.notes-nav a[aria-current] { font-weight: 700; }
-.notes-main { max-width: 780px; margin: auto; padding: 48px 24px 32px; }
+.notes-main { width: 100%; flex: 1; max-width: 780px; margin: auto; padding: 48px 24px 32px; }
 .notes-eyebrow { color: var(--green); font-size: 11px; letter-spacing: .18em; margin-bottom: 12px; font-weight: 700; }
 .notes-title { font-size: clamp(28px, 5vw, 40px); line-height: 1.5; font-weight: 700; letter-spacing: .03em; }
 .notes-description { color: var(--muted); font-size: 14px; line-height: 1.9; margin: 12px 0 28px; }
@@ -49,7 +42,6 @@
 .notes-empty { border: 1px dashed #c4cfc0; border-radius: 14px; padding: 48px 24px; text-align: center; line-height: 2; }
 .notes-empty strong { display: block; margin-bottom: 8px; }
 .notes-export { position: sticky; bottom: 16px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #e6ecdf; border: 1px solid #b8c9af; border-radius: 12px; box-shadow: 0 4px 24px #243a3214; font-size: 13px; }
-.notes-footer { max-width: 780px; margin: auto; padding: 32px 24px calc(24px + env(safe-area-inset-bottom)); font-size: 11px; color: #859082; text-align: center; }
 .notes-back { display: inline-block; margin-bottom: 28px; }
 .notes-saved-links { display: flex; gap: 16px; flex-wrap: wrap; }
 .notes-card-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 20px; padding-top: 14px; border-top: 1px solid #eaede5; }
@@ -79,4 +71,6 @@
 .notes-basket-icon { font-size: 42px; color: #a99e87; }
 @media (prefers-reduced-motion: reduce) { .notes-crumpling { animation: none; } }
 @media (max-width: 420px) { .notes-trash-card { gap: 14px; padding: 20px 16px; } .notes-paper-ball { flex-basis: 42px; width: 42px; height: 48px; } }
-@media (max-width: 600px) { .notes-header { padding: 18px 20px; flex-wrap: wrap; } .notes-nav { width: 100%; } .notes-main { padding: 32px 18px 20px; } .notes-body-input { min-height: 280px; padding: 20px; } .notes-card { padding: 20px; } .notes-compose-actions { align-items: flex-start; } .notes-compose-actions .notes-primary { flex-shrink: 0; } .notes-title { font-size: 28px; } .notes-heading-row { align-items: flex-start; } }
+@media (max-width: 600px) { .notes-main { padding: 32px 18px 20px; } .notes-body-input { min-height: 280px; padding: 20px; } .notes-card { padding: 20px; } .notes-compose-actions { align-items: flex-start; } .notes-compose-actions .notes-primary { flex-shrink: 0; } .notes-title { font-size: 28px; } .notes-heading-row { align-items: flex-start; } }
+
+.notes-app > .site-footer { padding-bottom: calc(40px + env(safe-area-inset-bottom)); }
