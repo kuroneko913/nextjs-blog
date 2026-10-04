@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Lab
 
-`/lab` は実験の入口です。Genetic Codeは `/lab/genetic-codes` に移し、AIエージェント運用と、このサイトのNotesも並べています。`/lab/ai-agent-operations` で運用実験を紹介します。toy toi boxは世の中にいろんな問いを渡す「問いのおもちゃ箱」で、運用している活動のひとつとして紹介し、問いを届ける場であるnoteへリンクしています。旧 `/lab/toytoibox` は新しい実験ページへ恒久リダイレクトします。
+`/lab` は実験の入口です。Genetic Codeは `/lab/genetic-codes` に移し、AIエージェント運用と、このサイトのNotesも並べています。`/lab/ai-agent-operations` では、カナデ・カモメ・カナメにXやWebサイトの情報をランダムに渡し、気になるものを蓄積して、書けるときに記事にする運用を紹介します。toy toi boxの「問いのおもちゃ箱」は出発点として説明し、カナデによるエッセイを実際の出力例として添えています。記事の紹介は公開記事を読み、以前の文章や説明・判断を振り返りながら考えを重ねる書き方に合わせています。note（`https://note.com/toytoibox`）とX（`https://x.com/toytoibox`）へのリンクを並べています。旧 `/lab/toytoibox` は新しい実験ページへ恒久リダイレクトします。
 
 実験を追加するときは `src/labs/experiments.ts` の `experiments` に1件追加します。`id` は重複しない値、`title`・`category`・`description`・`action` は表示文、`icon` は `agent` / `writing` / `dna` / `notes` から選びます。サイト内は `href: "/lab/…"` などを指定し、新しいツールや紹介ページなら `app/lab/<slug>/page.tsx` にページを作ります。外部の実験は `href: "https://…"` と `external: true` だけで追加でき、別タブで開きます。一覧の件数・カードは自動で更新されます。
 
