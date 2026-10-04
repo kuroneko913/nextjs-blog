@@ -18,7 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const staticPages = [
         { url: `${protocol}://${host}/notes`, changeFrequency: 'daily' as const, priority: 0.8 },
         { url: `${protocol}://${host}/lab/genetic-codes`, changeFrequency: 'monthly' as const, priority: 0.7 },
-        { url: `${protocol}://${host}/lab/toytoibox`, changeFrequency: 'monthly' as const, priority: 0.7 },
+        { url: `${protocol}://${host}/lab/ai-agent-operations`, changeFrequency: 'monthly' as const, priority: 0.7 },
         {
             url: `${protocol}://${host}/`,
             lastModified: new Date().toISOString(),
