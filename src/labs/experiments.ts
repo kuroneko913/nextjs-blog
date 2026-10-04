@@ -15,11 +15,11 @@ export type Experiment = ExperimentDetails & (
 // Add an entry here to put another experiment on the Lab page.
 export const experiments: readonly Experiment[] = [
   {
-    id: "toytoibox",
-    title: "toy toi box",
-    category: "AIエージェント",
-    description: "AIエージェントに仕事を任せ、継続して動かす仕組みを試しています。noteへの発信も、その活動のひとつです。",
-    href: "/lab/toytoibox",
+    id: "ai-agent-operations",
+    title: "AIエージェント運用",
+    category: "運用の実験",
+    description: "AIエージェントに仕事を任せ、日々の活動を続ける実験。「問いのおもちゃ箱」toy toi boxの活動などを通じて、運用の仕組みを試しています。",
+    href: "/lab/ai-agent-operations",
     action: "実験を見る",
     icon: "agent",
   },
