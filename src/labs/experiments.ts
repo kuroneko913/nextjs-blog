@@ -4,7 +4,7 @@ type ExperimentDetails = {
   category: string;
   description: string;
   action: string;
-  icon: "agent" | "writing" | "dna" | "notes";
+  icon: "agent" | "kernel" | "writing" | "dna" | "notes";
 };
 
 export type Experiment = ExperimentDetails & (
@@ -22,6 +22,15 @@ export const experiments: readonly Experiment[] = [
     href: "/lab/ai-agent-operations",
     action: "実験を見る",
     icon: "agent",
+  },
+  {
+    id: "mind-kernel",
+    title: "Mind Kernel",
+    category: "思考の軸の運用",
+    description: "自分の価値観や思考の癖を、AIが参照できる形にする。対話や判断にどう関わるかを試す実験と、テンプレート・MCPサーバーを紹介します。",
+    href: "/lab/mind-kernel",
+    action: "実験を見る",
+    icon: "kernel",
   },
   {
     id: "genetic-codes",

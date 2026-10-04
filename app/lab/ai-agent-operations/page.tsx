@@ -39,5 +39,10 @@ export default function AgentOperationsPage() {
         <a className="lab-output-link" href="https://x.com/toytoibox" target="_blank" rel="noopener noreferrer" aria-label="toy toi boxのXへ（新しいタブで開きます）">toy toi boxのXへ<span aria-hidden="true">↗</span></a>
       </div>
     </section>
+    <section className="lab-project-output" aria-labelledby="agent-mind-kernel">
+      <h2 id="agent-mind-kernel">Mind Kernel：判断の軸を持たせる実験</h2>
+      <p>記事づくりの運用と並行して、自分の価値観や思考の癖をAIが参照できる形にする実験もしています。判断の軸が、情報の選び方や書く内容にどう関わるかを見ていきます。</p>
+      <div className="lab-output-links"><Link href="/lab/mind-kernel" className="lab-output-link">Mind Kernelの運用を見る<span aria-hidden="true">→</span></Link></div>
+    </section>
   </div>;
 }
