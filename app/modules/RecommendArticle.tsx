@@ -7,7 +7,7 @@ export default async function RecommendArticle(prop: { posts: Post[] }) {
     return (
         <div className="w-full  mt-16">
             <h1 className="text-2xl pb-10 font-bold">Recommend</h1>
-            <div className="flex sm:flex-row gap-8 flex-wrap justify-start items-start">
+            <div className="site-article-grid">
                 {prop.posts.map((post) => (
                     <ArticleBox post={post} key={post.slug} likeNum={likes[post.slug] ? likes[post.slug] : 0} />
                 ))}

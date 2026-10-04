@@ -10,26 +10,24 @@ export default function ArticleBox(prop: { post: Post, likeNum: number }) {
       <div className="site-card site-article-card flex-none group" key={post.slug}>
         <a href={`/blog/${post.slug}`}>
           {/* 画像部分 */}
-          <div className="relative w-[280px] h-[200px] overflow-hidden">
+          <div className="site-article-image relative overflow-hidden">
             <Image
               src={post.thumbnail}
               alt="Hero"
               fill
-              sizes="280px"
+              sizes="(max-width: 600px) 100vw, 360px"
               style={{ objectFit: 'cover' }}
             />
           </div>
           <div className="relative mt-4">
-            <h2 className="text-xl w-[280px] truncate" title={post.title}>{post.title}</h2>
-            <div className="absolute left-0 top-0 w-full group-hover:bg-[var(--site-soft)] pt-2 pb-2 z-10 hidden group-hover:flex">
-              <h2 className="text-sm">{post.title}</h2>
-            </div>
+            <h2 className="text-lg font-semibold leading-relaxed" title={post.title}>{post.title}</h2>
+
           </div>
         </a>
         <div className="mt-2">
-            <p className="text-sm w-[280px]">{post.date.toLocaleDateString('ja-JP', options)}</p>
-            <p className="text-sm w-[280px]">{post.tags?.join(', ')}</p>
-            <p className="text-sm w-[280px]">{post.categories?.join(', ')}</p>
+            <p className="text-sm">{post.date.toLocaleDateString('ja-JP', options)}</p>
+            <p className="text-sm">{post.tags?.join(', ')}</p>
+            <p className="text-sm">{post.categories?.join(', ')}</p>
             <LikeNum slug={post.slug} like={likeNum} />
         </div>
       </div>
