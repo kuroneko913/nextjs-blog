@@ -43,7 +43,7 @@
 
 OAuthの開始はブラウザの `Origin` を固定の本番ドメインと比較し、Deploy Preview・localhost・未指定・`null` からは受け付けません。GitHubへのcallback URL、コード交換時のredirect URI、ログイン後の戻り先も本番ドメインに固定します。callbackはOriginのないGET遷移なので、サーバー側URLでは判定せず、Domain属性のない署名付きstate Cookie・有効期限・PKCE・GitHub本人IDで検証します。リクエストURLや転送Hostヘッダーから戻り先を生成しません。GitHubのパスワード・パスキー・二要素認証はGitHubの画面だけで入力します。参考: [GitHub OAuthのWebフロー](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps)、[スコープなしで使える公開情報](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps)。
 
-書きかけはブラウザのlocalStorageに保存します。端末間の同期はありません。通信失敗時には入力を維持し、再送には同じIDを使うため重複投稿を防げます。接続が戻っても自動公開せず、本人が「公開する」を押します。公開内容はプレーンテキストとして表示します。画像添付・公開後の編集は初期版には含みません。
+書きかけはブラウザのlocalStorageに保存します。同じ保存領域を読める外部スクリプトはサイト全体で読み込まない方針です（[保護と運用](security.md)）。端末間の同期はありません。通信失敗時には入力を維持し、再送には同じIDを使うため重複投稿を防げます。接続が戻っても自動公開せず、本人が「公開する」を押します。公開内容はプレーンテキストとして表示します。画像添付・公開後の編集は初期版には含みません。
 
 本番PWAは投稿画面と必要なJS/CSSをキャッシュします。オンラインで一度起動してService Workerの準備が終われば、オフラインでも投稿画面を開いて下書きできます。API、認証情報、Next.jsのRSCレスポンスはキャッシュしません。開発モードではService Workerを登録しません。
 

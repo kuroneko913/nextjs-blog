@@ -1,13 +1,7 @@
-import { headers } from "next/headers";
+import { getLikeCounts } from "@/src/blogLikes";
 
 export default async function fetchBlogLike() {
-    // サーバーサイドレンダリングのため、フルパスでリクエストを送る。
-    const headersList = headers();
-    const host = headersList.get('host');
-    const protocol = headersList.get('x-forwarded-proto') || 'http';
-    const res = await fetch(`${protocol}://${host}/api/blog-like`, {
-        next: { revalidate: 60 * 30 }  // 30分間キャッシュ
-    });
-    const data = await res.json();
-    return data.result;
+    // No Host-header-derived internal HTTP request. A limit/outage must not break pages.
+    try { return await getLikeCounts(); }
+    catch { return {}; }
 }

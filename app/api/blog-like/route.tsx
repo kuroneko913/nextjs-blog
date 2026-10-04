@@ -1,81 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
-const { cert } = require('firebase-admin/app');
-const { getFirestore } = require('firebase-admin/firestore');
-const admin = require('firebase-admin');
+import { getLikeCounts, toggleLike, validLikeSlug } from '@/src/blogLikes';
+import { LikeLimitError } from '@/src/security/likeBudget';
+import { limitedJson, RequestBodyError } from '@/src/security/requestJson';
 
-// Firebaseの初期化をリクエスト時に遅延実行する
-function getDb() {
-  if (!admin.apps.length) {
-    admin.initializeApp({
-      credential: cert({
-        projectId: process.env.FIREBASE_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n') ?? '',
-      }),
-    });
-  }
-  return getFirestore();
-}
+const failure = (error: unknown) => error instanceof LikeLimitError
+  ? NextResponse.json({ error: 'しばらく待ってからお試しください。' }, { status: 429, headers: { 'Retry-After': '60', 'Cache-Control': 'no-store' } })
+  : NextResponse.json({ error: 'いいねを取得・更新できませんでした。' }, { status: 503 });
 
-// POSTリクエストに対応
 export async function POST(req: NextRequest) {
-  const COLLECTION_NAME = 'blog-likes';
-
-  try {
-    const db = getDb();
-    const body = await req.json(); // リクエストボディをJSONとしてパース
-    const likesRef = db.collection(COLLECTION_NAME);
-
-    const snapshot = await likesRef.where('article-slug', '==', body.slug).where('ip', '==', req.headers.get('x-forwarded-for') || req.ip).get()
-    // すでにいいねしている場合は削除
-    if (!snapshot.empty) {
-      likesRef.doc(snapshot.docs[0].id).delete();
-      return NextResponse.json({ message: 'You have already liked this post. so un liked.', liked: false}, { status: 200 });
-    }
-
-    const insertData = {
-      "article-slug": body.slug,
-      ip: req.headers.get('x-forwarded-for') || req.ip, // ユーザーのIPアドレス取得
-    };
-
-    await likesRef.doc().set(insertData);
-
-    // 成功レスポンスを返す
-    return NextResponse.json({ message: 'Like added successfully!', liked: true}, { status: 200 });
-  } catch (error) {
-    return NextResponse.json({ error: 'Failed to add like' }, { status: 500 });
+  const origin = req.headers.get('origin');
+  if (origin !== 'https://myblackcat913.com' && !(process.env.NODE_ENV !== 'production' && origin === req.nextUrl.origin)) {
+    return NextResponse.json({ error: 'Invalid origin' }, { status: 403 });
   }
+  let body;
+  try { body = await limitedJson(req, 2048); }
+  catch (error) { return NextResponse.json({ error: 'Invalid request body' }, { status: error instanceof RequestBodyError ? error.status : 400 }); }
+  if (!validLikeSlug(body?.slug)) return NextResponse.json({ error: 'Unknown article' }, { status: 400 });
+  // Global limits remain effective even if a client identity/header changes.
+  const identity = req.headers.get('x-nf-client-connection-ip') || req.ip || req.headers.get('x-forwarded-for');
+  if (!identity || identity.length > 100) return NextResponse.json({ error: 'Client unavailable' }, { status: 503 });
+  try { return NextResponse.json({ liked: await toggleLike(body.slug, identity) }); }
+  catch (error) { return failure(error); }
 }
 
 export async function GET(req: NextRequest) {
-  const COLLECTION_NAME = 'blog-likes';
-  const slug = req.nextUrl.searchParams.get('slug') ?? '';
+  const slug = req.nextUrl.searchParams.get('slug');
+  if (slug !== null && !validLikeSlug(slug)) return NextResponse.json({ error: 'Unknown article' }, { status: 400 });
   try {
-    const db = getDb();
-    const likesRef = db.collection(COLLECTION_NAME);
-    const snapshot = await likesRef.get();
-    if (snapshot.empty) {
-      return NextResponse.json({ error: 'No like found' }, { status: 404 });
-    }
-    const records = snapshot.docs.map((doc: any) => doc.data());
-    const result = countLikeBySlug(records);
-    if (slug === '') {
-      return NextResponse.json({ result }, { status: 200 });  // ドキュメントのカウント
-    }
-    // 特定の記事（slug）のいいね数を取得
-    return NextResponse.json({ 'result':result[slug] ?? 0 }, { status: 200});  // ドキュメントのカウント
-  } catch (error) {
-    console.error('Error fetching likes:', error);
-    return NextResponse.json({ error: 'Failed to get like' }, { status: 500 });
-  }
-}
-
-function countLikeBySlug(records: {ip: string, 'article-slug': string}[])
-{
-  let result: any = {};
-  for (const record of records) {
-    const slug = record['article-slug'];
-    slug in result ? result[slug]++ : result[slug] = 1;
-  }
-  return result;
+    const result = await getLikeCounts();
+    return NextResponse.json({ result: slug === null ? result : result[slug] || 0 }, { headers: { 'Cache-Control': 'public, max-age=60' } });
+  } catch (error) { return failure(error); }
 }

@@ -25,28 +25,6 @@ const SyntaxHighlighterBlock = dynamic(
     },
 );
 
-const YoutubeEmbed = dynamic(
-    async () => {
-        const { default: Youtube } = await import('react-youtube');
-        const Component = ({ videoId }: { videoId: string }) => (
-            <div className="youtube-wrap">
-                <Youtube videoId={videoId} />
-            </div>
-        );
-        return Component;
-    },
-    { ssr: false }
-);
-
-const TweetEmbed = dynamic(
-    async () => {
-        const { Tweet } = await import('react-twitter-widgets');
-        const Component = ({ tweetId }: { tweetId: string }) => <Tweet tweetId={tweetId} />;
-        return Component;
-    },
-    { ssr: false }
-);
-
 const CodeBlock: React.FC<CodeBlockProps> = ({ inline, className, children }) => {
     const match = /language-(\w+)/.exec(className || '');
     if (match === null || className === undefined) {
@@ -54,7 +32,12 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ inline, className, children }) =>
     }
 
     if (match[1] === "youtube") {
-        return <YoutubeEmbed videoId={String(children).replace(/\n$/, '')} />;
+        const videoId = String(children).trim();
+        if (!/^[A-Za-z0-9_-]{11}$/.test(videoId)) return <code>{videoId}</code>;
+        return <iframe className="w-full aspect-video" title="YouTube動画"
+            src={`https://www.youtube-nocookie.com/embed/${videoId}`}
+            loading="lazy" referrerPolicy="strict-origin-when-cross-origin"
+            allow="encrypted-media; picture-in-picture" allowFullScreen />;
     }
 
     if (match[1] === 'link') {
@@ -69,7 +52,9 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ inline, className, children }) =>
     }
 
     if (match[1] === 'twitter') {
-        return <TweetEmbed tweetId={String(children).replace(/\n$/, '')} />;
+        const tweetId = String(children).trim();
+        if (!/^\d+$/.test(tweetId)) return <code>{tweetId}</code>;
+        return <a href={`https://x.com/i/status/${tweetId}`} target="_blank" rel="noopener noreferrer">Xで投稿を見る ↗</a>;
     }
 
     // コードハイライト
