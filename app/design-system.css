@@ -27,7 +27,7 @@ body { background: var(--site-bg); color: var(--site-ink); }
 .site-button:hover { background: var(--site-accent-hover); }
 .site-content { width: 100%; max-width: var(--site-width); margin: 0 auto; padding: 48px 32px 64px; gap: 32px; }
 .site-profile { padding: var(--site-space); color: var(--site-muted); }
-.site-article-card { padding: 16px; width: 312px; max-width: 100%; }
+.site-article-card { padding: 16px; width: 100%; min-width: 0; max-width: 100%; }
 .site-article-card:hover { border-color: var(--site-focus); background: var(--site-soft); }
 .site-article-card p { color: var(--site-muted); overflow-wrap: anywhere; }
 .site-article-card img { border-radius: var(--site-radius-control); }
@@ -38,10 +38,18 @@ body { background: var(--site-bg); color: var(--site-ink); }
 .markdown h6 { color: var(--site-muted); }
 @media (max-width: 1000px) { .site-header { padding-left: 24px; padding-right: 24px; } .site-header .logo > a { font-size: 19px; } }
 @media (max-width: 850px) { .site-header .site-desktop-nav { display: none; } .site-header .site-menu-toggle { display: flex; } .site-header .site-menu { display: flex; } .site-header .site-menu.hidden { display: none; } }
-@media (max-width: 600px) { .site-content { padding: 32px 20px 48px; } .site-article-card { width: 100%; } .site-article-card > a > div:first-child { width: 100%; } .site-article-card h2, .site-article-card p { width: 100%; } }
+@media (max-width: 600px) { .site-content { padding: 32px 20px 48px; } .site-article-card { width: 100%; }  .site-article-card h2, .site-article-card p { width: 100%; } }
 
 .site-home-grid { display: grid; grid-template-columns: minmax(0, 1fr) 260px; }
 .site-footer .social-icons { justify-content: center; padding: 0; margin-bottom: 20px; }
 @media (max-width: 850px) { .site-home-grid { grid-template-columns: minmax(0, 1fr); } }
 
 .notes-primary, .notes-secondary, .lab-output-link { border-radius: var(--site-radius-control); }
+
+.site-article-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 24px; align-items: stretch; }
+.site-article-image { width: 100%; aspect-ratio: 7 / 5; }
+.site-article-card h2 { overflow-wrap: anywhere; }
+
+.site-reading-grid { display: grid; grid-template-columns: minmax(0, 1fr) 260px; align-items: start; }
+@media (max-width: 850px) { .site-reading-grid { grid-template-columns: minmax(0, 1fr); } }
+.site-home-grid .site-profile, .site-reading-grid .site-profile { width: 100%; max-width: none; margin-left: 0; margin-right: 0; }
