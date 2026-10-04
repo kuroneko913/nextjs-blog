@@ -46,3 +46,4 @@ yarn build
 - [Notesの使い方と運用](docs/notes.md)：保存先、くずかご、GitHub OAuth設定、認証、PWA、リリース時の確認。
 - [Labの構成と実験の追加](docs/lab.md)：紹介ページと一覧への追加方法。
 - [共通デザイン](docs/design-system.md)：デザインの定義と共通部品。
+- [公開サイトの保護と運用](docs/security.md)：いいねAPIの上限、MCPの削除、下書きと外部スクリプト。
