@@ -57,14 +57,15 @@ export default async function BlogPage({ params }: { params: { slug: string } })
     <main>
       <Header />
       <ArticleThumbnail src={post.hero} />
-      <h1 className="px-4 sm:px-20 pt-10 pb-4 text-2xl font-bold">{post.title}</h1>
-      <p className="px-4 sm:px-20">Date: {
+      <div className="site-content site-reading-grid">
+        <article className="min-w-0">
+      <h1 className="pb-4 text-2xl font-bold">{post.title}</h1>
+      <p className="text-sm text-[var(--site-muted)]">Date: {
         new Date(post.date).toLocaleDateString("ja-jp", { year:'numeric', month:'2-digit', day: '2-digit', hour: "2-digit", minute: "2-digit" })
       }</p>
-      <p className="px-4 sm:px-20">Category: {categories}</p>
-      <div className="site-content flex flex-col sm:flex-row">
-        <div className="w-full sm:w-3/4 markdown mb-16">
-          <div className="sm:px-10 markdown overflow-x-auto">
+      <p className="text-sm text-[var(--site-muted)]">Category: {categories}</p>
+        <div className="markdown mt-10 mb-16">
+          <div className="markdown overflow-x-auto">
             <ReactMarkdown 
               remarkPlugins={[gfm, breaks]} 
               components={{ code: CodeBlock as any }} 
@@ -74,7 +75,8 @@ export default async function BlogPage({ params }: { params: { slug: string } })
             <LikeButton slug={params.slug} />
           </div>
         </div>
-        <IntroductionBox />
+        </article>
+        <aside className="min-w-0"><IntroductionBox /></aside>
       </div>
       <Footer />
     </main>

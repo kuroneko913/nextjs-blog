@@ -49,3 +49,6 @@ body { background: var(--site-bg); color: var(--site-ink); }
 .site-article-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 24px; align-items: stretch; }
 .site-article-image { width: 100%; aspect-ratio: 7 / 5; }
 .site-article-card h2 { overflow-wrap: anywhere; }
+
+.site-reading-grid { display: grid; grid-template-columns: minmax(0, 1fr) 260px; align-items: start; }
+@media (max-width: 850px) { .site-reading-grid { grid-template-columns: minmax(0, 1fr); } }
